@@ -32,6 +32,7 @@ class ProductController extends Controller
             compact('categories')
         );
     }
+    
 
     public function store(Request $request)
     {

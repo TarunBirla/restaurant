@@ -8,6 +8,7 @@ use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\UserRegisterController;
 use App\Http\Controllers\Auth\UserLoginController;
+
 use App\Http\Controllers\RestaurantAdmin\OrderController as RestaurantOrderController;
 
 use App\Http\Controllers\RestaurantAdmin\ProfileController;

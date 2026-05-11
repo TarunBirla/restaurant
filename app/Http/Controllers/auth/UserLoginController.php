@@ -15,14 +15,14 @@ class UserLoginController extends Controller
 
     public function login(Request $request)
     {
-        if(Auth::attempt([
+        if (Auth::attempt([
             'email' => $request->email,
             'password' => $request->password
-        ])){
+        ])) {
 
             return redirect('/');
         }
 
-        return back()->with('error','Invalid Login');
+        return back()->with('error', 'Invalid Login');
     }
 }
