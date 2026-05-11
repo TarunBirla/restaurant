@@ -286,7 +286,7 @@
                         border:1px solid #F1F1F1;
                     ">
 
-                        {!! QrCode::size(220)->generate(url('/restaurants')) !!}
+                        {!! $qrCode !!}
 
                     </div>
 

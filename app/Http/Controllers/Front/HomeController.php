@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Restaurant;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class HomeController extends Controller
 {
@@ -14,10 +15,13 @@ class HomeController extends Controller
         $products = Product::latest()->get();
 
         $categories = Category::whereNull('parent_id')->get();
+        $qrCode = QrCode::size(220)
+    ->generate(url('/restaurants'));
 
         return view('front.home', compact(
             'products',
-            'categories'
+            'categories',
+            'qrCode'
         ));
     }
 
