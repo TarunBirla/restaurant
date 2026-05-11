@@ -160,15 +160,10 @@ Route::post(
     [UserRegisterController::class, 'register']
 );
 
-Route::get(
-    '/login',
-    [UserLoginController::class, 'showLogin']
-);
 
-Route::post(
-    '/login-user',
-    [UserLoginController::class, 'login']
-);
+Route::get('/login', [UserLoginController::class, 'showLogin']);
+
+Route::post('/login-user', [UserLoginController::class, 'login']);
 
 
 
