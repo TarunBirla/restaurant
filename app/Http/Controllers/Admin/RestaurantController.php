@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
 class RestaurantController extends Controller
@@ -36,6 +37,7 @@ class RestaurantController extends Controller
     $restaurant = Restaurant::create([
 
         'name' => $request->name,
+         'slug' => Str::slug($request->name),
 
         'email' => $request->email,
 

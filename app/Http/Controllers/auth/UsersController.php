@@ -20,7 +20,8 @@ class UsersController extends Controller
             'password' => $request->password
         ])) {
 
-            return redirect('/');
+            // return redirect('/');
+            return redirect()->intended('/');
         }
 
         return back()->with('error', 'Invalid Login');

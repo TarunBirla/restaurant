@@ -37,6 +37,25 @@ Route::get(
     '/product/{id}',
     [HomeController::class, 'productDetails']
 );
+Route::get(
+    '/restaurants',
+    [HomeController::class, 'restaurants']
+);
+
+Route::get('/login', [UsersController::class, 'showLogin'])
+    ->name('login');
+
+// Route::post('/login-user', [UsersController::class, 'login']);
+Route::post('/login', [UsersController::class, 'login'])
+    ->name('login.submit');
+Route::get(
+    '/restaurant/{slug}',
+    [HomeController::class, 'restaurantProducts']
+);
+Route::get(
+    '/restaurant/{slug}/{category}',
+    [HomeController::class, 'restaurantCategoryProducts']
+);
 Route::middleware(['auth'])->group(function () {
     Route::get(
         '/dashboard',
@@ -181,9 +200,8 @@ Route::post(
 );
 
 
-Route::get('/login', [UsersController::class, 'showLogin']);
+// Route::get('/login', [UsersController::class, 'showLogin']);    
 
-Route::post('/login-user', [UsersController::class, 'login']);
 
 
 

@@ -21,7 +21,8 @@
 
         </h1>
 
-        <form method="POST" action="/login-user">
+        <!-- <form method="POST" action="/login-user"> -->
+            <form method="POST" action="{{ route('login.submit') }}">
 
             @csrf
 

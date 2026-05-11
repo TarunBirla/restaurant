@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -33,6 +34,7 @@ class CategoryController extends Controller
 
         Category::create([
             'name' => $request->name,
+            'slug' => Str::slug($request->name),
             'parent_id' => $request->parent_id,
             'image' => $image,
             'status' => 1

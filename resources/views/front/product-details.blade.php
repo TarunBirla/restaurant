@@ -2,61 +2,56 @@
 
 @section('content')
 
-<div class="container mx-auto py-10">
+    <div class="container mx-auto py-10">
 
-    <div class="bg-white rounded shadow p-10 grid grid-cols-2 gap-10">
+        <div class="bg-white rounded shadow p-10 grid grid-cols-2 gap-10">
 
-        <div>
+            <div>
 
-            <img
-            src="{{ asset('storage/'.$product->image) }}"
-            class="w-full rounded">
+                <img src="{{ asset('storage/' . $product->image) }}" class="w-full rounded">
 
-        </div>
+            </div>
 
-        <div>
+            <div>
 
-            <h1 class="text-5xl font-bold">
+                <h1 class="text-5xl font-bold">
 
-                {{ $product->name }}
+                    {{ $product->name }}
 
-            </h1>
+                </h1>
 
-            <p class="text-3xl font-bold text-red-500 mt-5">
+                <p class="text-3xl font-bold text-red-500 mt-5">
 
-                €{{ $product->price }}
+                    €{{ $product->price }}
 
-            </p>
+                </p>
 
-            <p class="mt-5 text-gray-600 leading-8">
+                <p class="mt-5 text-gray-600 leading-8">
 
-                {{ $product->description }}
+                    {{ $product->description }}
 
-            </p>
+                </p>
 
-            <form method="POST"
-            action="/cart/add"
-            class="mt-10">
+                <form method="POST" action="/cart/add" class="mt-10">
 
-                @csrf
+                    @csrf
 
-                <input type="hidden"
-                name="product_id"
-                value="{{ $product->id }}">
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="hidden" name="current_url" value="{{ url()->current() }}">
 
-                <button
-                class="bg-red-500 text-white px-10 py-4 rounded text-xl">
 
-                    Add To Cart
+                    <button class="bg-red-500 text-white px-10 py-4 rounded text-xl">
 
-                </button>
+                        Add To Cart
 
-            </form>
+                    </button>
+
+                </form>
+
+            </div>
 
         </div>
 
     </div>
-
-</div>
 
 @endsection

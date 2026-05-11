@@ -22,7 +22,13 @@ class CartController extends Controller
     {
         if (!auth()->check()) {
 
-            return redirect('/login');
+            session([
+                'url.intended' => url()->full()
+            ]);
+
+            return redirect()
+                ->route('login')
+                ->with('error', 'Please login first');
         }
 
         $product = Product::findOrFail(
@@ -52,13 +58,10 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
-        return view(
-            'front.cart',
-            compact('cart')
-        );
 
+        return redirect('/cart')
+            ->with('success', 'Product added');
     }
-
     public function remove($id)
     {
         $cart = session()->get('cart', []);

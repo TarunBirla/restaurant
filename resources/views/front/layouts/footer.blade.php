@@ -1,9 +1,12 @@
 <footer style="background:#0D0D0D; color:#fff; margin-top:80px;">
     <div class="container mx-auto" style="max-width:1280px; padding:60px 24px 40px;">
-        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:48px; padding-bottom:48px; border-bottom:1px solid #2A2A2A;">
+        <div  class="footer-grid"
+style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr;">
+            
             <div>
                 <a href="/" style="display:flex; align-items:center; gap:10px; text-decoration:none; margin-bottom:18px;">
-                    <div style="width:38px; height:38px; background:#E8370E; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                    <div style="width:38px; height:38px; background:#E8370E; border-radius:10px; display:flex; align-items:center; justify-content:center;"
+                    >
                         <i data-lucide="utensils" style="color:#fff; width:20px; height:20px;"></i>
                     </div>
                     <span style="font-family:'Syne',sans-serif; font-weight:800; font-size:22px;">Food<span style="color:#E8370E;">Rush</span></span>
@@ -54,9 +57,22 @@
                 </ul>
             </div>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; padding-top:28px;">
+        <div  class="footer-bottom"
+style="display:flex; justify-content:space-between; align-items:center; padding-top:28px;">
             <p style="color:#6B7280; font-size:13px; margin:0;">© {{ date('Y') }} FoodRush. All rights reserved.</p>
             <p style="color:#6B7280; font-size:13px; margin:0;">Made with <span style="color:#E8370E;">♥</span> for food lovers</p>
         </div>
     </div>
 </footer>
+<script>
+
+function toggleMobileMenu(){
+
+    document
+    .getElementById('mobileMenu')
+    .classList
+    .toggle('active');
+
+}
+
+</script>
