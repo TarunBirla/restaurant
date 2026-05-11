@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\UserRegisterController;
+use App\Http\Controllers\Admin\VendorController;
 
 use App\Http\Controllers\RestaurantAdmin\OrderController as RestaurantOrderController;
 
@@ -114,6 +115,7 @@ Route::middleware(['auth', 'super_admin'])
 
         Route::resource('products', ProductController::class);
         Route::resource('orders', OrdersController::class);
+        Route::resource('vendor', VendorController::class);
         Route::get(
             '/users',
             [UserController::class, 'index']

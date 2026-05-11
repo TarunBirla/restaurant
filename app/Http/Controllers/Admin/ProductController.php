@@ -7,15 +7,18 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Restaurant;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category','restaurant')
-            ->latest()
-            ->get();
+        $products = Product::with(
+            'category',
+            'restaurant',
+            'vendor'
+        )->latest()->get();
 
         return view('admin.products.index', compact('products'));
     }
@@ -26,8 +29,10 @@ class ProductController extends Controller
 
         $restaurants = Restaurant::all();
 
+        $vendors = User::where('role','vendor')->get();
+
         return view('admin.products.create',
-            compact('categories','restaurants'));
+            compact('categories','restaurants','vendors'));
     }
 
     public function store(Request $request)
@@ -41,6 +46,7 @@ class ProductController extends Controller
 
         Product::create([
             'restaurant_id' => $request->restaurant_id,
+            'vendor_id' => $request->vendor_id,
             'category_id' => $request->category_id,
             'name' => $request->name,
             'slug' => Str::slug($request->name),
@@ -64,8 +70,15 @@ class ProductController extends Controller
 
         $restaurants = Restaurant::all();
 
+        $vendors = User::where('role','vendor')->get();
+
         return view('admin.products.edit',
-            compact('product','categories','restaurants'));
+            compact(
+                'product',
+                'categories',
+                'restaurants',
+                'vendors'
+            ));
     }
 
     public function update(Request $request, $id)
@@ -81,6 +94,7 @@ class ProductController extends Controller
 
         $product->update([
             'restaurant_id' => $request->restaurant_id,
+            'vendor_id' => $request->vendor_id,
             'category_id' => $request->category_id,
             'name' => $request->name,
             'slug' => Str::slug($request->name),

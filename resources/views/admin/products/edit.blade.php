@@ -40,6 +40,28 @@
             </div>
 
         </div>
+        <div>
+
+    <label>Vendor</label>
+
+    <select name="vendor_id"
+    class="w-full border p-3 rounded">
+
+        @foreach($vendors as $vendor)
+
+        <option
+        value="{{ $vendor->id }}"
+        {{ $product->vendor_id == $vendor->id ? 'selected' : '' }}>
+
+            {{ $vendor->name }}
+
+        </option>
+
+        @endforeach
+
+    </select>
+
+</div>
 
         <div class="mt-5">
 

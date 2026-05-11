@@ -44,6 +44,28 @@
                 </select>
 
             </div>
+            <div>
+
+    <label>Vendor</label>
+
+    <select name="vendor_id"
+    class="w-full border p-3 rounded">
+
+        <option value="">
+            Select Vendor
+        </option>
+
+        @foreach($vendors as $vendor)
+
+        <option value="{{ $vendor->id }}">
+            {{ $vendor->name }}
+        </option>
+
+        @endforeach
+
+    </select>
+
+</div>
 
             <div>
 

@@ -4,17 +4,13 @@
 
     <div class="p-6 border-b border-gray-700">
 
-        <h1 class="text-3xl font-bold">
+        <h1 class="text-xl font-bold">
 
-            Restaurant Panel
+            {{ auth()->user()->name }} Panel
 
         </h1>
 
-        <p class="text-gray-400 mt-2">
-
-            {{ auth()->user()->name }}
-
-        </p>
+        
 
     </div>
 
@@ -45,6 +41,17 @@
             class="block px-6 py-4 hover:bg-gray-800 transition">
 
                 Restaurants
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/vendor"
+            class="block px-6 py-4 hover:bg-gray-800 transition">
+
+                Vendors
 
             </a>
 

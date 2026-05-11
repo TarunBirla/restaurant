@@ -31,4 +31,8 @@ class Product extends Model
     {
         return $this->belongsTo(Restaurant::class);
     }
+    public function vendor()
+{
+    return $this->belongsTo(User::class,'vendor_id');
+}
 }
