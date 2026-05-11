@@ -160,7 +160,35 @@
     @endif
 
 
+@if(auth()->user()->role == 'vendor')
 
+<ul class="mt-6">
+
+    <li>
+
+        <a href="/vendor/dashboard"
+        class="block px-6 py-4 hover:bg-gray-800 transition">
+
+            Dashboard
+
+        </a>
+
+    </li>
+
+    <li>
+
+        <a href="/vendor/products"
+        class="block px-6 py-4 hover:bg-gray-800 transition">
+
+            My Products
+
+        </a>
+
+    </li>
+
+</ul>
+
+@endif
 
 
 

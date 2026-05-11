@@ -83,6 +83,24 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+Route::middleware(['auth'])
+    ->prefix('vendor')
+    ->name('vendor.')
+    ->group(function () {
+
+        Route::get('/dashboard', function () {
+
+            return view('vendor.dashboard');
+
+        });
+
+        Route::resource(
+            'products',
+            \App\Http\Controllers\Vendor\ProductController::class
+        );
+
+    });
+
 Route::middleware(['auth', 'super_admin'])
     ->prefix('admin')
     ->name('admin.')

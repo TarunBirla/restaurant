@@ -24,24 +24,40 @@ class AdminLoginController extends Controller
         ]);
 
         if(Auth::attempt([
+
             'email' => $request->email,
+
             'password' => $request->password
+
         ])){
+
+            // SUPER ADMIN
 
             if(auth()->user()->role == 'super_admin'){
 
                 return redirect('/admin/dashboard');
             }
 
+            // RESTAURANT ADMIN
+
             if(auth()->user()->role == 'restaurant_admin'){
 
                 return redirect('/restaurant/dashboard');
             }
 
+            // VENDOR
+
+            if(auth()->user()->role == 'vendor'){
+
+                return redirect('/vendor/dashboard');
+            }
+
+            // NORMAL USER
+
             return redirect('/');
         }
 
-        return back()->with('error','Invalid Login');
+        return back()->with('error', 'Invalid Login');
     }
 
     public function logout()
