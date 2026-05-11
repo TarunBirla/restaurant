@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\UsersController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\OrderController;
 use App\Http\Controllers\Front\ProfileController as FrontProfileController;
@@ -7,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\UserRegisterController;
-use App\Http\Controllers\Auth\UsersController;
 
 use App\Http\Controllers\RestaurantAdmin\OrderController as RestaurantOrderController;
 
