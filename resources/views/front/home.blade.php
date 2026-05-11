@@ -62,22 +62,271 @@
         </div>
     </section>
 
-    
-    <!-- CATEGORY SECTION -->
-    <section id="categories" style="max-width:1280px; margin:0 auto; padding:80px 24px;">
-         <div class="col-md-12 text-center mt-5">
+    <section style="
+    padding:80px 0;
+    background:linear-gradient(135deg,#FFF7F4,#FFFFFF);
+">
 
-                <h1>
-                    Welcome To Restaurant App
+    <div style="
+        max-width:1280px;
+        margin:auto;
+        padding:0 24px;
+    ">
+
+        <div style="
+            display:grid;
+            grid-template-columns:1.2fr .8fr;
+            gap:50px;
+            align-items:center;
+        "
+        class="qr-wrapper">
+
+            <!-- LEFT CONTENT -->
+
+            <div>
+
+                <span style="
+                    background:#FFE7E0;
+                    color:#E8370E;
+                    padding:8px 18px;
+                    border-radius:50px;
+                    font-size:13px;
+                    font-weight:700;
+                    display:inline-block;
+                    margin-bottom:20px;
+                    font-family:'Syne',sans-serif;
+                ">
+                    Scan & Order
+                </span>
+
+                <h1 style="
+                    font-size:34px;
+                    line-height:1.1;
+                    font-weight:800;
+                    margin-bottom:20px;
+                    font-family:'Syne',sans-serif;
+                    color:#111827;
+                "
+                class="qr-title">
+
+                    Scan QR Code <br>
+                    For Restaurant Menu
+
                 </h1>
 
-                <p>
-                    Scan QR Code For Restaurant Menu
+                <p style="
+                    color:#6B7280;
+                    font-size:18px;
+                    line-height:1.8;
+                    margin-bottom:35px;
+                    max-width:600px;
+                ">
+
+                    Explore delicious meals, discover restaurants,
+                    and order food instantly by scanning the QR code.
+
                 </p>
 
-                {!! QrCode::size(250)->generate(url('/restaurants')) !!}
+                <div style="
+                    display:flex;
+                    gap:18px;
+                    flex-wrap:wrap;
+                ">
+
+                    <div style="
+                        display:flex;
+                        align-items:center;
+                        gap:10px;
+                    ">
+
+                        <div style="
+                            width:44px;
+                            height:44px;
+                            background:#E8370E;
+                            border-radius:12px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                        ">
+
+                            <i data-lucide="utensils"
+                            style="width:20px;height:20px;color:#fff;"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4 style="
+                                margin:0;
+                                font-size:16px;
+                                font-weight:700;
+                            ">
+                                Premium Restaurants
+                            </h4>
+
+                            <p style="
+                                margin:0;
+                                color:#6B7280;
+                                font-size:14px;
+                            ">
+                                Top quality food
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div style="
+                        display:flex;
+                        align-items:center;
+                        gap:10px;
+                    ">
+
+                        <div style="
+                            width:44px;
+                            height:44px;
+                            background:#111827;
+                            border-radius:12px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                        ">
+
+                            <i data-lucide="clock-3"
+                            style="width:20px;height:20px;color:#fff;"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4 style="
+                                margin:0;
+                                font-size:16px;
+                                font-weight:700;
+                            ">
+                                Fast Ordering
+                            </h4>
+
+                            <p style="
+                                margin:0;
+                                color:#6B7280;
+                                font-size:14px;
+                            ">
+                                Instant menu access
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
+
+            <!-- RIGHT QR -->
+
+            <div style="
+                display:flex;
+                justify-content:center;
+            ">
+
+                <div style="
+                    background:#fff;
+                    padding:35px;
+                    border-radius:30px;
+                    box-shadow:0 20px 60px rgba(0,0,0,.08);
+                    text-align:center;
+                    border:1px solid #F1F1F1;
+                    max-width:360px;
+                    width:100%;
+                ">
+
+                    <div style="
+                        width:90px;
+                        height:90px;
+                        background:#FFF2EE;
+                        border-radius:24px;
+                        margin:auto auto 25px;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                    ">
+
+                        <i data-lucide="qr-code"
+                        style="
+                            width:42px;
+                            height:42px;
+                            color:#E8370E;
+                        "></i>
+
+                    </div>
+
+                    <h3 style="
+                        font-size:28px;
+                        font-weight:800;
+                        margin-bottom:10px;
+                        font-family:'Syne',sans-serif;
+                    ">
+                        Scan Me
+                    </h3>
+
+                    <p style="
+                        color:#6B7280;
+                        font-size:15px;
+                        margin-bottom:25px;
+                    ">
+                        Open restaurant menu instantly
+                    </p>
+
+                    <div style="
+                        background:#fff;
+                        padding:20px;
+                        border-radius:20px;
+                        display:inline-block;
+                        border:1px solid #F1F1F1;
+                    ">
+
+                        {!! QrCode::size(220)->generate(url('/restaurants')) !!}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+@media(max-width:992px){
+
+    .qr-wrapper{
+        grid-template-columns:1fr !important;
+        text-align:center;
+    }
+
+    .qr-title{
+        font-size:42px !important;
+    }
+
+}
+
+@media(max-width:576px){
+
+    .qr-title{
+        font-size:32px !important;
+    }
+
+}
+
+</style>
+    <!-- CATEGORY SECTION -->
+    <section id="categories" style="max-width:1280px; margin:0 auto; padding:80px 24px;">
+         
         <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:40px;">
             <div>
                 <p
