@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\UserRegisterController;
-use App\Http\Controllers\Auth\UserLoginController;
+use App\Http\Controllers\Auth\UserloginController;
 
 use App\Http\Controllers\RestaurantAdmin\OrderController as RestaurantOrderController;
 
@@ -179,9 +179,9 @@ Route::post(
 );
 
 
-Route::get('/login', [UserLoginController::class, 'showLogin']);
+Route::get('/login', [UserloginController::class, 'showLogin']);
 
-Route::post('/login-user', [UserLoginController::class, 'login']);
+Route::post('/login-user', [UserloginController::class, 'login']);
 
 
 
