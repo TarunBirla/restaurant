@@ -4,12 +4,13 @@ use App\Http\Controllers\Auth\UsersController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\OrderController;
 use App\Http\Controllers\Front\ProfileController as FrontProfileController;
+use App\Http\Controllers\RestaurantAdmin\ItemController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\UserRegisterController;
 use App\Http\Controllers\Admin\VendorController;
-
+use App\Http\Controllers\RestaurantAdmin\DashboardController as RestaurantDashboardController;
 use App\Http\Controllers\RestaurantAdmin\OrderController as RestaurantOrderController;
 
 use App\Http\Controllers\RestaurantAdmin\ProfileController;
@@ -42,20 +43,7 @@ Route::get(
     [HomeController::class, 'restaurants']
 );
 
-Route::get('/login', [UsersController::class, 'showLogin'])
-    ->name('login');
 
-// Route::post('/login-user', [UsersController::class, 'login']);
-Route::post('/login', [UsersController::class, 'login'])
-    ->name('login.submit');
-Route::get(
-    '/restaurant/{slug}',
-    [HomeController::class, 'restaurantProducts']
-);
-Route::get(
-    '/restaurant/{slug}/{category}',
-    [HomeController::class, 'restaurantCategoryProducts']
-);
 Route::middleware(['auth'])->group(function () {
     Route::get(
         '/dashboard',
@@ -156,9 +144,11 @@ Route::middleware(['auth', 'restaurant_admin'])
     ->name('restaurant.')
     ->group(function () {
 
-        Route::get('/dashboard', function () {
-            return view('restaurant.dashboard');
-        });
+        Route::get(
+            '/dashboard',
+            [RestaurantDashboardController::class, 'index']
+        );
+        Route::resource('items', ItemController::class);
 
         Route::resource('products', RestaurantProductController::class);
         Route::get(
@@ -202,7 +192,20 @@ Route::post(
 
 // Route::get('/login', [UsersController::class, 'showLogin']);    
 
+Route::get('/login', [UsersController::class, 'showLogin'])
+    ->name('login');
 
+// Route::post('/login-user', [UsersController::class, 'login']);
+Route::post('/login', [UsersController::class, 'login'])
+    ->name('login.submit');
+Route::get(
+    '/restaurant/{slug}',
+    [HomeController::class, 'restaurantProducts']
+);
+Route::get(
+    '/restaurant/{slug}/{category}',
+    [HomeController::class, 'restaurantCategoryProducts']
+);
 
 
 Route::post('/logout', function () {

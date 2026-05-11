@@ -1,40 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant System</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', sans-serif; }
 
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+
+        /* Sidebar */
+        #sidebar { width: 260px; min-height: 100vh; background: #0D0D0D; position: fixed; top: 0; left: 0; z-index: 50; display: flex; flex-direction: column; transition: transform .3s ease; }
+        #main-content { margin-left: 260px; min-height: 100vh; background: #F5F5F0; }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 11px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #9CA3AF;
+            text-decoration: none;
+            transition: all .18s;
+            margin: 2px 0;
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.07);
+            color: #fff;
+        }
+        .nav-link.active {
+            background: #E8370E;
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 4px 14px rgba(232,55,14,.35);
+        }
+        .nav-link .nav-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* Alert */
+        .alert-success {
+            background: #DCFCE7;
+            border: 1px solid #86EFAC;
+            color: #15803D;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 22px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Mobile */
+        #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 40; }
+        .mobile-menu-btn { display: none; }
+
+        @media(max-width: 1024px) {
+            #sidebar { transform: translateX(-100%); }
+            #sidebar.open { transform: translateX(0); }
+            #main-content { margin-left: 0 !important; }
+            .mobile-menu-btn { display: flex !important; }
+            #sidebar-overlay.active { display: block; }
+        }
+    </style>
 </head>
+<body>
 
-<body class="bg-gray-100">
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-<div class="flex">
+<!-- SIDEBAR -->
+@include('layouts.sidebar')
 
-    @include('layouts.sidebar')
+<!-- MAIN -->
+<div id="main-content">
+    @include('layouts.navbar')
 
-    <div class="ml-64 w-full">
-
-        @include('layouts.navbar')
-
-        <div class="p-6">
-
-            @if(session('success'))
-
-            <div class="bg-green-500 text-white p-3 rounded mb-5">
-                {{ session('success') }}
-            </div>
-
-            @endif
-
-            @yield('content')
-
+    <div style="padding: 28px 28px;">
+        @if(session('success'))
+        <div class="alert-success">
+            <i data-lucide="circle-check" style="width:18px; height:18px; flex-shrink:0;"></i>
+            {{ session('success') }}
         </div>
+        @endif
 
+        @if(session('error'))
+        <div style="background:#FEE2E2; border:1px solid #FCA5A5; color:#DC2626; border-radius:12px; padding:14px 18px; margin-bottom:22px; font-size:14px; font-weight:500; display:flex; align-items:center; gap:10px;">
+            <i data-lucide="circle-x" style="width:18px; height:18px; flex-shrink:0;"></i>
+            {{ session('error') }}
+        </div>
+        @endif
+
+        @yield('content')
     </div>
-
 </div>
 
+<script>
+    lucide.createIcons();
+
+    function openSidebar() {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('sidebar-overlay').classList.add('active');
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebar-overlay').classList.remove('active');
+    }
+</script>
 </body>
 </html>
