@@ -28,7 +28,6 @@
       <p class="text-sm font-medium text-gray-500 mb-3">Quick actions</p>
       <div class="flex flex-col gap-2">
         <a href="{{ route('admin.products.create') }}" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium w-fit">+ Add product</a>
-        <!-- <a href="{{ route('admin.categories.create') }}" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium w-fit">+ Add category</a> -->
       </div>
     </div>
     <div class="bg-white border border-gray-100 rounded-xl p-5">
