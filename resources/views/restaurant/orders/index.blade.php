@@ -2,96 +2,151 @@
 
 @section('content')
 
-<h1 class="text-4xl font-bold mb-8">
+    <h1 class="text-4xl font-bold mb-8">
 
-    Restaurant Orders
+        Restaurant Orders
 
-</h1>
+    </h1>
 
-<div class="bg-white rounded-2xl shadow overflow-hidden">
+    <div class="bg-white rounded-2xl shadow overflow-hidden">
 
-    <table class="w-full">
+        <table class="w-full">
 
-        <thead class="bg-gray-100">
+            <thead class="bg-gray-100">
 
-            <tr>
+                <tr>
 
-                <th class="p-5 text-left">
-                    Order ID
-                </th>
+                    <th class="p-5 text-left">
+                        Order ID
+                    </th>
 
-                <th class="p-5 text-left">
-                    User
-                </th>
+                    <th class="p-5 text-left">
+                        User
+                    </th>
 
-                <th class="p-5 text-left">
-                    Amount
-                </th>
+                    <th class="p-5 text-left">
+                        Amount
+                    </th>
 
-                <th class="p-5 text-left">
-                    Status
-                </th>
+                    <th class="p-5 text-left">
+                        Status
+                    </th>
+                    <th class="p-5 text-left">
+                        View
+                    </th>
 
-            </tr>
+                </tr>
 
-        </thead>
+            </thead>
 
-        <tbody>
+            <tbody>
 
-            @forelse($orders as $order)
+                @forelse($orders as $order)
 
-            <tr class="border-t">
+                    <tr class="border-t">
 
-                <td class="p-5">
+                        <td class="p-5">
 
-                    #{{ $order->id }}
+                            #{{ $order->id }}
 
-                </td>
+                        </td>
 
-                <td class="p-5">
+                        <td class="p-5">
 
-                    {{ $order->user->name ?? '' }}
+                            {{ $order->user->name ?? '' }}
 
-                </td>
+                        </td>
 
-                <td class="p-5">
+                        <td class="p-5">
 
-                    €{{ $order->total_amount }}
+                            £{{ $order->total_amount }}
 
-                </td>
+                        </td>
 
-                <td class="p-5">
+                        <td class="p-5">
 
-                    <span
-                    class="bg-green-100 text-green-700 px-4 py-1 rounded-full">
+                            @if($order->status == 'pending')
 
-                        {{ $order->status }}
+                                <span class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full text-sm font-semibold">
 
-                    </span>
+                                    Pending
 
-                </td>
+                                </span>
 
-            </tr>
+                            @elseif($order->status == 'completed')
 
-            @empty
+                                <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-semibold">
 
-            <tr>
+                                    Completed
 
-                <td colspan="4"
-                class="text-center py-20 text-gray-500">
+                                </span>
 
-                    No Orders Found
+                            @elseif($order->status == 'cancelled')
 
-                </td>
+                                <span class="bg-red-100 text-red-700 px-4 py-1 rounded-full text-sm font-semibold">
 
-            </tr>
+                                    Cancelled
 
-            @endforelse
+                                </span>
 
-        </tbody>
+                            @elseif($order->status == 'processing')
 
-    </table>
+                                <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-sm font-semibold">
 
-</div>
+                                    Processing
+
+                                </span>
+
+                            @elseif($order->status == 'delivered')
+
+                                <span class="bg-purple-100 text-purple-700 px-4 py-1 rounded-full text-sm font-semibold">
+
+                                    Delivered
+
+                                </span>
+
+                            @else
+
+                                <span class="bg-gray-100 text-gray-700 px-4 py-1 rounded-full text-sm font-semibold">
+
+                                    {{ ucfirst($order->status) }}
+
+                                </span>
+
+                            @endif
+
+                        </td>
+                        <td class="p-5">
+
+                            <a href="{{ route('restaurant.orders.show', $order->id) }}"
+                                class="bg-black text-white px-4 py-2 rounded-lg text-sm">
+
+                                View
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td colspan="4" class="text-center py-20 text-gray-500">
+
+                            No Orders Found
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 @endsection

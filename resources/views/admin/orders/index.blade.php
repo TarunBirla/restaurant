@@ -92,7 +92,7 @@
 
                 <td class="p-5 font-bold">
 
-                    €{{ $order->total_amount }}
+                    £{{ $order->total_amount }}
 
                 </td>
 

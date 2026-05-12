@@ -1,5 +1,5 @@
 <header style="background:#fff; box-shadow:0 1px 0 #F0F0EC; position:sticky; top:0; z-index:100;">
-    <div style="max-width:1280px; margin:0 auto; padding:0 24px;">
+    <div style=" margin:0 auto; padding:0 24px;" class="mx-auto max-w-7xl">
         <div style="display:flex; align-items:center; justify-content:space-between; height:68px;">
 
             <!-- LOGO -->

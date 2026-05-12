@@ -59,7 +59,7 @@ class ProductController extends Controller
 
             'price' => $request->price,
 
-            'currency' => 'EUR',
+            'currency' => 'Pound',
 
             'status' => 1
         ]);

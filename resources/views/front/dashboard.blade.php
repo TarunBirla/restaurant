@@ -2,264 +2,223 @@
 
 @section('content')
 
-<div class="bg-gray-100 min-h-screen py-10">
+    <div class="bg-gray-100 mx-auto max-w-7xl  px-5 py-10">
 
-    <div class="container mx-auto">
+        <div class="container mx-auto">
 
-        <div class="grid grid-cols-12 gap-8">
+            <div class="grid grid-cols-12 gap-8">
 
-            <!-- SIDEBAR -->
+                <!-- SIDEBAR -->
 
-            <div class="col-span-3">
+                <div class="col-span-3">
 
-                <div class="bg-white rounded-3xl shadow p-8 sticky top-28">
+                   @include('front.layouts.user-sidebar')
 
-                    <div class="text-center border-b pb-8">
+                </div>
 
-                        <div
-                        class="w-24 h-24 bg-red-500 rounded-full mx-auto flex items-center justify-center text-white text-4xl font-bold">
 
-                            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
 
-                        </div>
 
-                        <h2 class="text-2xl font-bold mt-5">
 
-                            {{ auth()->user()->name }}
+                <!-- CONTENT -->
 
-                        </h2>
+                <div class="col-span-9">
 
-                        <p class="text-gray-500 mt-2">
+                    <div class="grid grid-cols-3 gap-6">
 
-                            {{ auth()->user()->email }}
+                        <div class="bg-white rounded-3xl shadow p-8">
 
-                        </p>
-
-                    </div>
-
-                    <ul class="mt-8 space-y-3">
-
-                        <li>
-
-                            <a href="/dashboard"
-                            class="block bg-red-500 text-white px-5 py-4 rounded-xl">
-
-                                Dashboard
-
-                            </a>
-
-                        </li>
-
-                        <li>
-
-                            <a href="/profile"
-                            class="block hover:bg-gray-100 px-5 py-4 rounded-xl transition">
-
-                                My Profile
-
-                            </a>
-
-                        </li>
-
-                        <li>
-
-                            <a href="/my-orders"
-                            class="block hover:bg-gray-100 px-5 py-4 rounded-xl transition">
+                            <h3 class="text-gray-500 text-lg">
 
                                 My Orders
 
+                            </h3>
+
+                            <h2 class="text-5xl font-bold mt-5">
+
+                                {{ \App\Models\Order::where('user_id', auth()->id())->count() }}
+
+                            </h2>
+
+                        </div>
+                        <div class="bg-white rounded-3xl shadow p-8">
+
+                            <h3 class="text-gray-500 text-lg">
+
+                                Total Spent
+
+                            </h3>
+
+                            <h2 class="text-5xl font-bold mt-5 text-green-600">
+
+                                £{{ number_format(
+        \App\Models\Payment::where(
+            'user_id',
+            auth()->id()
+        )
+            ->where('payment_status', 'paid')
+            ->sum('amount'),
+        2
+    ) }}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="bg-white rounded-3xl shadow p-8">
+
+                            <h3 class="text-gray-500 text-lg">
+
+                                Cart Items
+
+                            </h3>
+
+                            <h2 class="text-5xl font-bold mt-5">
+
+                                {{ count(session('cart', [])) }}
+
+                            </h2>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+                    <!-- RECENT ORDERS -->
+
+                    <div class="bg-white rounded-3xl shadow mt-10 p-8">
+
+                        <div class="flex justify-between items-center mb-8">
+
+                            <h2 class="text-3xl font-bold">
+
+                                Recent Orders
+
+                            </h2>
+
+                            <a href="/my-orders" class="text-red-500 font-bold">
+
+                                View All
+
                             </a>
 
-                        </li>
+                        </div>
 
-                        <li>
+                        <table class="w-full">
 
-                            <a href="/cart"
-                            class="block hover:bg-gray-100 px-5 py-4 rounded-xl transition">
+                            <thead>
 
-                                Cart
+                                <tr class="border-b">
 
-                            </a>
+                                    <th class="text-left py-4">
+                                        Order ID
+                                    </th>
 
-                        </li>
+                                    <th class="text-left py-4">
+                                        Amount
+                                    </th>
 
-                        <li>
+                                    <th class="text-left py-4">
+                                        Date
+                                    </th>
 
-                            <form method="POST"
-                            action="/logout">
+                                    <th class="text-left py-4">
+                                        Status
+                                    </th>
 
-                                @csrf
+                                </tr>
 
-                                <button
-                                class="w-full text-left hover:bg-red-500 hover:text-white px-5 py-4 rounded-xl transition">
+                            </thead>
 
-                                    Logout
+                            <tbody>
 
-                                </button>
+                                @foreach(\App\Models\Order::where('user_id', auth()->id())->latest()->take(5)->get() as $order)
 
-                            </form>
+                                    <tr class="border-b">
 
-                        </li>
+                                        <td class="py-5">
 
-                    </ul>
+                                            #{{ $order->id }}
 
-                </div>
+                                        </td>
 
-            </div>
+                                        <td class="py-5">
 
+                                            £{{ $order->total_amount }}
 
+                                        </td>
 
+                                        <td class="py-5">
 
+                                            {{ $order->created_at->format('d M Y') }}
 
-            <!-- CONTENT -->
+                                        </td>
 
-            <div class="col-span-9">
+                                        <td class="p-5">
 
-                <div class="grid grid-cols-3 gap-6">
+                                            @if($order->status == 'pending')
 
-                    <div class="bg-white rounded-3xl shadow p-8">
+                                                <span
+                                                    class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-sm font-bold inline-flex items-center gap-2">
 
-                        <h3 class="text-gray-500 text-lg">
+                                                    Pending
 
-                            My Orders
+                                                </span>
 
-                        </h3>
+                                            @elseif($order->status == 'accepted')
 
-                        <h2 class="text-5xl font-bold mt-5">
+                                                <span
+                                                    class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-bold inline-flex items-center gap-2">
 
-                            {{ \App\Models\Order::where('user_id',auth()->id())->count() }}
+                                                    Accepted
 
-                        </h2>
+                                                </span>
 
-                    </div>
+                                            @elseif($order->status == 'completed')
 
-                    <div class="bg-white rounded-3xl shadow p-8">
+                                                <span
+                                                    class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-bold inline-flex items-center gap-2">
 
-                        <h3 class="text-gray-500 text-lg">
+                                                    Completed
 
-                            Cart Items
+                                                </span>
 
-                        </h3>
+                                            @elseif($order->status == 'cancelled')
 
-                        <h2 class="text-5xl font-bold mt-5">
+                                                <span
+                                                    class="bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-bold inline-flex items-center gap-2">
 
-                            {{ count(session('cart',[])) }}
+                                                    Cancelled
 
-                        </h2>
+                                                </span>
 
-                    </div>
+                                            @else
 
-                    <div class="bg-white rounded-3xl shadow p-8">
+                                                <span
+                                                    class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm font-bold inline-flex items-center gap-2">
 
-                        <h3 class="text-gray-500 text-lg">
+                                                    {{ ucfirst($order->status) }}
 
-                            Account Type
+                                                </span>
 
-                        </h3>
+                                            @endif
 
-                        <h2 class="text-3xl font-bold mt-5">
+                                        </td>
 
-                            {{ auth()->user()->role }}
+                                    </tr>
 
-                        </h2>
+                                @endforeach
 
-                    </div>
+                            </tbody>
 
-                </div>
-
-
-
-
-
-                <!-- RECENT ORDERS -->
-
-                <div class="bg-white rounded-3xl shadow mt-10 p-8">
-
-                    <div class="flex justify-between items-center mb-8">
-
-                        <h2 class="text-3xl font-bold">
-
-                            Recent Orders
-
-                        </h2>
-
-                        <a href="/my-orders"
-                        class="text-red-500 font-bold">
-
-                            View All
-
-                        </a>
+                        </table>
 
                     </div>
-
-                    <table class="w-full">
-
-                        <thead>
-
-                            <tr class="border-b">
-
-                                <th class="text-left py-4">
-                                    Order ID
-                                </th>
-
-                                <th class="text-left py-4">
-                                    Amount
-                                </th>
-
-                                <th class="text-left py-4">
-                                    Date
-                                </th>
-
-                                <th class="text-left py-4">
-                                    Status
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            @foreach(\App\Models\Order::where('user_id',auth()->id())->latest()->take(5)->get() as $order)
-
-                            <tr class="border-b">
-
-                                <td class="py-5">
-
-                                    #{{ $order->id }}
-
-                                </td>
-
-                                <td class="py-5">
-
-                                    €{{ $order->total_amount }}
-
-                                </td>
-
-                                <td class="py-5">
-
-                                    {{ $order->created_at->format('d M Y') }}
-
-                                </td>
-
-                                <td class="py-5">
-
-                                    <span
-                                    class="bg-green-100 text-green-700 px-4 py-1 rounded-full">
-
-                                        {{ $order->status }}
-
-                                    </span>
-
-                                </td>
-
-                            </tr>
-
-                            @endforeach
-
-                        </tbody>
-
-                    </table>
 
                 </div>
 
@@ -268,7 +227,5 @@
         </div>
 
     </div>
-
-</div>
 
 @endsection

@@ -5,6 +5,7 @@ use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\OrderController;
 use App\Http\Controllers\Front\ProfileController as FrontProfileController;
 use App\Http\Controllers\RestaurantAdmin\ItemController;
+use App\Http\Controllers\RestaurantAdmin\RestaurantPaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Auth\AdminLoginController;
@@ -16,7 +17,7 @@ use App\Http\Controllers\RestaurantAdmin\OrderController as RestaurantOrderContr
 use App\Http\Controllers\RestaurantAdmin\ProfileController;
 use App\Http\Controllers\Front\UserDashboardController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\RestaurantAdmin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\OrdersController;
@@ -59,6 +60,15 @@ Route::middleware(['auth'])->group(function () {
         '/cart/add',
         [CartController::class, 'add']
     );
+    Route::get(
+        '/cart/increase/{id}',
+        [CartController::class, 'increase']
+    );
+
+    Route::get(
+        '/cart/decrease/{id}',
+        [CartController::class, 'decrease']
+    );
 
     Route::get(
         '/cart/remove/{id}',
@@ -80,6 +90,10 @@ Route::middleware(['auth'])->group(function () {
         [OrderController::class, 'myOrders']
     );
     Route::get(
+        '/my-orders/{id}',
+        [OrderController::class, 'orderDetails']
+    );
+    Route::get(
         '/profile',
         [FrontProfileController::class, 'index']
     );
@@ -87,6 +101,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post(
         '/profile/update',
         [FrontProfileController::class, 'update']
+    );
+    Route::get(
+        '/transactions',
+        [OrderController::class, 'transactions']
     );
 
 });
@@ -118,7 +136,6 @@ Route::middleware(['auth', 'super_admin'])
 
         Route::resource('restaurants', RestaurantController::class);
 
-        Route::resource('categories', CategoryController::class);
 
         Route::resource('products', ProductController::class);
         Route::resource('orders', OrdersController::class);
@@ -149,12 +166,23 @@ Route::middleware(['auth', 'restaurant_admin'])
             [RestaurantDashboardController::class, 'index']
         );
         Route::resource('items', ItemController::class);
-
+        Route::resource('categories', CategoryController::class);
+        Route::resource('payments', RestaurantPaymentController::class);
         Route::resource('products', RestaurantProductController::class);
+        
         Route::get(
             '/orders',
             [RestaurantOrderController::class, 'index']
         );
+        Route::get(
+            '/orders/{id}',
+            [RestaurantOrderController::class, 'show']
+        )->name('orders.show');
+
+        Route::post(
+            '/orders/{id}/status',
+            [RestaurantOrderController::class, 'updateStatus']
+        )->name('orders.status');
 
         Route::get(
             '/profile',

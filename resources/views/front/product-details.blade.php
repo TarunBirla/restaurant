@@ -67,7 +67,7 @@
                 <!-- PRICE -->
                 <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:24px;">
                     <span style="font-family:'Poppins',sans-serif; font-size:42px; font-weight:800; color:#E8370E; line-height:1;">
-                        €{{ $product->price }}
+                        £{{ $product->price }}
                     </span>
                     <span style="font-size:14px; color:#9CA3AF; font-weight:500;">per serving</span>
                 </div>

@@ -14,7 +14,17 @@ class Order extends Model
         'user_id',
         'restaurant_id',
         'total_amount',
-        'status'
+        'order_type',
+
+        'address',
+        'phone',
+        'pincode',
+
+        'payment_method',
+        'status',
+        'stuart_job_id',
+        'tracking_url',
+        'delivery_status',
     ];
 
     public function user()
@@ -30,5 +40,9 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
     }
 }

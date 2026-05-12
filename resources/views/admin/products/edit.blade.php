@@ -18,7 +18,7 @@
           <input type="text" name="name" value="{{ $product->name }}" class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div>
-          <label class="block text-xs uppercase tracking-wide text-gray-400 font-medium mb-2">Price (€)</label>
+          <label class="block text-xs uppercase tracking-wide text-gray-400 font-medium mb-2">Price (£)</label>
           <input type="number" name="price" step="0.01" value="{{ $product->price }}" class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div>
@@ -26,6 +26,18 @@
           <select name="vendor_id" class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             @foreach($vendors as $v)
             <option value="{{ $v->id }}" {{ $product->vendor_id==$v->id?'selected':'' }}>{{ $v->name }}</option>
+            @endforeach
+          </select>
+        </div>
+
+         <div>
+          <label class="block text-xs uppercase tracking-wide text-gray-400 font-medium mb-2">Category</label>
+          <select name="category_id" class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Select category</option>
+            
+            @foreach($categories as $c)
+            <option value="{{ $c->id }}" {{ $product->category_id==$c->id?'selected':'' }}>{{ $c->name }}</option>
+
             @endforeach
           </select>
         </div>

@@ -18,7 +18,7 @@
           <input type="text" name="name" class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div>
-          <label class="block text-xs uppercase tracking-wide text-gray-400 font-medium mb-2">Price (€)</label>
+          <label class="block text-xs uppercase tracking-wide text-gray-400 font-medium mb-2">Price (£)</label>
           <input type="number" name="price" step="0.01" class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div>

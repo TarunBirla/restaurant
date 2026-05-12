@@ -30,5 +30,14 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'stuart' => [
+
+        'client_id' => env('STUART_CLIENT_ID'),
+
+        'client_secret' => env('STUART_CLIENT_SECRET'),
+
+        'base_url' => env('STUART_BASE_URL'),
+
+    ],
 
 ];

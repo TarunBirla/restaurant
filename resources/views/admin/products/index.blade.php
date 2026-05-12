@@ -36,7 +36,7 @@
               {{ $product->category->name ?? '—' }}
             </span>
           </td>
-          <td class="px-4 py-3 text-sm font-medium">€{{ $product->price }}</td>
+          <td class="px-4 py-3 text-sm font-medium">£{{ $product->price }}</td>
           <td class="px-4 py-3">
             <a href="{{ route('admin.products.edit',$product->id) }}" class="inline-flex items-center gap-1 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-lg text-xs font-medium mr-1">Edit</a>
             <form method="POST" action="{{ route('admin.products.destroy',$product->id) }}" class="inline">

@@ -6,11 +6,11 @@
       <h1 class="text-2xl font-medium">Edit category</h1>
       <p class="text-sm text-gray-500 mt-1">Update category details</p>
     </div>
-    <a href="{{ route('admin.categories.index') }}" class="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium">← Back</a>
+    <a href="{{ route('restaurant.categories.index') }}" class="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium">← Back</a>
   </div>
 
   <div class="bg-white border border-gray-100 rounded-xl p-6">
-    <form method="POST" action="{{ route('admin.categories.update',$category->id) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('restaurant.categories.update',$category->id) }}" enctype="multipart/form-data">
       @csrf @method('PUT')
 
       <div class="mb-4">
@@ -62,7 +62,7 @@
       </div>
 
       <div class="flex justify-between items-center mt-6 pt-5 border-t border-gray-100">
-        <a href="{{ route('admin.categories.index') }}" class="text-sm text-gray-500 hover:text-gray-700">Discard changes</a>
+        <a href="{{ route('restaurant.categories.index') }}" class="text-sm text-gray-500 hover:text-gray-700">Discard changes</a>
         <button class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium">✓ Update category</button>
       </div>
     </form>

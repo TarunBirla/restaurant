@@ -6,7 +6,7 @@
       <h1 class="text-2xl font-medium">Categories</h1>
       <p class="text-sm text-gray-500 mt-1">Manage your food categories</p>
     </div>
-    <a href="{{ route('admin.categories.create') }}" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">+ Add category</a>
+    <a href="{{ route('restaurant.categories.create') }}" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">+ Add category</a>
   </div>
 
   <div class="bg-white border border-gray-100 rounded-xl overflow-hidden">
@@ -40,8 +40,8 @@
             @endif
           </td>
           <td class="px-4 py-3">
-            <a href="{{ route('admin.categories.edit',$category->id) }}" class="inline-flex items-center gap-1 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-lg text-xs font-medium mr-1">Edit</a>
-            <form method="POST" action="{{ route('admin.categories.destroy',$category->id) }}" class="inline">
+            <a href="{{ route('restaurant.categories.edit',$category->id) }}" class="inline-flex items-center gap-1 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-lg text-xs font-medium mr-1">Edit</a>
+            <form method="POST" action="{{ route('restaurant.categories.destroy',$category->id) }}" class="inline">
               @csrf @method('DELETE')
               <button class="inline-flex items-center gap-1 bg-red-100 text-red-800 px-3 py-1 rounded-lg text-xs font-medium" onclick="return confirm('Delete this category?')">Delete</button>
             </form>

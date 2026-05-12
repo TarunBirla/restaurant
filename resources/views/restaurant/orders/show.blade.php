@@ -22,7 +22,7 @@
 
         </div>
 
-        <a href="/admin/orders"
+        <a href="/restaurant/orders"
         class="bg-black text-white px-6 py-3 rounded-xl">
 
             Back
@@ -65,22 +65,7 @@
 
 
 
-        <div class="bg-white rounded-2xl shadow p-8">
-
-            <h2 class="text-xl font-bold mb-5">
-
-                Restaurant
-
-            </h2>
-
-            <p class="mb-3">
-
-                <strong>Name:</strong>
-                {{ $order->restaurant->name }}
-
-            </p>
-
-        </div>
+       
 
 
 
@@ -95,7 +80,7 @@
             </h2>
 
             <form method="POST"
-            action="{{ route('admin.orders.status',$order->id) }}">
+            action="{{ route('restaurant.orders.status',$order->id) }}">
 
                 @csrf
 
@@ -112,12 +97,20 @@
                     </option>
 
                     <option
+                    value="accepted"
+                    {{ $order->status == 'accepted' ? 'selected' : '' }}>
+
+                        Accepted
+
+                    </option>
+                    <option
                     value="completed"
                     {{ $order->status == 'completed' ? 'selected' : '' }}>
 
                         Completed
 
                     </option>
+                    
 
                     <option
                     value="cancelled"

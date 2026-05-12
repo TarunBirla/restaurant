@@ -15,8 +15,9 @@ class HomeController extends Controller
         $products = Product::latest()->get();
 
         $categories = Category::whereNull('parent_id')->get();
+
         $qrCode = QrCode::size(220)
-    ->generate(url('/restaurants'));
+            ->generate(url('/restaurants'));
 
         return view('front.home', compact(
             'products',
@@ -65,19 +66,32 @@ class HomeController extends Controller
             $slug
         )->firstOrFail();
 
-        $categories = Category::whereHas('products', function ($query) use ($restaurant) {
+        /*
+        |--------------------------------------------------------------------------
+        | ONLY THIS RESTAURANT CATEGORIES
+        |--------------------------------------------------------------------------
+        */
 
-            $query->where(
-                'restaurant_id',
-                $restaurant->id
-            );
+        $categories = Category::where(
+            'restaurant_id',
+            $restaurant->id
+        )
+            ->whereNull('parent_id')
+            ->latest()
+            ->get();
 
-        })->get();
+        /*
+        |--------------------------------------------------------------------------
+        | ONLY THIS RESTAURANT PRODUCTS
+        |--------------------------------------------------------------------------
+        */
 
         $products = Product::where(
             'restaurant_id',
             $restaurant->id
-        )->latest()->get();
+        )
+            ->latest()
+            ->get();
 
         return view(
             'front.restaurant-products',
@@ -98,19 +112,41 @@ class HomeController extends Controller
             $slug
         )->firstOrFail();
 
+        /*
+        |--------------------------------------------------------------------------
+        | CATEGORY MUST BELONG TO SAME RESTAURANT
+        |--------------------------------------------------------------------------
+        */
+
         $category = Category::where(
             'slug',
             $categorySlug
-        )->firstOrFail();
-
-        $categories = Category::whereHas('products', function ($query) use ($restaurant) {
-
-            $query->where(
+        )
+            ->where(
                 'restaurant_id',
                 $restaurant->id
-            );
+            )
+            ->firstOrFail();
 
-        })->get();
+        /*
+        |--------------------------------------------------------------------------
+        | ALL CATEGORIES OF THIS RESTAURANT
+        |--------------------------------------------------------------------------
+        */
+
+        $categories = Category::where(
+            'restaurant_id',
+            $restaurant->id
+        )
+            ->whereNull('parent_id')
+            ->latest()
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | ONLY PRODUCTS OF THIS RESTAURANT + CATEGORY
+        |--------------------------------------------------------------------------
+        */
 
         $products = Product::where(
             'restaurant_id',

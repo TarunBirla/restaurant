@@ -62,6 +62,51 @@ class CartController extends Controller
         return redirect('/cart')
             ->with('success', 'Product added');
     }
+    public function increase($id)
+    {
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$id])) {
+
+            $cart[$id]['quantity']++;
+
+        }
+
+        session()->put('cart', $cart);
+
+        return back();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | DECREASE QTY
+    |--------------------------------------------------------------------------
+    */
+
+    public function decrease($id)
+    {
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$id])) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | MINIMUM 1
+            |--------------------------------------------------------------------------
+            */
+
+            if ($cart[$id]['quantity'] > 1) {
+
+                $cart[$id]['quantity']--;
+
+            }
+
+        }
+
+        session()->put('cart', $cart);
+
+        return back();
+    }
     public function remove($id)
     {
         $cart = session()->get('cart', []);

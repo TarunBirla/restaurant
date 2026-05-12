@@ -97,7 +97,7 @@
 
                 <td class="p-5">
 
-                    €{{ $product->price }}
+                    £{{ $product->price }}
 
                 </td>
 

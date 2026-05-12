@@ -180,7 +180,7 @@
                             {{ $product->name }}
                         </h3>
                         <span style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#E8370E; white-space:nowrap;">
-                            €{{ $product->price }}
+                            £{{ $product->price }}
                         </span>
                     </div>
                     <p style="color:#6B7280; font-size:13px; line-height:1.6; margin:0 0 16px;">

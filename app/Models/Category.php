@@ -10,12 +10,20 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
+
+        'restaurant_id',
         'name',
-         'slug',
+        'slug',
         'parent_id',
         'image',
         'status'
+
     ];
+
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
 
     public function parent()
     {
