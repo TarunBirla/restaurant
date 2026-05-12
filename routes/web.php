@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\RestaurantAdmin\ProductController as RestaurantProductController;
 use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Artisan;
 
 
 Route::get(
@@ -235,6 +236,13 @@ Route::get(
     [HomeController::class, 'restaurantCategoryProducts']
 );
 
+Route::get('/storage-link', function () {
+
+    Artisan::call('storage:link');
+
+    return 'Storage Link Created Successfully';
+
+});
 
 Route::post('/logout', function () {
 
