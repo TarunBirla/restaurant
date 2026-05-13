@@ -9,6 +9,8 @@ use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Services\StuartService;
 use App\Models\Restaurant;
+use Illuminate\Support\Facades\Log;
+
 
 class OrderController extends Controller
 {
@@ -24,6 +26,7 @@ class OrderController extends Controller
 
     public function placeOrder(Request $request)
     {
+        Log::info('PLACE ORDER START');
         $request->validate([
 
             'order_type' => 'required',
@@ -38,6 +41,7 @@ class OrderController extends Controller
             'pincode' => 'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
 
         ]);
+        Log::info('VALIDATION SUCCESS');
         $cart = session()->get('cart', []);
 
         if (empty($cart)) {
@@ -75,6 +79,9 @@ class OrderController extends Controller
             'payment_method' => $request->payment_method,
 
             'status' => 'pending'
+        ]);
+        Log::info('ORDER CREATED', [
+            'order_id' => $order->id
         ]);
 
         foreach ($cart as $item) {
@@ -117,12 +124,13 @@ class OrderController extends Controller
                 ? 'pending'
                 : 'paid'
         ]);
+        Log::info('PAYMENT CREATED');
         /*
 |--------------------------------------------------------------------------
 | STUART DELIVERY
 |--------------------------------------------------------------------------
 */
-
+        Log::info('STUART DELIVERY START');
         if ($request->order_type == 'delivery') {
 
             $restaurant = Restaurant::find(
@@ -135,6 +143,9 @@ class OrderController extends Controller
                 $order,
                 $restaurant
             );
+            Log::info('DELIVERY RESPONSE', [
+                'delivery' => $delivery
+            ]);
 
             /*
             |--------------------------------------------------------------------------
