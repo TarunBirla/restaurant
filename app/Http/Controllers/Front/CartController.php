@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Order;
 
 class CartController extends Controller
 {
@@ -16,6 +17,56 @@ class CartController extends Controller
             'front.cart',
             compact('cart')
         );
+    }
+    public function driverwebhook(Request $request)
+    {
+        \Log::info('STUART WEBHOOK', $request->all());
+
+        $data = $request->data;
+
+        if (!$data) {
+            return response()->json([
+                'success' => false
+            ]);
+        }
+
+        $clientReference =
+            $data['clientReference'] ?? null;
+
+        if (!$clientReference) {
+            return response()->json([
+                'success' => false
+            ]);
+        }
+
+        $orderId =
+            str_replace(
+                'ORDER-',
+                '',
+                $clientReference
+            );
+
+        $order = Order::find($orderId);
+
+        if (!$order) {
+            return response()->json([
+                'success' => false
+            ]);
+        }
+
+        $order->update([
+
+            'delivery_status' =>
+                $data['status'] ?? null,
+
+            'tracking_url' =>
+                $data['trackingUrl'] ?? null,
+
+        ]);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     public function add(Request $request)

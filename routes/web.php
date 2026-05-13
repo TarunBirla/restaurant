@@ -25,7 +25,7 @@ use App\Http\Controllers\RestaurantAdmin\ProductController as RestaurantProductC
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Artisan;
 
-
+Route::post('/driverwebhook',[CartController::class, 'driverwebhook']);
 Route::get(
     '/',
     [HomeController::class, 'home']

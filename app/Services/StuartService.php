@@ -6,13 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class StuartService
-{
-    /*
-    |--------------------------------------------------------------------------
-    | GET ACCESS TOKEN
-    |--------------------------------------------------------------------------
-    */
-
+{    
     public function getToken()
     {
         $response = Http::withoutVerifying()
@@ -28,13 +22,6 @@ class StuartService
 
         return $response->json()['access_token'] ?? null;
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | CREATE DELIVERY
-    |--------------------------------------------------------------------------
-    */
-
     public function createDelivery($order, $restaurant)
     {
         Log::info('STEP 1 - CREATE DELIVERY START');
@@ -132,4 +119,5 @@ class StuartService
 
         return $response->json();
     }
+
 }

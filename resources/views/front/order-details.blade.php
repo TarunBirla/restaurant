@@ -423,7 +423,7 @@
                         <a
                         href="{{ $order->tracking_url }}"
                         target="_blank"
-                        class="bg-green-500 text-white px-6 py-3 rounded-2xl inline-block mt-5">
+                        class="bg-green-500 text-white px-6 py-3 rounded-2xl inline-block mt-5 mb-5">
 
                             Track Delivery
 
@@ -467,6 +467,10 @@
                             <div class="info-item">
                                 <label>Address</label>
                                 <span>{{ $order->address ?? '—' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Delivery Status</label>
+                                <span>{{ $order->delivery_status ?? '—' }}</span>
                             </div>
                         </div>
                     </div>

@@ -159,10 +159,12 @@ class OrderController extends Controller
                     $delivery['id'] ?? null,
 
                 'tracking_url' =>
-                    $delivery['tracking_url'] ?? null,
+                    $delivery['deliveries'][0]['tracking_url']
+                    ?? null,
 
                 'delivery_status' =>
-                    $delivery['status'] ?? 'pending',
+                    $delivery['status']
+                    ?? 'pending',
 
             ]);
         }
