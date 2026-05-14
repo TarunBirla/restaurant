@@ -30,12 +30,44 @@ use Illuminate\Support\Facades\Artisan;
 Route::post('/driverwebhook', [CartController::class, 'driverwebhook']);
 
 
-Route::get('/payment', [PaymentController::class, 'index'])->name('payment.form');
-Route::post('/payment/pay', [PaymentController::class, 'pay'])->name('payment.pay');
-Route::post('/payment/notify', [PaymentController::class, 'notify'])->name('payment.notify');
-Route::post('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
-Route::post('/payment/failure', [PaymentController::class, 'failure'])->name('payment.failure');
-Route::get('/payment/successpage', [PaymentController::class, 'successPage'])->name('payment.successpage');
+// Route::get('/payment', [PaymentController::class, 'index'])->name('payment.form');
+// Route::post('/payment/pay', [PaymentController::class, 'pay'])->name('payment.pay');
+// Route::post('/payment/notify', [PaymentController::class, 'notify'])->name('payment.notify');
+// Route::post('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+// Route::post('/payment/failure', [PaymentController::class, 'failure'])->name('payment.failure');
+// Route::get('/payment/successpage', [PaymentController::class, 'successPage'])->name('payment.successpage');
+Route::get(
+    '/payment',
+    [PaymentController::class, 'index']
+)->name('payment.form');
+
+Route::post(
+    '/payment/pay',
+    [PaymentController::class, 'pay']
+)->name('payment.pay');
+
+Route::match(
+    ['get', 'post'],
+    '/payment/notify',
+    [PaymentController::class, 'notify']
+)->name('payment.notify');
+
+Route::match(
+    ['get', 'post'],
+    '/payment/success',
+    [PaymentController::class, 'success']
+)->name('payment.success');
+
+Route::match(
+    ['get', 'post'],
+    '/payment/failure',
+    [PaymentController::class, 'failure']
+)->name('payment.failure');
+
+Route::get(
+    '/payment/successpage',
+    [PaymentController::class, 'successPage']
+)->name('payment.successpage');
 
 
 
@@ -208,7 +240,7 @@ Route::middleware(['auth', 'restaurant_admin'])
             '/profile/update',
             [ProfileController::class, 'update']
         );
-       // ✅ ADD THIS
+        // ✅ ADD THIS
         Route::post(
             '/orders/payment-status/{id}',
             [OrderController::class, 'updatePaymentStatus']

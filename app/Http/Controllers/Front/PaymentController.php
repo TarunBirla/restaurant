@@ -34,7 +34,7 @@ class PaymentController extends Controller
         $checksumString = "{$memberId}|{$totype}|{$amount}|{$merchantTransactionId}|{$merchantRedirectUrl}|{$secureKey}";
         $checksum = md5($checksumString);
         $data = [
-            'memberId' => '16265',
+            'memberId' => $memberId,
             'language' => env('TRANSACTWORLD_LANGUAGE'),
             'checksum' => $checksum,
             'totype' => $totype,
