@@ -90,7 +90,9 @@
                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 16px rgba(0,0,0,.07)'">
 
                         <div style="position:relative; overflow:hidden;">
-                            <img src="{{ asset('storage/' . $product->image) }}"
+                            <img src="{{ $product->image 
+    ? asset('storage/' . $product->image) 
+    : asset('default.png') }}"
                                 style="width:100%; height:210px; object-fit:cover; transition:transform .5s; display:block;"
                                 onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
                             <div style="position:absolute; top:12px; left:12px;" class="badge-primary">

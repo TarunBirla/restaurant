@@ -1,9 +1,11 @@
 <?php
-
 use App\Http\Controllers\Auth\UsersController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\OrderController;
+use App\Http\Controllers\Front\PaymentController;
 use App\Http\Controllers\Front\ProfileController as FrontProfileController;
+// use App\Http\Controllers\PaymentController;
+
 use App\Http\Controllers\RestaurantAdmin\ItemController;
 use App\Http\Controllers\RestaurantAdmin\RestaurantPaymentController;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +27,19 @@ use App\Http\Controllers\RestaurantAdmin\ProductController as RestaurantProductC
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Artisan;
 
-Route::post('/driverwebhook',[CartController::class, 'driverwebhook']);
+Route::post('/driverwebhook', [CartController::class, 'driverwebhook']);
+
+
+Route::get('/payment', [PaymentController::class, 'index'])->name('payment.form');
+Route::post('/payment/pay', [PaymentController::class, 'pay'])->name('payment.pay');
+Route::post('/payment/notify', [PaymentController::class, 'notify'])->name('payment.notify');
+Route::post('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+Route::post('/payment/failure', [PaymentController::class, 'failure'])->name('payment.failure');
+Route::get('/payment/successpage', [PaymentController::class, 'successPage'])->name('payment.successpage');
+
+
+
+
 Route::get(
     '/',
     [HomeController::class, 'home']
@@ -170,7 +184,7 @@ Route::middleware(['auth', 'restaurant_admin'])
         Route::resource('categories', CategoryController::class);
         Route::resource('payments', RestaurantPaymentController::class);
         Route::resource('products', RestaurantProductController::class);
-        
+
         Route::get(
             '/orders',
             [RestaurantOrderController::class, 'index']
@@ -194,6 +208,11 @@ Route::middleware(['auth', 'restaurant_admin'])
             '/profile/update',
             [ProfileController::class, 'update']
         );
+       // ✅ ADD THIS
+        Route::post(
+            '/orders/payment-status/{id}',
+            [OrderController::class, 'updatePaymentStatus']
+        )->name('orders.payment.status');
 
     });
 

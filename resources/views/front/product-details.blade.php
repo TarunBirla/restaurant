@@ -13,7 +13,9 @@
             <!-- IMAGE SIDE -->
             <div>
                 <div style="border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.12); position:relative; background:#fff;">
-                    <img src="{{ asset('storage/' . $product->image) }}"
+                    <img src="{{ $product->image 
+    ? asset('storage/' . $product->image) 
+    : asset('default.png') }}"
                          style="width:100%; aspect-ratio:4/3; object-fit:cover; display:block; transition:transform .6s;"
                          onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
                     <div style="position:absolute; top:16px; left:16px;" class="badge-primary">

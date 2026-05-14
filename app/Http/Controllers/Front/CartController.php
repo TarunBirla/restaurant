@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
+use Illuminate\Support\Facades\Log;
+
 
 class CartController extends Controller
 {
@@ -20,7 +22,7 @@ class CartController extends Controller
     }
     public function driverwebhook(Request $request)
     {
-        \Log::info('STUART WEBHOOK', $request->all());
+        Log::info('STUART WEBHOOK', $request->all());
 
         $data = $request->data;
 

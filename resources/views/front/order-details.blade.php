@@ -418,18 +418,40 @@
                     </div>
                 </div>
 
-                    @if($order->tracking_url)
+                   @if($order->tracking_url)
 
-                        <a
-                        href="{{ $order->tracking_url }}"
-                        target="_blank"
+                    <button
+                        type="button"
+                        onclick="openTracking()"
                         class="bg-green-500 text-white px-6 py-3 rounded-2xl inline-block mt-5 mb-5">
+                        Track Delivery
+                    </button>
 
-                            Track Delivery
+                    <div id="trackingContainer" style="display:none;" class="mt-4 mb-4">
+                        <iframe
+                            id="trackingFrame"
+                            src=""
+                            width="100%"
+                            height="700"
+                            style="border:none; border-radius:16px; background:#fff;">
+                        </iframe>
+                    </div>
 
-                        </a>
+                    <script>
+                    function openTracking() {
 
-                        @endif
+                        document.getElementById('trackingContainer').style.display = 'block';
+
+                        document.getElementById('trackingFrame').src =
+                            "{{ $order->tracking_url }}";
+
+                        // optional scroll
+                        document.getElementById('trackingContainer')
+                            .scrollIntoView({ behavior: 'smooth' });
+                    }
+                    </script>
+
+                    @endif
 
                 {{-- PAYMENT + DELIVERY --}}
                 <div class="info-grid">

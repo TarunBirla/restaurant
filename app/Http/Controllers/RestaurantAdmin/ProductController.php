@@ -25,14 +25,17 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::where(
+            'restaurant_id',
+            auth()->user()->restaurant_id
+        )->get();
 
         return view(
             'restaurant.products.create',
             compact('categories')
         );
     }
-    
+
 
     public function store(Request $request)
     {

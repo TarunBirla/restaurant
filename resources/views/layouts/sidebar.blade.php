@@ -15,7 +15,7 @@
     </div>
 
     <!-- USER BADGE -->
-    <div style="padding: 18px 20px; border-bottom: 1px solid #1F1F1F;">
+    <!-- <div style="padding: 18px 20px; border-bottom: 1px solid #1F1F1F;">
         <div style="display:flex; align-items:center; gap:11px;">
             <div
                 style="width:40px; height:40px; background:#E8370E; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:'Poppins',sans-serif; font-weight:800; font-size:16px; color:#fff;">
@@ -32,7 +32,7 @@
                 </span>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- NAV -->
     <!-- <div style="flex:1; overflow-y:auto; padding: 16px 12px;"> -->

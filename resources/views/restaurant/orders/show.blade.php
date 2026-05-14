@@ -60,7 +60,27 @@
             </p>
 
         </div>
+<div class="bg-white rounded-2xl shadow p-8">
 
+    <h2 class="text-xl font-bold mb-5">
+        Payment Info
+    </h2>
+
+    <p class="mb-3">
+        <strong>Payment Method:</strong>
+
+        {{ $order->payment->payment_method ?? 'N/A' }}
+    </p>
+
+    <p class="mb-3">
+        <strong>Payment Status:</strong>
+
+        <span class="px-3 py-1 rounded-full bg-gray-100">
+            {{ $order->payment->payment_status ?? 'Pending' }}
+        </span>
+    </p>
+
+</div>
 
 
 
@@ -132,6 +152,57 @@
             </form>
 
         </div>
+        <div class="mt-8 border-t pt-6">
+
+    <h3 class="text-lg font-bold mb-4">
+        Update Payment Status
+    </h3>
+
+    <form method="POST"
+    action="{{ route('restaurant.orders.payment.status', $order->id) }}">
+
+        @csrf
+
+        <select
+        name="payment_status"
+        class="w-full border rounded-xl p-4">
+
+            <option
+            value="pending"
+            {{ optional($order->payment)->payment_status == 'pending' ? 'selected' : '' }}>
+                Pending
+            </option>
+
+            <option
+            value="paid"
+            {{ optional($order->payment)->payment_status == 'paid' ? 'selected' : '' }}>
+                Paid
+            </option>
+
+            <option
+            value="failed"
+            {{ optional($order->payment)->payment_status == 'failed' ? 'selected' : '' }}>
+                Failed
+            </option>
+
+            <option
+            value="cancelled"
+            {{ optional($order->payment)->payment_status == 'cancelled' ? 'selected' : '' }}>
+                Cancelled
+            </option>
+
+        </select>
+
+        <button
+        class="bg-green-500 text-white px-8 py-3 rounded-xl mt-5">
+
+            Update Payment
+
+        </button>
+
+    </form>
+
+</div>
 
     </div>
 

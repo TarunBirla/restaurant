@@ -48,9 +48,9 @@
 
                 <!-- CART ITEMS -->
 
-                <div class="mb-10">
+                <div class="mb-4">
 
-                    <h2 class="text-2xl font-bold mb-6">
+                    <h2 class="text-xl font-bold mb-2">
 
                         Order Summary
 
@@ -70,7 +70,7 @@
 
                             <div class="flex items-center gap-4">
 
-                                <img src="{{ asset('storage/' . $item['image']) }}" class="w-30 h-30 rounded-xl object-cover">
+                                <img src="{{ asset('storage/' . $item['image']) }}" class="w-40 h-40 rounded-xl object-cover">
 
                                 <div>
 
@@ -146,9 +146,9 @@
 
                 <!-- TOTAL -->
 
-                <div class="flex justify-between items-center border-b pb-6 mb-8">
+                <div class="flex justify-between items-center border-b pb-4 mb-4">
 
-                    <h2 class="text-3xl font-bold">
+                    <h2 class="text-xl font-bold">
 
                         Total Amount
 
@@ -164,13 +164,15 @@
 
                 <!-- FORM -->
 
-                <form method="POST" action="/place-order">
+                <!-- <form method="POST" action="/place-order" > -->
+                <form method="POST" action="/place-order" id="checkoutForm">
+                    <!-- <form method="POST" action="{{ route('payment.pay') }}" > -->
 
                     @csrf
 
                     <!-- ORDER TYPE -->
 
-                    <h2 class="text-2xl font-bold mb-5">
+                    <h2 class="text-xl font-bold mb-2">
 
                         Select Order Type
 
@@ -178,38 +180,38 @@
 
                     <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
 
-                                        <label class="border rounded-2xl p-5 cursor-pointer hover:border-red-500 transition">
+                                                <label class="border rounded-2xl p-5 cursor-pointer hover:border-red-500 transition">
 
-                                            <input type="radio" name="order_type" value="dine_in" required>
+                                                    <input type="radio" name="order_type" value="dine_in" required>
 
-                                            <span class="ml-2 font-semibold text-lg">
+                                                    <span class="ml-2 font-semibold text-lg">
 
-                                                Dine In
+                                                        Dine In
 
-                                            </span>
+                                                    </span>
 
-                                        </label>
+                                                </label>
 
-                                        <label class="border rounded-2xl p-5 cursor-pointer hover:border-red-500 transition">
+                                                <label class="border rounded-2xl p-5 cursor-pointer hover:border-red-500 transition">
 
-                                            <input type="radio" name="order_type" value="delivery" required>
+                                                    <input type="radio" name="order_type" value="delivery" required>
 
-                                            <span class="ml-2 font-semibold text-lg">
+                                                    <span class="ml-2 font-semibold text-lg">
 
-                                                Home Delivery
+                                                        Home Delivery
 
-                                            </span>
+                                                    </span>
 
-                                        </label>
+                                                </label>
 
-                                    </div> -->
+                                            </div> -->
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
 
                         <!-- DINE IN -->
 
                         <label
-                            class="border-2 border-gray-200 rounded-3xl p-5 cursor-pointer transition hover:border-red-500 hover:bg-red-50 flex items-center justify-between">
+                            class="border-2 border-gray-200 rounded-3xl p-2 cursor-pointer transition hover:border-red-500 hover:bg-red-50 flex items-center justify-between">
 
                             <div class="flex items-center gap-4">
 
@@ -222,7 +224,7 @@
 
                                 <div>
 
-                                    <h3 class="font-bold text-xl text-gray-800">
+                                    <h3 class="font-bold text-lg text-gray-800">
 
                                         Dine In
 
@@ -240,7 +242,7 @@
 
                             <!-- ICON -->
 
-                            <div class="text-3xl">
+                            <div class="text-xl">
 
                                 🍽️
 
@@ -251,7 +253,7 @@
                         <!-- HOME DELIVERY -->
 
                         <label
-                            class="border-2 border-gray-200 rounded-3xl p-5 cursor-pointer transition hover:border-red-500 hover:bg-red-50 flex items-center justify-between">
+                            class="border-2 border-gray-200 rounded-3xl p-2 cursor-pointer transition hover:border-red-500 hover:bg-red-50 flex items-center justify-between">
 
                             <div class="flex items-center gap-4">
 
@@ -264,7 +266,7 @@
 
                                 <div>
 
-                                    <h3 class="font-bold text-xl text-gray-800">
+                                    <h3 class="font-bold text-lg text-gray-800">
 
                                         Home Delivery
 
@@ -282,7 +284,7 @@
 
                             <!-- ICON -->
 
-                            <div class="text-3xl">
+                            <div class="text-xl">
 
                                 🚚
 
@@ -328,22 +330,22 @@
 
                         <!-- <div class="mb-6">
 
-                                <label class="font-bold text-lg block mb-3">
+                                        <label class="font-bold text-lg block mb-3">
 
-                                    Phone Number
+                                            Phone Number
 
-                                </label>
+                                        </label>
 
-                                <input type="text" id="phone" name="phone" placeholder="Enter Phone Number"
-                                    class="w-full border-2 border-gray-200 rounded-2xl p-5 focus:outline-none focus:ring-2 focus:ring-red-500">
+                                        <input type="text" id="phone" name="phone" placeholder="Enter Phone Number"
+                                            class="w-full border-2 border-gray-200 rounded-2xl p-5 focus:outline-none focus:ring-2 focus:ring-red-500">
 
-                            </div> -->
+                                    </div> -->
 
                     </div>
 
                     <!-- PAYMENT -->
 
-                    <h2 class="text-2xl font-bold mb-5">
+                    <h2 class="text-xl font-bold mb-2">
 
                         Select Payment Method
 
@@ -354,7 +356,7 @@
                         <!-- ONLINE PAYMENT -->
 
                         <label
-                            class="border-2 border-gray-200 rounded-3xl p-5 cursor-pointer transition hover:border-green-500 hover:bg-green-50 flex items-center justify-between">
+                            class="border-2 border-gray-200 rounded-3xl p-2 cursor-pointer transition hover:border-green-500 hover:bg-green-50 flex items-center justify-between">
 
                             <div class="flex items-center gap-4">
 
@@ -367,7 +369,7 @@
 
                                 <div>
 
-                                    <h3 class="font-bold text-xl text-gray-800">
+                                    <h3 class="font-bold text-lg text-gray-800">
 
                                         Online Payment
 
@@ -385,7 +387,7 @@
 
                             <!-- ICON -->
 
-                            <div class="text-3xl">
+                            <div class="text-xl">
 
                                 💳
 
@@ -396,7 +398,7 @@
                         <!-- CASH ON DELIVERY -->
 
                         <label
-                            class="border-2 border-gray-200 rounded-3xl p-5 cursor-pointer transition hover:border-blue-500 hover:bg-blue-50 flex items-center justify-between">
+                            class="border-2 border-gray-200 rounded-3xl p-2 cursor-pointer transition hover:border-blue-500 hover:bg-blue-50 flex items-center justify-between">
 
                             <div class="flex items-center gap-4">
 
@@ -409,7 +411,7 @@
 
                                 <div>
 
-                                    <h3 class="font-bold text-xl text-gray-800">
+                                    <h3 class="font-bold text-lg text-gray-800">
 
                                         Cash On Delivery
 
@@ -427,7 +429,7 @@
 
                             <!-- ICON -->
 
-                            <div class="text-3xl">
+                            <div class="text-xl">
 
                                 💵
 
@@ -568,6 +570,48 @@
 
         });
 
+        const checkoutForm =
+            document.getElementById('checkoutForm');
+
+        checkoutForm.addEventListener('submit', function (e) {
+
+            const paymentMethod =
+                document.querySelector(
+                    'input[name="payment_method"]:checked'
+                );
+
+            if (paymentMethod) {
+
+                /*
+                |--------------------------------------------------------------------------
+                | ONLINE PAYMENT
+                |--------------------------------------------------------------------------
+                */
+
+                if (paymentMethod.value == 'online') {
+
+                    e.preventDefault();
+
+                    checkoutForm.action =
+                        "{{ route('payment.pay') }}";
+
+                    checkoutForm.submit();
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | COD
+                |--------------------------------------------------------------------------
+                */
+
+                else {
+
+                    checkoutForm.action =
+                        "/place-order";
+                }
+            }
+
+        });
     </script>
 
 @endsection
