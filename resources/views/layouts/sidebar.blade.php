@@ -9,7 +9,7 @@
             </div>
             <span
                 style="font-family:'Poppins',sans-serif; font-weight:800; font-size:18px; color:#fff; letter-spacing:-.3px;">
-                Food<span style="color:#E8370E;">Rush</span>
+                HYST
             </span>
         </a>
     </div>

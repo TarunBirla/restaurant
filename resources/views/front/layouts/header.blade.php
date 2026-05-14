@@ -8,7 +8,7 @@
                     <i data-lucide="utensils" style="color:#fff; width:20px; height:20px;"></i>
                 </div>
                 <span style="font-family:'Poppins',sans-serif; font-weight:800; font-size:20px; color:#0D0D0D; letter-spacing:-.3px;">
-                    Food<span style="color:#E8370E;">Rush</span>
+                    HYST
                 </span>
             </a>
 

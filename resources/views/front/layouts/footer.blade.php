@@ -10,7 +10,7 @@
                         <i data-lucide="utensils" style="color:#fff; width:20px; height:20px;"></i>
                     </div>
                     <span style="font-family:'Poppins',sans-serif; font-weight:800; font-size:20px; letter-spacing:-.3px;">
-                        Food<span style="color:#E8370E;">Rush</span>
+                        HYST
                     </span>
                 </a>
                 <p style="color:#9CA3AF; line-height:1.8; font-size:14px; max-width:260px; margin-bottom:24px;">
@@ -95,7 +95,7 @@
                     </li>
                     <li style="display:flex; align-items:center; gap:10px; color:#9CA3AF; font-size:14px;">
                         <i data-lucide="mail" style="width:15px; height:15px; color:#E8370E; flex-shrink:0;"></i>
-                        hello@foodrush.com
+                        hello@HYST.com
                     </li>
                 </ul>
             </div>
@@ -104,7 +104,7 @@
         <!-- DIVIDER -->
         <div style="border-top:1px solid #1F1F1F; padding-top:28px;">
             <div class="footer-bottom" style="display:flex; justify-content:space-between; align-items:center;">
-                <p style="color:#4B5563; font-size:13px; margin:0;">© {{ date('Y') }} FoodRush. All rights reserved.</p>
+                <p style="color:#4B5563; font-size:13px; margin:0;">© {{ date('Y') }} HYST. All rights reserved.</p>
                 <p style="color:#4B5563; font-size:13px; margin:0;">Made with <span style="color:#E8370E;">♥</span> for food lovers</p>
             </div>
         </div>
