@@ -6,7 +6,13 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class StuartService
-{    
+{
+    /*
+    |--------------------------------------------------------------------------
+    | GET TOKEN
+    |--------------------------------------------------------------------------
+    */
+
     public function getToken()
     {
         $response = Http::withoutVerifying()
@@ -14,32 +20,32 @@ class StuartService
             ->post(
                 config('services.stuart.base_url') . '/oauth/token',
                 [
-                    'client_id' => config('services.stuart.client_id'),
-                    'client_secret' => config('services.stuart.client_secret'),
+                    'client_id' =>
+                        config('services.stuart.client_id'),
+
+                    'client_secret' =>
+                        config('services.stuart.client_secret'),
+
                     'grant_type' => 'client_credentials',
                 ]
             );
 
-        return $response->json()['access_token'] ?? null;
-    }
-    public function createDelivery($order, $restaurant)
-    {
-        Log::info('STEP 1 - CREATE DELIVERY START');
-
-        $token = $this->getToken();
-
-        Log::info('STEP 2 - TOKEN', [
-            'token' => $token
+        Log::info('STUART TOKEN RESPONSE', [
+            'body' => $response->body()
         ]);
 
-        if (!$token) {
+        return $response->json()['access_token'] ?? null;
+    }
 
-            Log::info('STEP 3 - TOKEN FAILED');
+    /*
+    |--------------------------------------------------------------------------
+    | DELIVERY PAYLOAD
+    |--------------------------------------------------------------------------
+    */
 
-            return null;
-        }
-
-        $payload = [
+    public function deliveryPayload($order, $restaurant)
+    {
+        return [
 
             'job' => [
 
@@ -53,6 +59,8 @@ class StuartService
 
                         'address' => $restaurant->location,
 
+                        'comment' => 'Restaurant Pickup',
+
                         'contact' => [
 
                             'firstname' => $restaurant->name,
@@ -62,9 +70,7 @@ class StuartService
                             'phone' => '+919876543210',
 
                         ],
-
                     ]
-
                 ],
 
                 'dropoffs' => [
@@ -73,31 +79,124 @@ class StuartService
 
                         'package_type' => 'small',
 
-                        'package_description' => 'Food Delivery',
+                        'package_description' =>
+                            'Food Delivery',
 
-                        'client_reference' => 'ORDER-' . $order->id,
+                        'client_reference' =>
+                            'ORDER-' . $order->id,
 
                         'address' => $order->address,
 
+                        'comment' =>
+                            'Customer Delivery Address',
+
                         'contact' => [
 
-                            'firstname' => $order->user->name,
+                            'firstname' =>
+                                $order->user->name,
 
                             'lastname' => 'Customer',
 
                             'phone' => $order->phone,
-
                         ],
-
                     ]
-
                 ]
-
             ]
-
         ];
+    }
 
-        Log::info('STEP 4 - PAYLOAD', $payload);
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATE DELIVERY
+    |--------------------------------------------------------------------------
+    */
+
+    public function validateDelivery($order, $restaurant)
+    {
+        $token = $this->getToken();
+
+        if (!$token) {
+            return false;
+        }
+
+        $payload =
+            $this->deliveryPayload(
+                $order,
+                $restaurant
+            );
+
+        $response = Http::withoutVerifying()
+            ->withToken($token)
+            ->post(
+                config('services.stuart.base_url')
+                . '/v2/jobs/validate',
+                $payload
+            );
+
+        Log::info('VALIDATE DELIVERY', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
+
+        return $response->json();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CREATE DELIVERY
+    |--------------------------------------------------------------------------
+    */
+
+    public function createDelivery($order, $restaurant)
+    {
+        Log::info('CREATE DELIVERY START');
+
+        $token = $this->getToken();
+
+        if (!$token) {
+
+            Log::info('TOKEN FAILED');
+
+            return null;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATE FIRST
+        |--------------------------------------------------------------------------
+        */
+
+        $validation =
+            $this->validateDelivery(
+                $order,
+                $restaurant
+            );
+
+        if (
+            !$validation ||
+            ($validation['valid'] ?? false) == false
+        ) {
+
+            Log::info('VALIDATION FAILED', [
+                'validation' => $validation
+            ]);
+
+            return null;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | CREATE JOB
+        |--------------------------------------------------------------------------
+        */
+
+        $payload =
+            $this->deliveryPayload(
+                $order,
+                $restaurant
+            );
+
+        Log::info('DELIVERY PAYLOAD', $payload);
 
         $response = Http::withoutVerifying()
             ->withToken($token)
@@ -105,19 +204,19 @@ class StuartService
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                config('services.stuart.base_url') . '/v2/jobs',
+                config('services.stuart.base_url')
+                . '/v2/jobs',
                 $payload
             );
 
-        Log::info('STEP 5 - RESPONSE STATUS', [
-            'status' => $response->status()
-        ]);
+        Log::info('CREATE DELIVERY RESPONSE', [
 
-        Log::info('STEP 6 - RESPONSE BODY', [
+            'status' => $response->status(),
+
             'body' => $response->body()
+
         ]);
 
         return $response->json();
     }
-
 }

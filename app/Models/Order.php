@@ -25,6 +25,11 @@ class Order extends Model
         'stuart_job_id',
         'tracking_url',
         'delivery_status',
+        'driver_name',
+        'driver_phone',
+        'driver_id',
+        'picked_at',
+        'delivered_at',
     ];
 
     public function user()

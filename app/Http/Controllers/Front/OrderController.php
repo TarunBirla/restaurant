@@ -138,36 +138,37 @@ class OrderController extends Controller
             );
 
             $stuart = new StuartService();
+
             $order->load('user');
+
             $delivery = $stuart->createDelivery(
                 $order,
                 $restaurant
             );
+
             Log::info('DELIVERY RESPONSE', [
                 'delivery' => $delivery
             ]);
 
-            /*
-            |--------------------------------------------------------------------------
-            | SAVE TRACKING
-            |--------------------------------------------------------------------------
-            */
+            if ($delivery) {
 
-            $order->update([
+                $order->update([
 
-                'stuart_job_id' =>
-                    $delivery['id'] ?? null,
+                    'stuart_job_id' =>
+                        $delivery['id'] ?? null,
 
-                'tracking_url' =>
-                    $delivery['deliveries'][0]['tracking_url']
-                    ?? null,
+                    'tracking_url' =>
+                        $delivery['deliveries'][0]['tracking_url']
+                        ?? null,
 
-                'delivery_status' =>
-                    $delivery['status']
-                    ?? 'pending',
-
-            ]);
+                    'delivery_status' =>
+                        $delivery['status']
+                        ?? 'searching',
+                ]);
+            }
         }
+
+
 
         session()->forget('cart');
 
@@ -177,6 +178,182 @@ class OrderController extends Controller
                 'Order Placed Successfully'
             );
     }
+
+
+
+    public function driverwebhook(Request $request)
+    {
+        Log::info('STUART WEBHOOK', $request->all());
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATA
+        |--------------------------------------------------------------------------
+        */
+
+        $data = $request->data;
+
+        if (!$data) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No data found'
+            ]);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | CLIENT REFERENCE
+        |--------------------------------------------------------------------------
+        */
+
+        $clientReference =
+            $data['clientReference'] ?? null;
+
+        if (!$clientReference) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No client reference'
+            ]);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ORDER ID
+        |--------------------------------------------------------------------------
+        */
+
+        $orderId = str_replace(
+            'ORDER-',
+            '',
+            $clientReference
+        );
+
+        $order = Order::find($orderId);
+
+        if (!$order) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Order not found'
+            ]);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | DRIVER
+        |--------------------------------------------------------------------------
+        */
+
+        $driver =
+            $data['driver'] ?? [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATUS
+        |--------------------------------------------------------------------------
+        */
+
+        $status =
+            $data['status'] ?? null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE ORDER
+        |--------------------------------------------------------------------------
+        */
+
+        $order->update([
+
+            /*
+            |--------------------------------------------------------------------------
+            | DELIVERY STATUS
+            |--------------------------------------------------------------------------
+            */
+
+            'delivery_status' => $status,
+
+            /*
+            |--------------------------------------------------------------------------
+            | TRACKING URL
+            |--------------------------------------------------------------------------
+            */
+
+            'tracking_url' =>
+                $data['trackingUrl']
+                ?? $order->tracking_url,
+
+            /*
+            |--------------------------------------------------------------------------
+            | DRIVER DETAILS
+            |--------------------------------------------------------------------------
+            */
+
+            'driver_name' =>
+                $driver['name']
+                ?? $order->driver_name,
+
+            'driver_phone' =>
+                $driver['phone']
+                ?? $order->driver_phone,
+
+            'driver_id' =>
+                $driver['id']
+                ?? $order->driver_id,
+
+            /*
+            |--------------------------------------------------------------------------
+            | PICKED
+            |--------------------------------------------------------------------------
+            */
+
+            'picked_at' =>
+
+                in_array($status, [
+                    'picking',
+                    'in_transit'
+                ])
+                ? now()
+                : $order->picked_at,
+
+            /*
+            |--------------------------------------------------------------------------
+            | DELIVERED
+            |--------------------------------------------------------------------------
+            */
+
+            'delivered_at' =>
+
+                $status == 'delivered'
+                ? now()
+                : $order->delivered_at,
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOGS
+        |--------------------------------------------------------------------------
+        */
+
+        Log::info('ORDER UPDATED', [
+
+            'order_id' => $order->id,
+
+            'status' => $status,
+
+            'driver_name' =>
+                $driver['name'] ?? null,
+        ]);
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+
+
+
 
     public function myOrders()
     {
