@@ -882,7 +882,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
 
         setInterval(() => {
 
@@ -890,7 +890,7 @@
 
         }, 15000);
 
-    </script>
+    </script> -->
 
 
 
