@@ -55,41 +55,48 @@ class HomeController extends Controller
         );
     }
     public function restaurants(Request $request)
-{
-    $ip = $request->ip();
+    {
+        $ip = $request->ip();
 
-    Log::info('User IP: '.$ip);
-    // dump($ip);
+        Log::info('User IP: ' . $ip);
 
-    $response = Http::get("http://ip-api.com/json/" . $ip);
-    // dd($response);
+        $response = Http::get("http://ip-api.com/json/" . $ip);
 
-    $data = $response->json();
-    // dd($data);
+        $data = $response->json();
 
-    Log::info('IP API Response', $data);
+        Log::info('IP API Response', $data);
 
-    $latitude = $data['lat'] ?? null;
-    $longitude = $data['lon'] ?? null;
+        $latitude = $data['lat'] ?? null;
+        $longitude = $data['lon'] ?? null;
 
-    Log::info('User Latitude: '.$latitude);
-    Log::info('User Longitude: '.$longitude);
+        Log::info('User Latitude: ' . $latitude);
+        Log::info('User Longitude: ' . $longitude);
 
-    if (!$latitude || !$longitude) {
+        /*
+        |--------------------------------------------------------------------------
+        | IF LOCATION NOT FOUND
+        |--------------------------------------------------------------------------
+        */
 
-        Log::info('Latitude Longitude not found');
+        if (!$latitude || !$longitude) {
 
-        $restaurants = Restaurant::latest()->get();
+            $restaurants = Restaurant::latest()->get();
 
-        return view(
-            'front.restaurants',
-            compact('restaurants')
-        );
-    }
+            return view(
+                'front.restaurants',
+                compact('restaurants')
+            );
+        }
 
-    $restaurants = Restaurant::select(
-        '*',
-        DB::raw("
+        /*
+        |--------------------------------------------------------------------------
+        | ALL RESTAURANTS WITH DISTANCE
+        |--------------------------------------------------------------------------
+        */
+
+        $restaurants = Restaurant::select(
+            '*',
+            DB::raw("
             (
                 6371 * acos(
                     cos(radians($latitude))
@@ -100,30 +107,35 @@ class HomeController extends Controller
                 )
             ) AS distance
         ")
-    )
-    ->having('distance', '<=', 5)
-    ->orderBy('distance')
-    ->get();
-
-    Log::info('Nearby Restaurants Count: '.$restaurants->count());
-
-    foreach ($restaurants as $restaurant) {
-
-        Log::info('Restaurant Found', [
-            'name' => $restaurant->name,
-            'distance' => $restaurant->distance
-        ]);
-    }
-
-    return view(
-        'front.restaurants',
-        compact(
-            'restaurants',
-            'latitude',
-            'longitude'
         )
-    );
-}
+            ->orderByRaw("
+        CASE
+            WHEN distance <= 5 THEN 0
+            ELSE 1
+        END
+    ")
+            ->orderBy('distance')
+            ->get();
+
+        Log::info('Restaurants Count: ' . $restaurants->count());
+
+        foreach ($restaurants as $restaurant) {
+
+            Log::info('Restaurant Found', [
+                'name' => $restaurant->name,
+                'distance' => $restaurant->distance
+            ]);
+        }
+
+        return view(
+            'front.restaurants',
+            compact(
+                'restaurants',
+                'latitude',
+                'longitude'
+            )
+        );
+    }
     public function restaurantProducts($slug)
     {
         $restaurant = Restaurant::where(
