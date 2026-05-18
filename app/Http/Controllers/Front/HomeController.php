@@ -62,9 +62,10 @@ class HomeController extends Controller
     dump($ip);
 
     $response = Http::get("http://ip-api.com/json/" . $ip);
-    dd($response);
+    // dd($response);
 
     $data = $response->json();
+    dd($data);
 
     Log::info('IP API Response', $data);
 
