@@ -82,9 +82,16 @@ class HomeController extends Controller
 
             $restaurants = Restaurant::latest()->get();
 
+            $nearbyRestaurants = collect();
+
+            $otherRestaurants = $restaurants;
+
             return view(
                 'front.restaurants',
-                compact('restaurants')
+                compact(
+                    'nearbyRestaurants',
+                    'otherRestaurants'
+                )
             );
         }
 
@@ -94,43 +101,52 @@ class HomeController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $restaurants = Restaurant::select(
+        $allRestaurants = Restaurant::select(
             '*',
             DB::raw("
-            (
-                6371 * acos(
-                    cos(radians($latitude))
-                    * cos(radians(latitude))
-                    * cos(radians(longitude) - radians($longitude))
-                    + sin(radians($latitude))
-                    * sin(radians(latitude))
-                )
-            ) AS distance
-        ")
-        )
-            ->orderByRaw("
-        CASE
-            WHEN distance <= 5 THEN 0
-            ELSE 1
-        END
+        (
+            6371 * acos(
+                cos(radians($latitude))
+                * cos(radians(latitude))
+                * cos(radians(longitude) - radians($longitude))
+                + sin(radians($latitude))
+                * sin(radians(latitude))
+            )
+        ) AS distance
     ")
+        )
             ->orderBy('distance')
             ->get();
 
-        Log::info('Restaurants Count: ' . $restaurants->count());
+        /*
+        |--------------------------------------------------------------------------
+        | NEARBY RESTAURANTS (<= 5 KM)
+        |--------------------------------------------------------------------------
+        */
 
-        foreach ($restaurants as $restaurant) {
+        $nearbyRestaurants = $allRestaurants->filter(function ($restaurant) {
 
-            Log::info('Restaurant Found', [
-                'name' => $restaurant->name,
-                'distance' => $restaurant->distance
-            ]);
-        }
+            return $restaurant->distance <= 5;
+
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | OTHER RESTAURANTS (> 5 KM)
+        |--------------------------------------------------------------------------
+        */
+
+        $otherRestaurants = $allRestaurants->filter(function ($restaurant) {
+
+            return $restaurant->distance > 5;
+
+        });
 
         return view(
             'front.restaurants',
             compact(
-                'restaurants',
+                'nearbyRestaurants',
+                'otherRestaurants',
                 'latitude',
                 'longitude'
             )
