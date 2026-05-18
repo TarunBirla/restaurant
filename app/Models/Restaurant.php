@@ -13,9 +13,11 @@ class Restaurant extends Model
 
         'name',
         'email',
-         'slug',
+        'slug',
         'phone',
         'location',
+        'latitude',
+        'longitude',
         'description',
         'image',
         'status'

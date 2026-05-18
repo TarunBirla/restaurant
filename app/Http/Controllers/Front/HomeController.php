@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Restaurant;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -52,11 +54,50 @@ class HomeController extends Controller
     }
     public function restaurants()
     {
-        $restaurants = Restaurant::latest()->get();
+        $ip = request()->ip();
+
+        $response = Http::get("http://ip-api.com/json/" . $ip);
+
+        $data = $response->json();
+
+        $latitude = $data['lat'] ?? null;
+        $longitude = $data['lon'] ?? null;
+
+        if (!$latitude || !$longitude) {
+
+            $restaurants = Restaurant::latest()->get();
+
+            return view(
+                'front.restaurants',
+                compact('restaurants')
+            );
+        }
+
+        $restaurants = Restaurant::select(
+            '*',
+            DB::raw("
+                (
+                    6371 * acos(
+                        cos(radians($latitude))
+                        * cos(radians(latitude))
+                        * cos(radians(longitude) - radians($longitude))
+                        + sin(radians($latitude))
+                        * sin(radians(latitude))
+                    )
+                ) AS distance
+            ")
+        )
+            ->having('distance', '<=', 5)
+            ->orderBy('distance')
+            ->get();
 
         return view(
             'front.restaurants',
-            compact('restaurants')
+            compact(
+                'restaurants',
+                'latitude',
+                'longitude'
+            )
         );
     }
     public function restaurantProducts($slug)

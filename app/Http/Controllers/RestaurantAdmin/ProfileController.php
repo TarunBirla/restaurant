@@ -14,8 +14,10 @@ class ProfileController extends Controller
             auth()->user()->restaurant_id
         );
 
-        return view('restaurant.profile.index',
-            compact('restaurant'));
+        return view(
+            'restaurant.profile.index',
+            compact('restaurant')
+        );
     }
 
     public function update(Request $request)
@@ -26,10 +28,10 @@ class ProfileController extends Controller
 
         $image = $restaurant->image;
 
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
 
             $image = $request->file('image')
-                ->store('restaurants','public');
+                ->store('restaurants', 'public');
         }
 
         $restaurant->update([
@@ -41,13 +43,18 @@ class ProfileController extends Controller
             'phone' => $request->phone,
 
             'location' => $request->location,
+            'latitude' => $request->latitude,
+
+            'longitude' => $request->longitude,
 
             'description' => $request->description,
 
             'image' => $image
         ]);
 
-        return back()->with('success',
-            'Profile Updated');
+        return back()->with(
+            'success',
+            'Profile Updated'
+        );
     }
 }
