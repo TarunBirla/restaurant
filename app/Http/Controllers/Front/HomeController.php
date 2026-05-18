@@ -55,23 +55,26 @@ class HomeController extends Controller
         );
     }
     public function restaurants(Request $request)
-{
-    $latitude = $request->lat;
-    $longitude = $request->lng;
+    {
+        $latitude = $request->lat;
+        $longitude = $request->lng;
 
-    if (!$latitude || !$longitude) {
+        Log::info('GPS Latitude: ' . $latitude);
+        Log::info('GPS Longitude: ' . $longitude);
 
-        $restaurants = Restaurant::latest()->get();
+        if (!$latitude || !$longitude) {
 
-        return view(
-            'front.restaurants',
-            compact('restaurants')
-        );
-    }
+            $restaurants = Restaurant::latest()->get();
 
-    $restaurants = Restaurant::select(
-        '*',
-        DB::raw("
+            return view(
+                'front.restaurants',
+                compact('restaurants')
+            );
+        }
+
+        $restaurants = Restaurant::select(
+            '*',
+            DB::raw("
             (
                 6371 * acos(
                     cos(radians($latitude))
@@ -82,20 +85,22 @@ class HomeController extends Controller
                 )
             ) AS distance
         ")
-    )
-    ->having('distance', '<=', 5)
-    ->orderBy('distance')
-    ->get();
-
-    return view(
-        'front.restaurants',
-        compact(
-            'restaurants',
-            'latitude',
-            'longitude'
         )
-    );
-}
+            ->having('distance', '<=', 5)
+            ->orderBy('distance')
+            ->get();
+
+        Log::info('Nearby Restaurants Count: ' . $restaurants->count());
+
+        return view(
+            'front.restaurants',
+            compact(
+                'restaurants',
+                'latitude',
+                'longitude'
+            )
+        );
+    }
     public function restaurantProducts($slug)
     {
         $restaurant = Restaurant::where(
