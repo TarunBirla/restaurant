@@ -9,6 +9,7 @@ use App\Models\Restaurant;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -56,14 +57,23 @@ class HomeController extends Controller
     {
         $ip = request()->ip();
 
+        Log::info('User IP: ' . $ip);
+
         $response = Http::get("http://ip-api.com/json/" . $ip);
 
         $data = $response->json();
 
+        Log::info('IP API Response', $data);
+
         $latitude = $data['lat'] ?? null;
         $longitude = $data['lon'] ?? null;
 
+        Log::info('User Latitude: ' . $latitude);
+        Log::info('User Longitude: ' . $longitude);
+
         if (!$latitude || !$longitude) {
+
+            Log::info('Latitude Longitude not found');
 
             $restaurants = Restaurant::latest()->get();
 
@@ -76,20 +86,30 @@ class HomeController extends Controller
         $restaurants = Restaurant::select(
             '*',
             DB::raw("
-                (
-                    6371 * acos(
-                        cos(radians($latitude))
-                        * cos(radians(latitude))
-                        * cos(radians(longitude) - radians($longitude))
-                        + sin(radians($latitude))
-                        * sin(radians(latitude))
-                    )
-                ) AS distance
-            ")
+            (
+                6371 * acos(
+                    cos(radians($latitude))
+                    * cos(radians(latitude))
+                    * cos(radians(longitude) - radians($longitude))
+                    + sin(radians($latitude))
+                    * sin(radians(latitude))
+                )
+            ) AS distance
+        ")
         )
             ->having('distance', '<=', 5)
             ->orderBy('distance')
             ->get();
+
+        Log::info('Nearby Restaurants Count: ' . $restaurants->count());
+
+        foreach ($restaurants as $restaurant) {
+
+            Log::info('Restaurant Found', [
+                'name' => $restaurant->name,
+                'distance' => $restaurant->distance
+            ]);
+        }
 
         return view(
             'front.restaurants',
