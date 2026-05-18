@@ -214,4 +214,22 @@
 
 </section>
 
+<script>
+
+if (navigator.geolocation) {
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+        let lat = position.coords.latitude;
+        let lng = position.coords.longitude;
+
+        window.location.href =
+            `/restaurants?lat=${lat}&lng=${lng}`;
+
+    });
+
+}
+
+</script>
+
 @endsection
