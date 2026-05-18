@@ -55,26 +55,40 @@ class HomeController extends Controller
         );
     }
     public function restaurants(Request $request)
-    {
-        $latitude = $request->lat;
-        $longitude = $request->lng;
+{
+    $ip = $request->ip();
 
-        Log::info('GPS Latitude: ' . $latitude);
-        Log::info('GPS Longitude: ' . $longitude);
+    Log::info('User IP: '.$ip);
+    dump($ip);
 
-        if (!$latitude || !$longitude) {
+    $response = Http::get("http://ip-api.com/json/" . $ip);
+    dd($response);
 
-            $restaurants = Restaurant::latest()->get();
+    $data = $response->json();
 
-            return view(
-                'front.restaurants',
-                compact('restaurants')
-            );
-        }
+    Log::info('IP API Response', $data);
 
-        $restaurants = Restaurant::select(
-            '*',
-            DB::raw("
+    $latitude = $data['lat'] ?? null;
+    $longitude = $data['lon'] ?? null;
+
+    Log::info('User Latitude: '.$latitude);
+    Log::info('User Longitude: '.$longitude);
+
+    if (!$latitude || !$longitude) {
+
+        Log::info('Latitude Longitude not found');
+
+        $restaurants = Restaurant::latest()->get();
+
+        return view(
+            'front.restaurants',
+            compact('restaurants')
+        );
+    }
+
+    $restaurants = Restaurant::select(
+        '*',
+        DB::raw("
             (
                 6371 * acos(
                     cos(radians($latitude))
@@ -85,22 +99,30 @@ class HomeController extends Controller
                 )
             ) AS distance
         ")
-        )
-            ->having('distance', '<=', 5)
-            ->orderBy('distance')
-            ->get();
+    )
+    ->having('distance', '<=', 5)
+    ->orderBy('distance')
+    ->get();
 
-        Log::info('Nearby Restaurants Count: ' . $restaurants->count());
+    Log::info('Nearby Restaurants Count: '.$restaurants->count());
 
-        return view(
-            'front.restaurants',
-            compact(
-                'restaurants',
-                'latitude',
-                'longitude'
-            )
-        );
+    foreach ($restaurants as $restaurant) {
+
+        Log::info('Restaurant Found', [
+            'name' => $restaurant->name,
+            'distance' => $restaurant->distance
+        ]);
     }
+
+    return view(
+        'front.restaurants',
+        compact(
+            'restaurants',
+            'latitude',
+            'longitude'
+        )
+    );
+}
     public function restaurantProducts($slug)
     {
         $restaurant = Restaurant::where(
