@@ -1,33 +1,7 @@
 @extends('front.layouts.app')
 
 @section('content')
-<script>
 
-if (navigator.geolocation) {
-
-    navigator.geolocation.getCurrentPosition(
-
-        function(position) {
-
-            let lat = position.coords.latitude;
-            let lng = position.coords.longitude;
-
-            window.location.href =
-                `/restaurants?lat=${lat}&lng=${lng}`;
-        },
-
-        function(error) {
-
-            console.log(error);
-
-            alert('Please allow location access');
-        }
-
-    );
-
-}
-
-</script>
 
 <section style="background:#F8F9FA; padding:20px 0; min-height:100vh;">
 
