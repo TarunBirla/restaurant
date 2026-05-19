@@ -21,7 +21,11 @@ class OrderController extends Controller
 
         if (empty($cart)) {
 
-            return back();
+            return redirect('/cart')
+                ->with(
+                    'error',
+                    'Your cart is empty'
+                );
         }
 
 
