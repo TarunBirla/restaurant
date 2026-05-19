@@ -28,13 +28,13 @@
             @foreach($restaurants as $r)<option value="{{ $r->id }}">{{ $r->name }}</option>@endforeach
           </select>
         </div>
-        <div>
+        <!-- <div>
           <label class="block text-xs uppercase tracking-wide text-gray-400 font-medium mb-2">Vendor</label>
           <select name="vendor_id" class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="">Select vendor</option>
             @foreach($vendors as $v)<option value="{{ $v->id }}">{{ $v->name }}</option>@endforeach
           </select>
-        </div>
+        </div> -->
         <div>
           <label class="block text-xs uppercase tracking-wide text-gray-400 font-medium mb-2">Category</label>
           <select name="category_id" class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">

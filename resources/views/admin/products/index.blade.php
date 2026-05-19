@@ -16,7 +16,7 @@
           <th class="text-left px-4 py-3 text-xs uppercase tracking-wide text-gray-400 font-medium">Image</th>
           <th class="text-left px-4 py-3 text-xs uppercase tracking-wide text-gray-400 font-medium">Name</th>
           <th class="text-left px-4 py-3 text-xs uppercase tracking-wide text-gray-400 font-medium">Restaurant</th>
-          <th class="text-left px-4 py-3 text-xs uppercase tracking-wide text-gray-400 font-medium">Vendor</th>
+          <!-- <th class="text-left px-4 py-3 text-xs uppercase tracking-wide text-gray-400 font-medium">Vendor</th> -->
           <th class="text-left px-4 py-3 text-xs uppercase tracking-wide text-gray-400 font-medium">Category</th>
           <th class="text-left px-4 py-3 text-xs uppercase tracking-wide text-gray-400 font-medium">Price</th>
           <th class="text-left px-4 py-3 text-xs uppercase tracking-wide text-gray-400 font-medium">Actions</th>
@@ -30,7 +30,7 @@
           </td>
           <td class="px-4 py-3 font-medium text-sm">{{ $product->name }}</td>
           <td class="px-4 py-3 text-sm text-gray-500">{{ $product->restaurant->name ?? '—' }}</td>
-          <td class="px-4 py-3 text-sm text-gray-500">{{ $product->vendor->name ?? '—' }}</td>
+          <!-- <td class="px-4 py-3 text-sm text-gray-500">{{ $product->vendor->name ?? '—' }}</td> -->
           <td class="px-4 py-3">
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
               {{ $product->category->name ?? '—' }}
