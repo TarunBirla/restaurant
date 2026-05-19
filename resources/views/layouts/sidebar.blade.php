@@ -112,6 +112,13 @@
             <a href="/restaurant/items" class="nav-link {{ str_contains($current, 'restaurant/items') ? 'active' : '' }}">
                 <i data-lucide="utensils-crossed" class="nav-icon"></i> Items
             </a>
+            <a href="/restaurant/offers" class="nav-link {{ str_contains($current, 'restaurant/offers') ? 'active' : '' }}">
+
+                <i data-lucide="badge-percent" class="nav-icon"></i>
+
+                Offers & Discounts
+
+            </a>
 
             <p
                 style="font-size:10px; font-weight:700; color:#4B5563; text-transform:uppercase; letter-spacing:.1em; padding:0 8px; margin:18px 0 10px;">

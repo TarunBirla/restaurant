@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use App\Models\Offer;
 
 class HomeController extends Controller
 {
@@ -94,9 +95,11 @@ class HomeController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $restaurants = Restaurant::select(
-            '*',
-            DB::raw("
+        // $restaurants = Restaurant::select(
+        $restaurants = Restaurant::with('featuredOffer')
+            ->select(
+                '*',
+                DB::raw("
             (
                 6371 * acos(
                     cos(radians($latitude))
@@ -107,7 +110,7 @@ class HomeController extends Controller
                 )
             ) AS distance
         ")
-        )
+            )
             ->orderByRaw("
         CASE
             WHEN distance <= 5 THEN 0
@@ -127,12 +130,14 @@ class HomeController extends Controller
             ]);
         }
 
+
         return view(
             'front.restaurants',
             compact(
                 'restaurants',
                 'latitude',
                 'longitude'
+
             )
         );
     }
@@ -170,12 +175,23 @@ class HomeController extends Controller
             ->latest()
             ->get();
 
+        $offers = Offer::where(
+            'restaurant_id',
+            $restaurant->id
+        )
+            ->where('is_active', 1)
+            // ->where('type', 'offer')
+            ->latest()
+            ->get();
+
         return view(
             'front.restaurant-products',
             compact(
                 'restaurant',
                 'products',
-                'categories'
+                'categories',
+                'offers'
+
             )
         );
     }
@@ -236,13 +252,16 @@ class HomeController extends Controller
             ->latest()
             ->get();
 
+
+
         return view(
             'front.restaurant-products',
             compact(
                 'restaurant',
                 'products',
                 'categories',
-                'category'
+                'category',
+
             )
         );
     }

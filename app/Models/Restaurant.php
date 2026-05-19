@@ -20,16 +20,35 @@ class Restaurant extends Model
         'longitude',
         'description',
         'image',
-        'status'
+        'status',
+        'dine_in',
+        'home_delivery',
     ];
+
 
     public function users()
     {
         return $this->hasMany(User::class);
     }
 
+
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+    public function getQrUrlAttribute()
+    {
+        return route('restaurant.products', $this->slug);
+    }
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
+    public function featuredOffer()
+    {
+        return $this->hasOne(Offer::class)
+            ->where('is_active', 1)
+            ->where('is_featured', 1)
+            ->latest();
     }
 }

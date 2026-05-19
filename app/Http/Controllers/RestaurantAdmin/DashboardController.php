@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\Payment;
+use App\Models\Restaurant;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class DashboardController extends Controller
 {
@@ -57,8 +59,8 @@ class DashboardController extends Controller
             'restaurant_id',
             $restaurantId
         )
-        ->where('payment_status','paid')
-        ->sum('amount');
+            ->where('payment_status', 'paid')
+            ->sum('amount');
 
         /*
         |--------------------------------------------------------------------------
@@ -70,8 +72,8 @@ class DashboardController extends Controller
             'restaurant_id',
             $restaurantId
         )
-        ->where('status','pending')
-        ->count();
+            ->where('status', 'pending')
+            ->count();
 
         /*
         |--------------------------------------------------------------------------
@@ -83,8 +85,8 @@ class DashboardController extends Controller
             'restaurant_id',
             $restaurantId
         )
-        ->where('status','completed')
-        ->count();
+            ->where('status', 'completed')
+            ->count();
 
         /*
         |--------------------------------------------------------------------------
@@ -96,9 +98,9 @@ class DashboardController extends Controller
             'restaurant_id',
             $restaurantId
         )
-        ->latest()
-        ->take(5)
-        ->get();
+            ->latest()
+            ->take(5)
+            ->get();
 
         /*
         |--------------------------------------------------------------------------
@@ -110,9 +112,19 @@ class DashboardController extends Controller
             'restaurant_id',
             $restaurantId
         )
-        ->latest()
-        ->take(5)
-        ->get();
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $restaurant = Restaurant::find($restaurantId);
+        $restaurantUrl = route(
+            'restaurant.products',
+            $restaurant->slug
+        );
+
+        $restaurantQr = QrCode::format('svg')
+            ->size(250)
+            ->generate($restaurantUrl);
 
         return view(
             'restaurant.dashboard',
@@ -124,7 +136,10 @@ class DashboardController extends Controller
                 'pendingOrders',
                 'completedOrders',
                 'recentOrders',
-                'recentPayments'
+                'recentPayments',
+                'restaurant',
+                'restaurantQr',
+                'restaurantUrl',
             )
         );
     }

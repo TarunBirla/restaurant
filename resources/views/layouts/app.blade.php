@@ -9,6 +9,9 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+        <link
+    href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css"
+    rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -193,6 +196,7 @@
             document.getElementById('sidebar-overlay').classList.remove('active');
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 </body>
 
 </html>

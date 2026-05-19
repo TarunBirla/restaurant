@@ -15,20 +15,39 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
-    {
-        $orders = Order::where(
-            'restaurant_id',
-            auth()->user()->restaurant_id
-        )
-            ->latest()
-            ->get();
+   public function index()
+{
+    $orders = Order::where(
+        'restaurant_id',
+        auth()->user()->restaurant_id
+    )
+    ->whereDate(
+        'created_at',
+        today()
+    )
+    ->latest()
+    ->get();
 
-        return view(
-            'restaurant.orders.index',
-            compact('orders')
-        );
-    }
+    return view(
+        'restaurant.orders.index',
+        compact('orders')
+    );
+}
+
+public function allOrders()
+{
+    $orders = Order::where(
+        'restaurant_id',
+        auth()->user()->restaurant_id
+    )
+    ->latest()
+    ->get();
+
+    return view(
+        'restaurant.orders.create',
+        compact('orders')
+    );
+}
 
     /*
     |--------------------------------------------------------------------------

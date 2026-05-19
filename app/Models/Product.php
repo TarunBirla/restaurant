@@ -35,4 +35,11 @@ class Product extends Model
 {
     return $this->belongsTo(User::class,'vendor_id');
 }
+public function offers()
+{
+    return $this->belongsToMany(
+        Offer::class,
+        'offer_products'
+    );
+}
 }

@@ -13,16 +13,45 @@ class RestaurantPaymentController extends Controller
             'order',
             'order.user'
         ])
-        ->where(
-            'restaurant_id',
-            auth()->user()->restaurant_id
-        )
-        ->latest()
-        ->get();
+            ->where(
+                'restaurant_id',
+                auth()->user()->restaurant_id
+            )
+            ->whereDate(
+                'created_at',
+                today()
+            )
+            ->latest()
+            ->get();
 
         return view(
             'restaurant.payments.index',
             compact('payments')
         );
     }
+
+    /*
+|--------------------------------------------------------------------------
+| ALL PAYMENTS
+|--------------------------------------------------------------------------
+*/
+
+public function allPayments()
+{
+    $payments = Payment::with([
+        'order',
+        'order.user'
+    ])
+    ->where(
+        'restaurant_id',
+        auth()->user()->restaurant_id
+    )
+    ->latest()
+    ->get();
+
+    return view(
+        'restaurant.payments.allpayment',
+        compact('payments')
+    );
+}
 }

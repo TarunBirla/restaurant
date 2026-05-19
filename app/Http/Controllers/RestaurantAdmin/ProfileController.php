@@ -49,7 +49,10 @@ class ProfileController extends Controller
 
             'description' => $request->description,
 
-            'image' => $image
+            'image' => $image,
+            'dine_in' => $request->dine_in,
+
+            'home_delivery' => $request->home_delivery,
         ]);
 
         return back()->with(

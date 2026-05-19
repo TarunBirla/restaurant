@@ -4,25 +4,21 @@
 
 <div class="bg-white rounded-3xl shadow overflow-hidden">
 
-    <div class="p-8 border-b">
+    <div class="p-8 border-b flex justify-between items-center">
 
-        <div class="flex justify-between items-center">
+        <h1 class="text-4xl font-bold">
 
-    <h1 class="text-4xl font-bold">
+            All Payments
 
-        Today's Payments
+        </h1>
 
-    </h1>
+        <a
+            href="/restaurant/payments"
+            class="bg-black text-white px-6 py-3 rounded-xl">
 
-    <a
-        href="/restaurant/all-payments"
-        class="bg-black text-white px-6 py-3 rounded-xl">
+            Today's Payments
 
-        View All Payments
-
-    </a>
-
-</div>
+        </a>
 
     </div>
 

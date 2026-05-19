@@ -7,6 +7,7 @@ use App\Http\Controllers\Front\ProfileController as FrontProfileController;
 // use App\Http\Controllers\PaymentController;
 
 use App\Http\Controllers\RestaurantAdmin\ItemController;
+use App\Http\Controllers\RestaurantAdmin\OfferController;
 use App\Http\Controllers\RestaurantAdmin\RestaurantPaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\HomeController;
@@ -219,11 +220,19 @@ Route::middleware(['auth', 'restaurant_admin'])
         Route::resource('categories', CategoryController::class);
         Route::resource('payments', RestaurantPaymentController::class);
         Route::resource('products', RestaurantProductController::class);
-
+        Route::resource('offers',OfferController::class);
+Route::post(
+    '/offers/{id}/featured',
+    [OfferController::class, 'featured']
+)->name('offers.featured');
         Route::get(
             '/orders',
             [RestaurantOrderController::class, 'index']
         );
+        Route::get(
+    '/all-orders',
+    [RestaurantOrderController::class, 'allOrders']
+);
         Route::get(
             '/orders/{id}',
             [RestaurantOrderController::class, 'show']
@@ -248,6 +257,10 @@ Route::middleware(['auth', 'restaurant_admin'])
             '/orders/payment-status/{id}',
             [OrderController::class, 'updatePaymentStatus']
         )->name('orders.payment.status');
+        Route::get(
+    '/all-payments',
+    [RestaurantPaymentController::class, 'allPayments']
+);
 
     });
 
@@ -281,10 +294,14 @@ Route::get('/login', [UsersController::class, 'showLogin'])
 // Route::post('/login-user', [UsersController::class, 'login']);
 Route::post('/login', [UsersController::class, 'login'])
     ->name('login.submit');
+// Route::get(
+//     '/restaurant/{slug}',
+//     [HomeController::class, 'restaurantProducts']
+// );
 Route::get(
     '/restaurant/{slug}',
     [HomeController::class, 'restaurantProducts']
-);
+)->name('restaurant.products');
 Route::get(
     '/restaurant/{slug}/{category}',
     [HomeController::class, 'restaurantCategoryProducts']

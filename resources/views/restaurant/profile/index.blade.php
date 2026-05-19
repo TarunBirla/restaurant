@@ -118,6 +118,61 @@
 
                 </div>
 
+                <div>
+                    <label class="font-bold block mb-2">
+        Delivery Methods
+    </label>
+
+    <label class="font-bold block mb-2">
+        Dine In
+    </label>
+
+    <select
+        name="dine_in"
+        class="w-full border p-4 rounded-xl">
+
+        <option
+            value="1"
+            {{ $restaurant->dine_in ? 'selected' : '' }}>
+            Enable
+        </option>
+
+        <option
+            value="0"
+            {{ !$restaurant->dine_in ? 'selected' : '' }}>
+            Disable
+        </option>
+
+    </select>
+
+</div>
+
+<div>
+
+    <label class="font-bold block mb-2">
+        Home Delivery
+    </label>
+
+    <select
+        name="home_delivery"
+        class="w-full border p-4 rounded-xl">
+
+        <option
+            value="1"
+            {{ $restaurant->home_delivery ? 'selected' : '' }}>
+            Enable
+        </option>
+
+        <option
+            value="0"
+            {{ !$restaurant->home_delivery ? 'selected' : '' }}>
+            Disable
+        </option>
+
+    </select>
+
+</div>
+
                 <button class="bg-blue-500 text-white px-10 py-4 rounded-xl mt-8">
 
                     Update Profile

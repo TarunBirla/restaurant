@@ -2,20 +2,19 @@
 
 @section('content')
 
-   
     <div class="flex justify-between items-center mb-8">
 
     <h1 class="text-4xl font-bold">
 
-       Today's All  Orders 
+        All Orders
 
     </h1>
 
     <a
-        href="/restaurant/all-orders"
+        href="/restaurant/orders"
         class="bg-black text-white px-6 py-3 rounded-xl">
 
-        All Orders view
+        Today's Orders
 
     </a>
 

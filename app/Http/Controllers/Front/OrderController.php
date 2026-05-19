@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Services\StuartService;
 use App\Models\Restaurant;
 use Illuminate\Support\Facades\Log;
@@ -18,30 +19,374 @@ class OrderController extends Controller
     {
         $cart = session()->get('cart', []);
 
+        if (empty($cart)) {
+
+            return back();
+        }
+
+
+        $restaurantId = Product::find(
+            array_key_first($cart)
+        )->restaurant_id;
+
+        $restaurant = Restaurant::find(
+            $restaurantId
+        );
+
+
+
+        $cartProductIds = collect($cart)
+            ->pluck('id')
+            ->toArray();
+
+
+
+        $originalTotal = 0;
+
+        $discount = 0;
+
+        $finalTotal = 0;
+
+
+
+        foreach ($cart as $item) {
+
+            $originalTotal +=
+                $item['price']
+                * $item['quantity'];
+        }
+
+
+        $offers = \App\Models\Offer::with('products')
+
+            ->where('is_active', 1)
+
+            ->where(function ($q) {
+
+                $q->whereNull('start_date')
+                    ->orWhereDate(
+                        'start_date',
+                        '<=',
+                        now()
+                    );
+
+            })
+
+            ->where(function ($q) {
+
+                $q->whereNull('end_date')
+                    ->orWhereDate(
+                        'end_date',
+                        '>=',
+                        now()
+                    );
+
+            })
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | APPLY OFFER ONLY IF
+        | ALL PRODUCTS MATCH
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($offers as $offer) {
+
+            $offerProductIds =
+                $offer->products
+                    ->pluck('id')
+                    ->toArray();
+
+
+
+            $allMatched = !array_diff(
+
+                $offerProductIds,
+
+                $cartProductIds
+            );
+
+
+            if ($allMatched) {
+
+
+                $offerProductsTotal = 0;
+
+                foreach ($cart as $item) {
+
+                    if (
+                        in_array(
+                            $item['id'],
+                            $offerProductIds
+                        )
+                    ) {
+
+                        $offerProductsTotal +=
+                            $item['price']
+                            * $item['quantity'];
+
+
+                        $cartItemOffer[
+                            $item['id']
+                        ] = $offer;
+                    }
+                }
+
+
+
+                if (
+                    $offer->value_type
+                    == 'percent'
+                ) {
+
+                    $discount +=
+                        (
+                            $offerProductsTotal
+                            * $offer->value
+                        ) / 100;
+                } else {
+
+                    $discount +=
+                        $offer->value;
+                }
+            }
+        }
+
+
+
+        $finalTotal =
+            max(
+                $originalTotal - $discount,
+                0
+            );
+
+
+        foreach ($cart as $key => $item) {
+
+            $cart[$key]['offer'] =
+                $cartItemOffer[$item['id']]
+                ?? null;
+
+            $cart[$key]['final_price'] =
+                $item['price'];
+
+            $cart[$key]['subtotal'] =
+                $item['price']
+                * $item['quantity'];
+        }
+
+
+
         return view(
+
             'front.checkout',
-            compact('cart')
+
+            compact(
+
+                'cart',
+                'restaurant',
+                'originalTotal',
+                'discount',
+                'finalTotal'
+            )
         );
     }
+
+    //     public function placeOrder(Request $request)
+//     {
+//         Log::info('PLACE ORDER START');
+//         $request->validate([
+
+    //             'order_type' => 'required',
+
+    //             'payment_method' => 'required',
+
+
+    //             'phone' => 'required_if:payment_method,Cash On Delivery',
+
+    //             'address' => 'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
+
+    //             'pincode' => 'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
+
+    //         ]);
+//         Log::info('VALIDATION SUCCESS');
+//         $cart = session()->get('cart', []);
+
+    //         if (empty($cart)) {
+
+    //             return back();
+//         }
+
+    //         $total = 0;
+
+    //         foreach ($cart as $item) {
+
+    //             $total += $item['price']
+//                 * $item['quantity'];
+//         }
+
+    //         $restaurantId = \App\Models\Product::find(
+//             array_key_first($cart)
+//         )->restaurant_id;
+
+    //         $order = Order::create([
+
+    //             'user_id' => auth()->id(),
+
+    //             'restaurant_id' => $restaurantId,
+
+    //             'total_amount' => $total,
+
+    //             'order_type' => $request->order_type,
+//             'phone' => $request->phone,
+
+    //             'address' => $request->address,
+
+    //             'pincode' => $request->pincode,
+
+    //             'payment_method' => $request->payment_method,
+
+    //             'status' => 'pending'
+//         ]);
+//         Log::info('ORDER CREATED', [
+//             'order_id' => $order->id
+//         ]);
+
+    //         foreach ($cart as $item) {
+
+    //             OrderItem::create([
+
+    //                 'order_id' => $order->id,
+
+    //                 'product_id' => $item['id'],
+
+    //                 'quantity' => $item['quantity'],
+
+    //                 'price' => $item['price'],
+
+    //                 'total' => $item['price']
+//                     * $item['quantity']
+//             ]);
+//         }
+
+    //         /*
+//         |--------------------------------------------------------------------------
+//         | PAYMENT ENTRY
+//         |--------------------------------------------------------------------------
+//         */
+
+    //         Payment::create([
+
+    //             'order_id' => $order->id,
+
+    //             'restaurant_id' => $restaurantId,
+
+    //             'user_id' => auth()->id(),
+
+    //             'payment_method' => $request->payment_method,
+
+    //             'amount' => $total,
+
+    //             'payment_status' =>
+//                 $request->payment_method == 'Cash On Delivery'
+//                 ? 'pending'
+//                 : 'paid'
+//         ]);
+//         Log::info('PAYMENT CREATED');
+//         /*
+// |--------------------------------------------------------------------------
+// | STUART DELIVERY
+// |--------------------------------------------------------------------------
+// */
+//         Log::info('STUART DELIVERY START');
+//         if ($request->order_type == 'delivery') {
+
+    //             $restaurant = Restaurant::find(
+//                 $restaurantId
+//             );
+
+    //             $stuart = new StuartService();
+
+    //             $order->load('user');
+
+    //             $delivery = $stuart->createDelivery(
+//                 $order,
+//                 $restaurant
+//             );
+
+    //             Log::info('DELIVERY RESPONSE', [
+//                 'delivery' => $delivery
+//             ]);
+
+    //             if ($delivery) {
+
+    //                 $order->update([
+
+    //                     'stuart_job_id' =>
+//                         $delivery['id'] ?? null,
+
+    //                     'tracking_url' =>
+//                         $delivery['deliveries'][0]['tracking_url']
+//                         ?? null,
+
+    //                     'delivery_status' =>
+//                         $delivery['status']
+//                         ?? 'searching',
+//                 ]);
+//             }
+//         }
+
+
+
+    //         session()->forget('cart');
+
+    //         return redirect('/my-orders')
+//             ->with(
+//                 'success',
+//                 'Order Placed Successfully'
+//             );
+//     }
+
 
     public function placeOrder(Request $request)
     {
         Log::info('PLACE ORDER START');
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATION
+        |--------------------------------------------------------------------------
+        */
+
         $request->validate([
 
-            'order_type' => 'required',
+            'order_type' =>
+                'required',
 
-            'payment_method' => 'required',
+            'payment_method' =>
+                'required',
 
+            'phone' =>
+                'required_if:payment_method,Cash On Delivery',
 
-            'phone' => 'required_if:payment_method,Cash On Delivery',
+            'address' =>
+                'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
 
-            'address' => 'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
-
-            'pincode' => 'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
+            'pincode' =>
+                'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
 
         ]);
+
         Log::info('VALIDATION SUCCESS');
+
+        /*
+        |--------------------------------------------------------------------------
+        | CART
+        |--------------------------------------------------------------------------
+        */
+
         $cart = session()->get('cart', []);
 
         if (empty($cart)) {
@@ -49,54 +394,349 @@ class OrderController extends Controller
             return back();
         }
 
-        $total = 0;
+        /*
+        |--------------------------------------------------------------------------
+        | RESTAURANT
+        |--------------------------------------------------------------------------
+        */
 
-        foreach ($cart as $item) {
-
-            $total += $item['price']
-                * $item['quantity'];
-        }
-
-        $restaurantId = \App\Models\Product::find(
+        $restaurantId = Product::find(
             array_key_first($cart)
         )->restaurant_id;
 
-        $order = Order::create([
+        /*
+        |--------------------------------------------------------------------------
+        | CART PRODUCT IDS
+        |--------------------------------------------------------------------------
+        */
 
-            'user_id' => auth()->id(),
+        $cartProductIds = collect($cart)
+            ->pluck('id')
+            ->toArray();
 
-            'restaurant_id' => $restaurantId,
+        /*
+        |--------------------------------------------------------------------------
+        | TOTALS
+        |--------------------------------------------------------------------------
+        */
 
-            'total_amount' => $total,
+        $originalTotal = 0;
 
-            'order_type' => $request->order_type,
-            'phone' => $request->phone,
+        $discount = 0;
 
-            'address' => $request->address,
-
-            'pincode' => $request->pincode,
-
-            'payment_method' => $request->payment_method,
-
-            'status' => 'pending'
-        ]);
-        Log::info('ORDER CREATED', [
-            'order_id' => $order->id
-        ]);
+        /*
+        |--------------------------------------------------------------------------
+        | ORIGINAL TOTAL
+        |--------------------------------------------------------------------------
+        */
 
         foreach ($cart as $item) {
 
+            $originalTotal +=
+                $item['price']
+                * $item['quantity'];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVE OFFERS
+        |--------------------------------------------------------------------------
+        */
+
+        $offers = \App\Models\Offer::with('products')
+
+            ->where('is_active', 1)
+
+            ->where(function ($q) {
+
+                $q->whereNull('start_date')
+
+                    ->orWhereDate(
+                        'start_date',
+                        '<=',
+                        now()
+                    );
+
+            })
+
+            ->where(function ($q) {
+
+                $q->whereNull('end_date')
+
+                    ->orWhereDate(
+                        'end_date',
+                        '>=',
+                        now()
+                    );
+
+            })
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | APPLY COMBO OFFERS
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($offers as $offer) {
+
+            $offerProductIds =
+                $offer->products
+                    ->pluck('id')
+                    ->toArray();
+
+            /*
+            |--------------------------------------------------------------------------
+            | FULL COMBO MATCH
+            |--------------------------------------------------------------------------
+            */
+
+            $allMatched = !array_diff(
+
+                $offerProductIds,
+
+                $cartProductIds
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | APPLY OFFER
+            |--------------------------------------------------------------------------
+            */
+
+            if ($allMatched) {
+
+                foreach ($cart as $item) {
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | ONLY OFFER PRODUCTS
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (
+                        in_array(
+                            $item['id'],
+                            $offerProductIds
+                        )
+                    ) {
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | PERCENT
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (
+                            $offer->value_type
+                            == 'percent'
+                        ) {
+
+                            $discount +=
+                                (
+                                    (
+                                        $item['price']
+                                        * $offer->value
+                                    ) / 100
+                                )
+                                * $item['quantity'];
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | FLAT
+                        |--------------------------------------------------------------------------
+                        */ else {
+
+                            $discount +=
+                                $offer->value
+                                * $item['quantity'];
+                        }
+                    }
+                }
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | FINAL TOTAL
+        |--------------------------------------------------------------------------
+        */
+
+        $finalTotal = max(
+
+            $originalTotal - $discount,
+
+            0
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | CREATE ORDER
+        |--------------------------------------------------------------------------
+        */
+
+        $order = Order::create([
+
+            'user_id' =>
+                auth()->id(),
+
+            'restaurant_id' =>
+                $restaurantId,
+
+            'total_amount' =>
+                $finalTotal,
+
+            'order_type' =>
+                $request->order_type,
+
+            'phone' =>
+                $request->phone,
+
+            'address' =>
+                $request->address,
+
+            'pincode' =>
+                $request->pincode,
+
+            'payment_method' =>
+                $request->payment_method,
+
+            'status' =>
+                'pending'
+        ]);
+
+        Log::info('ORDER CREATED', [
+
+            'order_id' =>
+                $order->id
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ORDER ITEMS
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($cart as $item) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | DEFAULT PRICE
+            |--------------------------------------------------------------------------
+            */
+
+            $finalPrice =
+                $item['price'];
+
+            /*
+            |--------------------------------------------------------------------------
+            | FIND OFFER
+            |--------------------------------------------------------------------------
+            */
+
+            foreach ($offers as $offer) {
+
+                $offerProductIds =
+                    $offer->products
+                        ->pluck('id')
+                        ->toArray();
+
+                $allMatched = !array_diff(
+
+                    $offerProductIds,
+
+                    $cartProductIds
+                );
+
+                /*
+                |--------------------------------------------------------------------------
+                | OFFER PRODUCT
+                |--------------------------------------------------------------------------
+                */
+
+                if (
+
+                    $allMatched
+
+                    &&
+
+                    in_array(
+                        $item['id'],
+                        $offerProductIds
+                    )
+
+                ) {
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | PERCENT
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (
+                        $offer->value_type
+                        == 'percent'
+                    ) {
+
+                        $discountAmount =
+                            (
+                                $item['price']
+                                * $offer->value
+                            ) / 100;
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | FLAT
+                    |--------------------------------------------------------------------------
+                    */ else {
+
+                        $discountAmount =
+                            $offer->value;
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | FINAL PRICE
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $finalPrice = max(
+
+                        $item['price']
+                        - $discountAmount,
+
+                        0
+                    );
+
+                    break;
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | SAVE ORDER ITEM
+            |--------------------------------------------------------------------------
+            */
+
             OrderItem::create([
 
-                'order_id' => $order->id,
+                'order_id' =>
+                    $order->id,
 
-                'product_id' => $item['id'],
+                'product_id' =>
+                    $item['id'],
 
-                'quantity' => $item['quantity'],
+                'quantity' =>
+                    $item['quantity'],
 
-                'price' => $item['price'],
+                'price' =>
+                    $finalPrice,
 
-                'total' => $item['price']
+                'total' =>
+                    $finalPrice
                     * $item['quantity']
             ]);
         }
@@ -109,29 +749,45 @@ class OrderController extends Controller
 
         Payment::create([
 
-            'order_id' => $order->id,
+            'order_id' =>
+                $order->id,
 
-            'restaurant_id' => $restaurantId,
+            'restaurant_id' =>
+                $restaurantId,
 
-            'user_id' => auth()->id(),
+            'user_id' =>
+                auth()->id(),
 
-            'payment_method' => $request->payment_method,
+            'payment_method' =>
+                $request->payment_method,
 
-            'amount' => $total,
+            'amount' =>
+                $finalTotal,
 
             'payment_status' =>
-                $request->payment_method == 'Cash On Delivery'
+
+                $request->payment_method
+                == 'Cash On Delivery'
+
                 ? 'pending'
+
                 : 'paid'
         ]);
+
         Log::info('PAYMENT CREATED');
+
         /*
-|--------------------------------------------------------------------------
-| STUART DELIVERY
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | STUART DELIVERY
+        |--------------------------------------------------------------------------
+        */
+
         Log::info('STUART DELIVERY START');
-        if ($request->order_type == 'delivery') {
+
+        if (
+            $request->order_type
+            == 'delivery'
+        ) {
 
             $restaurant = Restaurant::find(
                 $restaurantId
@@ -147,7 +803,9 @@ class OrderController extends Controller
             );
 
             Log::info('DELIVERY RESPONSE', [
-                'delivery' => $delivery
+
+                'delivery' =>
+                    $delivery
             ]);
 
             if ($delivery) {
@@ -155,31 +813,46 @@ class OrderController extends Controller
                 $order->update([
 
                     'stuart_job_id' =>
-                        $delivery['id'] ?? null,
+
+                        $delivery['id']
+                        ?? null,
 
                     'tracking_url' =>
+
                         $delivery['deliveries'][0]['tracking_url']
                         ?? null,
 
                     'delivery_status' =>
+
                         $delivery['status']
                         ?? 'searching',
                 ]);
             }
         }
 
-
+        /*
+        |--------------------------------------------------------------------------
+        | CLEAR CART
+        |--------------------------------------------------------------------------
+        */
 
         session()->forget('cart');
 
+        /*
+        |--------------------------------------------------------------------------
+        | REDIRECT
+        |--------------------------------------------------------------------------
+        */
+
         return redirect('/my-orders')
+
             ->with(
+
                 'success',
+
                 'Order Placed Successfully'
             );
     }
-
-
 
     public function driverwebhook(Request $request)
     {
