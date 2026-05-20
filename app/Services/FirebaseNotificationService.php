@@ -31,6 +31,14 @@ class FirebaseNotificationService
 
         try {
 
+            \Log::info('FCM SEND FUNCTION START', [
+
+                'token' => $token,
+                'title' => $title,
+                'body' => $body
+
+            ]);
+
             $message =
                 CloudMessage::withTarget(
 
@@ -39,15 +47,19 @@ class FirebaseNotificationService
 
                 )->withNotification(
 
-                    Notification::create(
+                        Notification::create(
 
-                        $title,
-                        $body
-                    )
-                );
+                            $title,
+                            $body
+                        )
+                    );
+
+            \Log::info('FCM MESSAGE CREATED');
 
             $this->messaging
                 ->send($message);
+
+            \Log::info('FCM SEND SUCCESS');
 
         } catch (\Exception $e) {
 
@@ -55,6 +67,8 @@ class FirebaseNotificationService
                 'FCM ERROR: '
                 . $e->getMessage()
             );
+
+            \Log::error($e);
         }
     }
 }

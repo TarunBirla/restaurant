@@ -9,9 +9,7 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-        <link
-    href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css"
-    rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -198,127 +196,122 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
-    <meta
-name="csrf-token"
-content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<script type="module">
+    <script type="module">
 
-import { initializeApp }
+        import { initializeApp }
 
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+            from
+            "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import {
+        import {
 
-    getMessaging,
-    getToken,
-    onMessage
+            getMessaging,
+            getToken,
+            onMessage
 
-}
-
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
-
-const firebaseConfig = {
-
-    apiKey:
-    "AIzaSyCZiAT9MHsByPZXwiNN05bdQm3J_T6dLOY",
-
-    authDomain:
-    "food-app-67243.firebaseapp.com",
-
-    projectId:
-    "food-app-67243",
-
-    storageBucket:
-    "food-app-67243.firebasestorage.app",
-
-    messagingSenderId:
-    "27556705584",
-
-    appId:
-    "1:27556705584:web:c5a44d5b5b9e241b0a84f5",
-
-    measurementId:
-    "G-B191S3TCSD"
-};
-
-const app =
-    initializeApp(firebaseConfig);
-
-const messaging =
-    getMessaging(app);
-
-navigator.serviceWorker.register(
-
-    '/firebase-messaging-sw.js'
-
-).then(async (registration) => {
-
-    const token = await getToken(
-
-        messaging,
-
-        {
-
-            vapidKey:
-
-'BMYx8jd3DnA-TqpVy9Dp65swax68RWcrwE4-gD9BnDm7VDqdHAKOBdFAllXP_5N96pZlCST1-zfR-j5cMoAls2Y',
-
-            serviceWorkerRegistration:
-                registration
         }
 
-    );
+            from
+            "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
-    console.log(token);
+        const firebaseConfig = {
 
-    if(token){
+            apiKey:
+                "AIzaSyCZiAT9MHsByPZXwiNN05bdQm3J_T6dLOY",
 
-        fetch('/save-fcm-token', {
+            authDomain:
+                "food-app-67243.firebaseapp.com",
 
-            method: 'POST',
+            projectId:
+                "food-app-67243",
 
-            headers: {
+            storageBucket:
+                "food-app-67243.firebasestorage.app",
 
-                'Content-Type':
-                    'application/json',
+            messagingSenderId:
+                "27556705584",
 
-                'X-CSRF-TOKEN':
+            appId:
+                "1:27556705584:web:c5a44d5b5b9e241b0a84f5",
 
-document.querySelector(
-'meta[name="csrf-token"]'
-).content
-            },
+            measurementId:
+                "G-B191S3TCSD"
+        };
 
-            body: JSON.stringify({
+        const app =
+            initializeApp(firebaseConfig);
 
-                token: token
+        const messaging =
+            getMessaging(app);
 
-            })
+        navigator.serviceWorker.register(
+
+            '/firebase-messaging-sw.js'
+
+        ).then(async (registration) => {
+
+            const token = await getToken(
+
+                messaging,
+
+                {
+
+                    vapidKey:
+
+                        'BMYx8jd3DnA-TqpVy9Dp65swax68RWcrwE4-gD9BnDm7VDqdHAKOBdFAllXP_5N96pZlCST1-zfR-j5cMoAls2Y',
+
+                    serviceWorkerRegistration:
+                        registration
+                }
+
+            );
+
+            console.log(token);
+
+            if (token) {
+
+                fetch('/save-fcm-token', {
+
+                    method: 'POST',
+
+                    headers: {
+
+                        'Content-Type':
+                            'application/json',
+
+                        'X-CSRF-TOKEN':
+
+                            document.querySelector(
+                                'meta[name="csrf-token"]'
+                            ).content
+                    },
+
+                    body: JSON.stringify({
+
+                        token: token
+
+                    })
+                });
+            }
         });
-    }
-});
 
-onMessage(messaging, (payload) => {
+       onMessage(messaging, (payload) => {
 
-    console.log(payload);
-
-    new Notification(
-
-        payload.notification.title,
-
-        {
-
-            body:
-                payload.notification.body
-
-        }
+    console.log(
+        'MESSAGE RECEIVED',
+        payload
     );
-});
 
-</script>
+    alert(
+        payload.notification.title
+        + ' - ' +
+        payload.notification.body
+    );
+
+});
+    </script>
 </body>
 
 </html>

@@ -202,7 +202,7 @@ class OrderController extends Controller
         );
     }
 
-  
+
 
 
     public function placeOrder(Request $request)
@@ -635,16 +635,23 @@ class OrderController extends Controller
             $order->restaurant_id
 
         )
+
             ->where(
                 'role',
                 'restaurant_admin'
             )
             ->first();
 
-        \Log::info('RESTAURANT ADMIN FOUND', [
+        \Log::info('RESTAURANT ADMIN QUERY RESULT', [
 
             'restaurant_id' => $order->restaurant_id,
-            'restaurant_admin' => $restaurantAdmin
+
+            'admin_id' => $restaurantAdmin->id ?? null,
+
+            'admin_name' => $restaurantAdmin->name ?? null,
+
+            'admin_token' => $restaurantAdmin->fcm_token ?? null
+
         ]);
 
         if (
@@ -656,6 +663,30 @@ class OrderController extends Controller
             $restaurantAdmin->fcm_token
 
         ) {
+
+            \Log::info(
+                'START SENDING RESTAURANT NOTIFICATION'
+            );
+
+            $firebase =
+                new FirebaseNotificationService();
+
+            $firebase->send(
+
+                $restaurantAdmin->fcm_token,
+
+                'New Order',
+
+                'You received a new order.'
+
+            );
+
+        } else {
+
+            \Log::error(
+                'RESTAURANT TOKEN NOT FOUND'
+            );
+        } {
 
             $firebase =
                 new FirebaseNotificationService();
@@ -979,86 +1010,86 @@ class OrderController extends Controller
     }
 
     public function submitReview(Request $request, $id)
-{
-    $request->validate([
+    {
+        $request->validate([
 
-        'rating' => 'required|integer|min:1|max:5',
+            'rating' => 'required|integer|min:1|max:5',
 
-        'review' => 'nullable|string|max:1000'
+            'review' => 'nullable|string|max:1000'
 
-    ]);
+        ]);
 
-    $order = Order::where(
+        $order = Order::where(
 
-        'user_id',
-        auth()->id()
+            'user_id',
+            auth()->id()
 
-    )
-    ->where('id', $id)
-    ->firstOrFail();
+        )
+            ->where('id', $id)
+            ->firstOrFail();
 
-    /*
-    |--------------------------------------------------------------------------
-    | ONLY DELIVERED ORDER
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | ONLY DELIVERED ORDER
+        |--------------------------------------------------------------------------
+        */
 
-    if ($order->delivery_status != 'delivered') {
+        if ($order->delivery_status != 'delivered') {
+
+            return back()->with(
+
+                'error',
+                'Review allowed only after delivery.'
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | PREVENT DUPLICATE
+        |--------------------------------------------------------------------------
+        */
+
+        $already = Review::where(
+
+            'order_id',
+            $order->id
+
+        )->exists();
+
+        if ($already) {
+
+            return back()->with(
+
+                'error',
+                'Review already submitted.'
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | SAVE REVIEW
+        |--------------------------------------------------------------------------
+        */
+
+        Review::create([
+
+            'user_id' => auth()->id(),
+
+            'restaurant_id' => $order->restaurant_id,
+
+            'order_id' => $order->id,
+
+            'rating' => $request->rating,
+
+            'review' => $request->review,
+            'status' => 'pending'
+
+        ]);
 
         return back()->with(
 
-            'error',
-            'Review allowed only after delivery.'
+            'success',
+            'Review submitted successfully.'
         );
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | PREVENT DUPLICATE
-    |--------------------------------------------------------------------------
-    */
-
-    $already = Review::where(
-
-        'order_id',
-        $order->id
-
-    )->exists();
-
-    if ($already) {
-
-        return back()->with(
-
-            'error',
-            'Review already submitted.'
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | SAVE REVIEW
-    |--------------------------------------------------------------------------
-    */
-
-    Review::create([
-
-        'user_id' => auth()->id(),
-
-        'restaurant_id' => $order->restaurant_id,
-
-        'order_id' => $order->id,
-
-        'rating' => $request->rating,
-
-        'review' => $request->review,
-         'status' => 'pending'
-
-    ]);
-
-    return back()->with(
-
-        'success',
-        'Review submitted successfully.'
-    );
-}
 }
