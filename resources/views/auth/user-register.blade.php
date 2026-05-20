@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>User Register</title>
 
@@ -9,64 +13,94 @@
 
 </head>
 
-<body class="bg-gray-100">
+<body class="min-h-screen bg-gradient-to-br from-green-100 via-emerald-50 to-teal-100 flex items-center justify-center p-5">
 
-<div class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md">
 
-    <div class="bg-white p-10 rounded shadow w-full max-w-md">
+        <div class="bg-white rounded-3xl shadow-2xl p-10">
 
-        <h1 class="text-3xl font-bold mb-8 text-center">
+            <div class="text-center mb-8">
 
-            User Register
 
-        </h1>
+                <h1 class="text-4xl font-extrabold text-gray-800 mb-2">
 
-        <form method="POST" action="/register-user">
+                    Create Account
 
-            @csrf
+                </h1>
 
-            <div class="mb-5">
+                <p class="text-gray-500 text-sm">
 
-                <label>Name</label>
+                    Register and start ordering delicious food
 
-                <input type="text"
-                name="name"
-                class="w-full border p-3 rounded">
+                </p>
 
             </div>
 
-            <div class="mb-5">
+            <form method="POST" action="/register-user">
 
-                <label>Email</label>
+                @csrf
 
-                <input type="email"
-                name="email"
-                class="w-full border p-3 rounded">
+                <div class="mb-5">
 
-            </div>
+                    <label class="text-gray-700 text-sm font-semibold mb-2 block">
 
-            <div class="mb-5">
+                        Full Name
 
-                <label>Password</label>
+                    </label>
 
-                <input type="password"
-                name="password"
-                class="w-full border p-3 rounded">
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Enter full name"
+                        class="w-full border border-gray-200 p-4 rounded-2xl outline-none focus:border-green-400">
 
-            </div>
+                </div>
 
-            <button
-            class="w-full bg-green-500 text-white p-3 rounded">
+                <div class="mb-5">
 
-                Register
+                    <label class="text-gray-700 text-sm font-semibold mb-2 block">
 
-            </button>
+                        Email Address
 
-        </form>
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter email address"
+                        class="w-full border border-gray-200 p-4 rounded-2xl outline-none focus:border-green-400">
+
+                </div>
+
+                <div class="mb-7">
+
+                    <label class="text-gray-700 text-sm font-semibold mb-2 block">
+
+                        Password
+
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Create password"
+                        class="w-full border border-gray-200 p-4 rounded-2xl outline-none focus:border-green-400">
+
+                </div>
+
+                <button
+                    class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-2xl shadow-lg">
+
+                    Create Account
+
+                </button>
+
+            </form>
+
+        </div>
 
     </div>
 
-</div>
-
 </body>
+
 </html>

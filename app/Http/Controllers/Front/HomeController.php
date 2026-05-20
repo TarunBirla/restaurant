@@ -49,10 +49,31 @@ class HomeController extends Controller
     public function productDetails($id)
     {
         $product = Product::findOrFail($id);
+        $reviews = \App\Models\Review::with('user')
+
+    ->where(
+
+        'restaurant_id',
+        $product->restaurant_id
+
+    )
+
+    ->where(
+
+        'status',
+        'approved'
+
+    )
+
+    ->latest()
+
+    ->take(10)
+
+    ->get();
 
         return view(
             'front.product-details',
-            compact('product')
+            compact('product','reviews')
         );
     }
     public function restaurants(Request $request)
@@ -96,7 +117,13 @@ class HomeController extends Controller
         */
 
         // $restaurants = Restaurant::select(
-        $restaurants = Restaurant::with('featuredOffer')
+        // $restaurants = Restaurant::with('featuredOffer')
+        $restaurants = Restaurant::with([
+
+            'featuredOffer',
+            'reviews'
+
+        ])
             ->select(
                 '*',
                 DB::raw("
@@ -143,10 +170,14 @@ class HomeController extends Controller
     }
     public function restaurantProducts($slug)
     {
-        $restaurant = Restaurant::where(
-            'slug',
-            $slug
-        )->firstOrFail();
+        $restaurant = Restaurant::with('reviews')
+
+            ->where(
+                'slug',
+                $slug
+            )
+
+            ->firstOrFail();
 
         /*
         |--------------------------------------------------------------------------

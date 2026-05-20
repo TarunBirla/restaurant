@@ -7,8 +7,7 @@
     <title>HYST — Premium Food Delivery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <style>
         :root {
@@ -22,7 +21,11 @@
             --success-light: #DCFCE7;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -30,7 +33,12 @@
             color: var(--black);
         }
 
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
         }
@@ -45,10 +53,11 @@
             display: inline-block;
             cursor: pointer;
         }
+
         .btn-primary:hover {
             background: var(--primary-dark);
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(232,55,14,.35);
+            box-shadow: 0 6px 20px rgba(232, 55, 14, .35);
         }
 
         .btn-black {
@@ -60,6 +69,7 @@
             transition: all .2s;
             display: inline-block;
         }
+
         .btn-black:hover {
             background: #333;
             transform: translateY(-1px);
@@ -68,7 +78,7 @@
         .card {
             background: #fff;
             border-radius: 20px;
-            box-shadow: 0 2px 16px rgba(0,0,0,.07);
+            box-shadow: 0 2px 16px rgba(0, 0, 0, .07);
         }
 
         .badge-primary {
@@ -100,14 +110,20 @@
             color: var(--black);
             text-decoration: none;
         }
-        .sidebar-link:hover { background: var(--gray-light); }
+
+        .sidebar-link:hover {
+            background: var(--gray-light);
+        }
+
         .sidebar-link.active {
             background: var(--primary);
             color: #fff;
             font-weight: 700;
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             border: 1.5px solid #E5E5E0;
             border-radius: 12px;
             padding: 13px 16px;
@@ -118,7 +134,10 @@
             transition: border .18s;
             background: #FAFAF8;
         }
-        input:focus, select:focus, textarea:focus {
+
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: var(--primary);
         }
 
@@ -141,12 +160,16 @@
             text-align: left;
             background: var(--gray-light);
         }
+
         td {
             padding: 16px 18px;
             border-bottom: 1px solid #F0F0EC;
             font-size: 14px;
         }
-        tr:last-child td { border-bottom: none; }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
 
         .avatar {
             width: 44px;
@@ -164,12 +187,23 @@
         }
 
         /* ── HEADER RESPONSIVE ── */
-        .desktop-nav { display: flex; }
-        .mobile-toggle { display: none; }
-        .mobile-menu { display: none; }
+        .desktop-nav {
+            display: flex;
+        }
+
+        .mobile-toggle {
+            display: none;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
 
         @media(max-width:992px) {
-            .desktop-nav { display: none !important; }
+            .desktop-nav {
+                display: none !important;
+            }
+
             .mobile-toggle {
                 display: flex !important;
                 align-items: center;
@@ -181,13 +215,18 @@
                 border-radius: 12px;
                 cursor: pointer;
             }
+
             .mobile-menu {
                 display: none;
                 background: #fff;
                 border-top: 1px solid #F0F0EC;
                 padding: 16px 20px 20px;
             }
-            .mobile-menu.active { display: block; }
+
+            .mobile-menu.active {
+                display: block;
+            }
+
             .mobile-menu a {
                 display: flex;
                 align-items: center;
@@ -199,39 +238,105 @@
                 font-weight: 500;
                 font-size: 14px;
             }
-            .mobile-menu a:last-child { border-bottom: none; }
+
+            .mobile-menu a:last-child {
+                border-bottom: none;
+            }
         }
 
         /* ── FOOTER RESPONSIVE ── */
         @media(max-width:900px) {
-            .footer-grid { grid-template-columns: repeat(2,1fr) !important; gap: 36px !important; }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 36px !important;
+            }
         }
+
         @media(max-width:560px) {
-            .footer-grid { grid-template-columns: 1fr !important; }
-            .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+            .footer-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
         }
 
         /* ── HOME PAGE RESPONSIVE ── */
         @media(max-width:900px) {
-            .hero-title { font-size: 36px !important; }
-            .hero-stats { gap: 20px !important; }
-            .categories-grid { grid-template-columns: repeat(3,1fr) !important; }
-            .products-grid { grid-template-columns: repeat(2,1fr) !important; }
-            .features-grid { grid-template-columns: repeat(2,1fr) !important; }
-            .offer-grid { grid-template-columns: 1fr !important; }
-            .offer-img { display: none !important; }
-            .qr-wrapper { grid-template-columns: 1fr !important; text-align: center; }
-            .qr-title { font-size: 30px !important; }
+            .hero-title {
+                font-size: 36px !important;
+            }
+
+            .hero-stats {
+                gap: 20px !important;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .offer-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .offer-img {
+                display: none !important;
+            }
+
+            .qr-wrapper {
+                grid-template-columns: 1fr !important;
+                text-align: center;
+            }
+
+            .qr-title {
+                font-size: 30px !important;
+            }
         }
+
         @media(max-width:600px) {
-            .hero-title { font-size: 26px !important; }
-            .section-title { font-size: 26px !important; }
-            .categories-grid { grid-template-columns: repeat(2,1fr) !important; }
-            .products-grid { grid-template-columns: 1fr !important; }
-            .features-grid { grid-template-columns: 1fr !important; }
-            .hero-stats { flex-wrap: wrap; gap: 16px !important; }
-            .hero-cta { flex-direction: column !important; }
-            .offer-title { font-size: 32px !important; }
+            .hero-title {
+                font-size: 26px !important;
+            }
+
+            .section-title {
+                font-size: 26px !important;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .hero-stats {
+                flex-wrap: wrap;
+                gap: 16px !important;
+            }
+
+            .hero-cta {
+                flex-direction: column !important;
+            }
+
+            .offer-title {
+                font-size: 32px !important;
+            }
         }
     </style>
 </head>
@@ -241,6 +346,160 @@
     @yield('content')
     @include('front.layouts.footer')
     <script>lucide.createIcons();</script>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <script type="module">
+
+        console.log('FCM START');
+
+        import { initializeApp }
+
+            from
+            "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+        import {
+
+            getMessaging,
+            getToken,
+            onMessage
+
+        }
+
+            from
+            "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+
+        const firebaseConfig = {
+
+            apiKey:
+                "AIzaSyCZiAT9MHsByPZXwiNN05bdQm3J_T6dLOY",
+
+            authDomain:
+                "food-app-67243.firebaseapp.com",
+
+            projectId:
+                "food-app-67243",
+
+            storageBucket:
+                "food-app-67243.firebasestorage.app",
+
+            messagingSenderId:
+                "27556705584",
+
+            appId:
+                "1:27556705584:web:c5a44d5b5b9e241b0a84f5",
+
+            measurementId:
+                "G-B191S3TCSD"
+        };
+
+        const app =
+            initializeApp(firebaseConfig);
+
+        console.log('FIREBASE INITIALIZED');
+
+        const messaging =
+            getMessaging(app);
+
+        Notification.requestPermission()
+
+            .then(async (permission) => {
+
+                console.log('PERMISSION:', permission);
+
+                if (permission === 'granted') {
+
+                    console.log('PERMISSION GRANTED');
+
+                    const registration =
+                        await navigator.serviceWorker.register(
+                            '/firebase-messaging-sw.js'
+                        );
+
+                    console.log(
+                        'SERVICE WORKER REGISTERED'
+                    );
+
+                    const token =
+                        await getToken(
+
+                            messaging,
+
+                            {
+
+                                vapidKey:
+
+                                    'BMYx8jd3DnA-TqpVy9Dp65swax68RWcrwE4-gD9BnDm7VDqdHAKOBdFAllXP_5N96pZlCST1-zfR-j5cMoAls2Y',
+
+                                serviceWorkerRegistration:
+                                    registration
+                            }
+
+                        );
+
+                    console.log(
+                        'FCM TOKEN:',
+                        token
+                    );
+
+                    if (token) {
+
+                        fetch('/save-fcm-token', {
+
+                            method: 'POST',
+
+                            headers: {
+
+                                'Content-Type':
+                                    'application/json',
+
+                                'X-CSRF-TOKEN':
+
+                                    document.querySelector(
+                                        'meta[name="csrf-token"]'
+                                    ).content
+                            },
+
+                            body: JSON.stringify({
+
+                                token: token
+
+                            })
+                        });
+
+                        console.log(
+                            'TOKEN SAVED'
+                        );
+                    }
+                }
+
+            }).catch((error) => {
+
+                console.log(
+                    'FCM ERROR:',
+                    error
+                );
+
+            });
+
+        onMessage(messaging, (payload) => {
+
+            console.log(payload);
+
+            new Notification(
+
+                payload.notification.title,
+
+                {
+
+                    body:
+                        payload.notification.body
+
+                }
+            );
+        });
+
+    </script>
 </body>
 
 </html>

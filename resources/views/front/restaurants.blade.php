@@ -132,7 +132,14 @@
                                                                                         font-size:13px;
                                                                                         font-weight:700;
                                                                                     ">
-                                    ★ 4.5
+                                   ★ {{ number_format($restaurant->reviews->avg('rating') ?? 0, 1) }}
+                                     <div style="
+        font-size:10px;
+        color:#6B7280;
+        margin-top:2px;
+    ">
+        {{ $restaurant->reviews->count() }} Reviews
+    </div>
                                 </div>
 
                             </div>

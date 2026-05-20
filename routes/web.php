@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Auth\UsersController;
+use App\Http\Controllers\FCMController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\OrderController;
 use App\Http\Controllers\Front\PaymentController;
@@ -33,7 +34,12 @@ Route::post(
     [RestaurantOrderController::class, 'driverwebhook']
 );
 
+Route::post(
 
+    '/submit-review/{id}',
+    [OrderController::class, 'submitReview']
+
+)->middleware('auth');
 // Route::get('/payment', [PaymentController::class, 'index'])->name('payment.form');
 // Route::post('/payment/pay', [PaymentController::class, 'pay'])->name('payment.pay');
 // Route::post('/payment/notify', [PaymentController::class, 'notify'])->name('payment.notify');
@@ -95,6 +101,12 @@ Route::get(
     [HomeController::class, 'restaurants']
 );
 
+Route::post(
+
+    '/save-fcm-token',
+    [FCMController::class, 'saveToken']
+
+)->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
     Route::get(
@@ -220,19 +232,44 @@ Route::middleware(['auth', 'restaurant_admin'])
         Route::resource('categories', CategoryController::class);
         Route::resource('payments', RestaurantPaymentController::class);
         Route::resource('products', RestaurantProductController::class);
-        Route::resource('offers',OfferController::class);
-Route::post(
-    '/offers/{id}/featured',
-    [OfferController::class, 'featured']
-)->name('offers.featured');
+        Route::resource('offers', OfferController::class);
+        Route::get(
+
+            '/reviews',
+
+            [RestaurantOrderController::class, 'reviews']
+
+        )->name('reviews');
+
+
+        Route::post(
+
+            '/reviews/{id}/approve',
+
+            [RestaurantOrderController::class, 'approveReview']
+
+        )->name('reviews.approve');
+
+
+        Route::post(
+
+            '/reviews/{id}/reject',
+
+            [RestaurantOrderController::class, 'rejectReview']
+
+        )->name('reviews.reject');
+        Route::post(
+            '/offers/{id}/featured',
+            [OfferController::class, 'featured']
+        )->name('offers.featured');
         Route::get(
             '/orders',
             [RestaurantOrderController::class, 'index']
         );
         Route::get(
-    '/all-orders',
-    [RestaurantOrderController::class, 'allOrders']
-);
+            '/all-orders',
+            [RestaurantOrderController::class, 'allOrders']
+        );
         Route::get(
             '/orders/{id}',
             [RestaurantOrderController::class, 'show']
@@ -258,9 +295,9 @@ Route::post(
             [OrderController::class, 'updatePaymentStatus']
         )->name('orders.payment.status');
         Route::get(
-    '/all-payments',
-    [RestaurantPaymentController::class, 'allPayments']
-);
+            '/all-payments',
+            [RestaurantPaymentController::class, 'allPayments']
+        );
 
     });
 

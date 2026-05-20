@@ -51,4 +51,8 @@ class Restaurant extends Model
             ->where('is_featured', 1)
             ->latest();
     }
+    public function reviews()
+{
+    return $this->hasMany(\App\Models\Review::class);
+}
 }

@@ -377,322 +377,311 @@
                     </div>
 
                     {{-- TRACKING --}}
-                 
-                        <div class="card tracking-card">
 
-                            <h2>Live Delivery Tracking</h2>
+                    <div class="card tracking-card">
 
-                            @php
+                        <h2>Live Delivery Tracking</h2>
 
-                                $deliveryStatus =
-                                    $order->delivery_status ?? 'searching';
+                        @php
 
-                                /*
-                                |--------------------------------------------------------------------------
-                                | TRACK WIDTH
-                                |--------------------------------------------------------------------------
-                                */
+                            $deliveryStatus =
+                                $order->delivery_status ?? 'searching';
 
-                                $progress = '5%';
+                            /*
+                            |--------------------------------------------------------------------------
+                            | TRACK WIDTH
+                            |--------------------------------------------------------------------------
+                            */
 
-                                if ($deliveryStatus == 'searching') {
-                                    $progress = '10%';
-                                }
+                            $progress = '5%';
 
-                                elseif ($deliveryStatus == 'almost_picking') {
-                                    $progress = '30%';
-                                }
+                            if ($deliveryStatus == 'searching') {
+                                $progress = '10%';
+                            } elseif ($deliveryStatus == 'almost_picking') {
+                                $progress = '30%';
+                            } elseif (
+                                $deliveryStatus == 'waiting_at_pickup' ||
+                                $deliveryStatus == 'picking'
+                            ) {
+                                $progress = '55%';
+                            } elseif ($deliveryStatus == 'in_transit') {
+                                $progress = '80%';
+                            } elseif ($deliveryStatus == 'delivered') {
+                                $progress = '100%';
+                            } elseif ($deliveryStatus == 'canceled') {
+                                $progress = '100%';
+                            }
 
-                                elseif (
-                                    $deliveryStatus == 'waiting_at_pickup' ||
-                                    $deliveryStatus == 'picking'
-                                ) {
-                                    $progress = '55%';
-                                }
+                        @endphp
 
-                                elseif ($deliveryStatus == 'in_transit') {
-                                    $progress = '80%';
-                                }
+                        <div class="tracking-bar-wrap">
 
-                                elseif ($deliveryStatus == 'delivered') {
-                                    $progress = '100%';
-                                }
+                            <div class="track-line-bg"></div>
 
-                                elseif ($deliveryStatus == 'canceled') {
-                                    $progress = '100%';
-                                }
+                            <div class="track-line-active" style="
+                                                                width: {{ $progress }};
 
-                            @endphp
+                                                                @if($deliveryStatus == 'canceled')
+                                                                    background: linear-gradient(
+                                                                        90deg,
+                                                                        #ef4444,
+                                                                        #f87171
+                                                                    );
+                                                                @endif
+                                                            ">
+                            </div>
 
-                            <div class="tracking-bar-wrap">
+                            {{-- STEP 1 --}}
+                            <div class="track-step">
 
-                                <div class="track-line-bg"></div>
+                                <div class="step-circle
+                                                                {{
+        in_array($deliveryStatus, [
 
-                                <div
-                                    class="track-line-active"
+            'searching',
+            'almost_picking',
+            'waiting_at_pickup',
+            'picking',
+            'in_transit',
+            'delivered'
 
-                                    style="
-                                        width: {{ $progress }};
-
-                                        @if($deliveryStatus == 'canceled')
-                                            background: linear-gradient(
-                                                90deg,
-                                                #ef4444,
-                                                #f87171
-                                            );
-                                        @endif
-                                    ">
+        ])
+        ? 'active'
+        : ''
+                                                                }}
+                                                            ">
+                                    ✓
                                 </div>
 
-                                {{-- STEP 1 --}}
-                                <div class="track-step">
+                                <div class="step-label
+                                                                {{
+        in_array($deliveryStatus, [
 
-                                    <div class="step-circle
-                                        {{
-                                            in_array($deliveryStatus, [
+            'searching',
+            'almost_picking',
+            'waiting_at_pickup',
+            'picking',
+            'in_transit',
+            'delivered'
 
-                                                'searching',
-                                                'almost_picking',
-                                                'waiting_at_pickup',
-                                                'picking',
-                                                'in_transit',
-                                                'delivered'
-
-                                            ])
-                                            ? 'active'
-                                            : ''
-                                        }}
-                                    ">
-                                        ✓
-                                    </div>
-
-                                    <div class="step-label
-                                        {{
-                                            in_array($deliveryStatus, [
-
-                                                'searching',
-                                                'almost_picking',
-                                                'waiting_at_pickup',
-                                                'picking',
-                                                'in_transit',
-                                                'delivered'
-
-                                            ])
-                                            ? 'active'
-                                            : ''
-                                        }}
-                                    ">
-                                        Driver Search
-                                    </div>
-
-                                </div>
-
-                                {{-- STEP 2 --}}
-                                <div class="track-step">
-
-                                    <div class="step-circle
-                                        {{
-                                            in_array($deliveryStatus, [
-
-                                                'almost_picking',
-                                                'waiting_at_pickup',
-                                                'picking',
-                                                'in_transit',
-                                                'delivered'
-
-                                            ])
-                                            ? 'active'
-                                            : ''
-                                        }}
-                                    ">
-                                        ✓
-                                    </div>
-
-                                    <div class="step-label
-                                        {{
-                                            in_array($deliveryStatus, [
-
-                                                'almost_picking',
-                                                'waiting_at_pickup',
-                                                'picking',
-                                                'in_transit',
-                                                'delivered'
-
-                                            ])
-                                            ? 'active'
-                                            : ''
-                                        }}
-                                    ">
-                                        Driver Assigned
-                                    </div>
-
-                                </div>
-
-                                {{-- STEP 3 --}}
-                                <div class="track-step">
-
-                                    <div class="step-circle
-                                        {{
-                                            in_array($deliveryStatus, [
-
-                                                'waiting_at_pickup',
-                                                'picking',
-                                                'in_transit',
-                                                'delivered'
-
-                                            ])
-                                            ? 'active'
-                                            : ''
-                                        }}
-                                    ">
-                                        ✓
-                                    </div>
-
-                                    <div class="step-label
-                                        {{
-                                            in_array($deliveryStatus, [
-
-                                                'waiting_at_pickup',
-                                                'picking',
-                                                'in_transit',
-                                                'delivered'
-
-                                            ])
-                                            ? 'active'
-                                            : ''
-                                        }}
-                                    ">
-                                        Pickup
-                                    </div>
-
-                                </div>
-
-                                {{-- STEP 4 --}}
-                                <div class="track-step">
-
-                                    <div class="step-circle
-                                        {{
-                                            in_array($deliveryStatus, [
-
-                                                'in_transit',
-                                                'delivered'
-
-                                            ])
-                                            ? 'active'
-                                            : ''
-                                        }}
-                                    ">
-                                        ✓
-                                    </div>
-
-                                    <div class="step-label
-                                        {{
-                                            in_array($deliveryStatus, [
-
-                                                'in_transit',
-                                                'delivered'
-
-                                            ])
-                                            ? 'active'
-                                            : ''
-                                        }}
-                                    ">
-                                        On The Way
-                                    </div>
-
-                                </div>
-
-                                {{-- STEP 5 --}}
-                                <div class="track-step">
-
-                                    @if($deliveryStatus == 'canceled')
-
-                                        <div class="step-circle cancelled">
-                                            ✕
-                                        </div>
-
-                                        <div class="step-label cancelled">
-                                            Cancelled
-                                        </div>
-
-                                    @else
-
-                                        <div class="step-circle
-                                            {{
-                                                $deliveryStatus == 'delivered'
-                                                ? 'active'
-                                                : ''
-                                            }}
-                                        ">
-                                            ✓
-                                        </div>
-
-                                        <div class="step-label
-                                            {{
-                                                $deliveryStatus == 'delivered'
-                                                ? 'active'
-                                                : ''
-                                            }}
-                                        ">
-                                            Delivered
-                                        </div>
-
-                                    @endif
-
+        ])
+        ? 'active'
+        : ''
+                                                                }}
+                                                            ">
+                                    Driver Search
                                 </div>
 
                             </div>
 
-                            {{-- STATUS BADGE --}}
-                            <div class="status-badge-wrap">
+                            {{-- STEP 2 --}}
+                            <div class="track-step">
 
-                                @if($deliveryStatus == 'searching')
+                                <div class="step-circle
+                                                                {{
+        in_array($deliveryStatus, [
 
-                                    <span class="status-badge badge-searching">
-                                        🔎 Searching Driver
-                                    </span>
+            'almost_picking',
+            'waiting_at_pickup',
+            'picking',
+            'in_transit',
+            'delivered'
 
-                                @elseif($deliveryStatus == 'almost_picking')
+        ])
+        ? 'active'
+        : ''
+                                                                }}
+                                                            ">
+                                    ✓
+                                </div>
 
-                                    <span class="status-badge badge-almost_picking">
-                                        🛵 Driver Coming to Restaurant
-                                    </span>
+                                <div class="step-label
+                                                                {{
+        in_array($deliveryStatus, [
 
-                                @elseif($deliveryStatus == 'waiting_at_pickup')
+            'almost_picking',
+            'waiting_at_pickup',
+            'picking',
+            'in_transit',
+            'delivered'
 
-                                    <span class="status-badge badge-almost_picking">
-                                        🍔 Driver Waiting at Restaurant
-                                    </span>
+        ])
+        ? 'active'
+        : ''
+                                                                }}
+                                                            ">
+                                    Driver Assigned
+                                </div>
 
-                                @elseif($deliveryStatus == 'picking')
+                            </div>
 
-                                    <span class="status-badge badge-almost_picking">
-                                        📦 Order Pickup Started
-                                    </span>
+                            {{-- STEP 3 --}}
+                            <div class="track-step">
 
-                                @elseif($deliveryStatus == 'in_transit')
+                                <div class="step-circle
+                                                                {{
+        in_array($deliveryStatus, [
 
-                                    <span class="status-badge badge-in_transit">
-                                        🚚 On The Way
-                                    </span>
+            'waiting_at_pickup',
+            'picking',
+            'in_transit',
+            'delivered'
 
-                                @elseif($deliveryStatus == 'delivered')
+        ])
+        ? 'active'
+        : ''
+                                                                }}
+                                                            ">
+                                    ✓
+                                </div>
 
-                                    <span class="status-badge badge-delivered">
-                                        ✅ Delivered Successfully
-                                    </span>
+                                <div class="step-label
+                                                                {{
+        in_array($deliveryStatus, [
 
-                                @elseif($deliveryStatus == 'canceled')
+            'waiting_at_pickup',
+            'picking',
+            'in_transit',
+            'delivered'
 
-                                    <span class="status-badge badge-canceled">
-                                        ❌ Delivery Cancelled
-                                    </span>
+        ])
+        ? 'active'
+        : ''
+                                                                }}
+                                                            ">
+                                    Pickup
+                                </div>
+
+                            </div>
+
+                            {{-- STEP 4 --}}
+                            <div class="track-step">
+
+                                <div class="step-circle
+                                                                {{
+        in_array($deliveryStatus, [
+
+            'in_transit',
+            'delivered'
+
+        ])
+        ? 'active'
+        : ''
+                                                                }}
+                                                            ">
+                                    ✓
+                                </div>
+
+                                <div class="step-label
+                                                                {{
+        in_array($deliveryStatus, [
+
+            'in_transit',
+            'delivered'
+
+        ])
+        ? 'active'
+        : ''
+                                                                }}
+                                                            ">
+                                    On The Way
+                                </div>
+
+                            </div>
+
+                            {{-- STEP 5 --}}
+                            <div class="track-step">
+
+                                @if($deliveryStatus == 'canceled')
+
+                                    <div class="step-circle cancelled">
+                                        ✕
+                                    </div>
+
+                                    <div class="step-label cancelled">
+                                        Cancelled
+                                    </div>
+
+                                @else
+
+                                                        <div
+                                                            class="step-circle
+                                                                                                                                                                                                                    {{
+                                    $deliveryStatus == 'delivered'
+                                    ? 'active'
+                                    : ''
+                                                                                                                                                                                                                    }}
+                                                                                                                                                                                                                ">
+                                                            ✓
+                                                        </div>
+
+                                                        <div
+                                                            class="step-label
+                                                                                                                                                                                                                    {{
+                                    $deliveryStatus == 'delivered'
+                                    ? 'active'
+                                    : ''
+                                                                                                                                                                                                                    }}
+                                                                                                                                                                                                                ">
+                                                            Delivered
+                                                        </div>
 
                                 @endif
 
                             </div>
 
                         </div>
+
+                        {{-- STATUS BADGE --}}
+                        <div class="status-badge-wrap">
+
+                            @if($deliveryStatus == 'searching')
+
+                                <span class="status-badge badge-searching">
+                                    🔎 Searching Driver
+                                </span>
+
+                            @elseif($deliveryStatus == 'almost_picking')
+
+                                <span class="status-badge badge-almost_picking">
+                                    🛵 Driver Coming to Restaurant
+                                </span>
+
+                            @elseif($deliveryStatus == 'waiting_at_pickup')
+
+                                <span class="status-badge badge-almost_picking">
+                                    🍔 Driver Waiting at Restaurant
+                                </span>
+
+                            @elseif($deliveryStatus == 'picking')
+
+                                <span class="status-badge badge-almost_picking">
+                                    📦 Order Pickup Started
+                                </span>
+
+                            @elseif($deliveryStatus == 'in_transit')
+
+                                <span class="status-badge badge-in_transit">
+                                    🚚 On The Way
+                                </span>
+
+                            @elseif($deliveryStatus == 'delivered')
+
+                                <span class="status-badge badge-delivered">
+                                    ✅ Delivered Successfully
+                                </span>
+
+                            @elseif($deliveryStatus == 'canceled')
+
+                                <span class="status-badge badge-canceled">
+                                    ❌ Delivery Cancelled
+                                </span>
+
+                            @endif
+
+                        </div>
+
+                    </div>
 
 
 
@@ -756,10 +745,10 @@
                                     <label>Delivery Status</label>
 
                                     <span style="
-                                                color:#16a34a;
-                                                font-weight:700;
-                                                text-transform:capitalize;
-                                            ">
+                                                                                                color:#16a34a;
+                                                                                                font-weight:700;
+                                                                                                text-transform:capitalize;
+                                                                                            ">
                                         {{ str_replace('_', ' ', $order->delivery_status) }}
                                     </span>
                                 </div>
@@ -841,6 +830,364 @@
 
                     </div>
 
+
+                    @if($order->delivery_status == 'delivered')
+
+                        @if(!$order->review)
+
+                            {{-- REVIEW BUTTON --}}
+
+                            <div class="card info-card mb-4" style="
+                                                                                            display:flex;
+                                                                                            justify-content:space-between;
+                                                                                            align-items:center;
+                                                                                            flex-wrap:wrap;
+                                                                                            gap:20px;
+                                                                                        ">
+
+                                <div>
+
+                                    <h3 style="
+                                                                                                margin:0 0 6px;
+                                                                                                font-size:22px;
+                                                                                                font-weight:800;
+                                                                                                color:#111827;
+                                                                                            ">
+                                        Enjoyed Your Meal?
+                                    </h3>
+
+                                    <p style="
+                                                                                                margin:0;
+                                                                                                color:#6B7280;
+                                                                                                font-size:14px;
+                                                                                            ">
+                                        Share your experience with this restaurant.
+                                    </p>
+
+                                </div>
+
+                                <button onclick="openReviewModal()" style="
+                                                                                                background:linear-gradient(135deg,#111827,#374151);
+                                                                                                color:#fff;
+                                                                                                border:none;
+                                                                                                padding:14px 26px;
+                                                                                                border-radius:14px;
+                                                                                                font-weight:700;
+                                                                                                cursor:pointer;
+                                                                                                font-size:15px;
+                                                                                                transition:0.3s;
+                                                                                                box-shadow:0 10px 25px rgba(0,0,0,0.15);
+                                                                                            "
+                                    onmouseover="this.style.transform='translateY(-2px)'"
+                                    onmouseout="this.style.transform='translateY(0)'">
+
+                                    ⭐ Write Review
+
+                                </button>
+
+                            </div>
+
+                            {{-- REVIEW MODAL --}}
+
+                            <div id="reviewModal" style="
+                                                                                            position:fixed;
+                                                                                            inset:0;
+                                                                                            background:rgba(0,0,0,0.6);
+                                                                                            z-index:99999;
+                                                                                            display:none;
+                                                                                            align-items:center;
+                                                                                            justify-content:center;
+                                                                                            padding:20px;
+                                                                                        ">
+
+                                <div style="
+                                                                                                background:#fff;
+                                                                                                width:100%;
+                                                                                                max-width:550px;
+                                                                                                border-radius:28px;
+                                                                                                overflow:hidden;
+                                                                                                animation:reviewPop .25s ease;
+                                                                                            ">
+
+                                    {{-- HEADER --}}
+
+                                    <div style="
+                                                                                                padding:24px 30px;
+                                                                                                border-bottom:1px solid #F3F4F6;
+                                                                                                display:flex;
+                                                                                                justify-content:space-between;
+                                                                                                align-items:center;
+                                                                                            ">
+
+                                        <div>
+
+                                            <h2 style="
+                                                                                                        margin:0 0 5px;
+                                                                                                        font-size:26px;
+                                                                                                        font-weight:800;
+                                                                                                        color:#111827;
+                                                                                                    ">
+                                                Rate Your Order
+                                            </h2>
+
+                                            <p style="
+                                                                                                        margin:0;
+                                                                                                        color:#6B7280;
+                                                                                                        font-size:14px;
+                                                                                                    ">
+                                                Your feedback helps improve service.
+                                            </p>
+
+                                        </div>
+
+                                        <button onclick="closeReviewModal()" style="
+                                                                                                        background:#F3F4F6;
+                                                                                                        border:none;
+                                                                                                        width:42px;
+                                                                                                        height:42px;
+                                                                                                        border-radius:50%;
+                                                                                                        cursor:pointer;
+                                                                                                        font-size:18px;
+                                                                                                        font-weight:700;
+                                                                                                    ">
+
+                                            ✕
+
+                                        </button>
+
+                                    </div>
+
+                                    {{-- BODY --}}
+
+                                    <form method="POST" action="/submit-review/{{ $order->id }}">
+
+                                        @csrf
+
+                                        <div style="padding:30px;">
+
+                                            {{-- STAR RATING --}}
+
+                                            <div style="margin-bottom:30px;">
+
+                                                <label style="
+                                            display:block;
+                                            margin-bottom:20px;
+                                            font-size:15px;
+                                            font-weight:700;
+                                            color:#111827;
+                                            text-align:center;
+                                        ">
+                                                    Select Rating
+                                                </label>
+
+                                                <div class="star-rating">
+
+                                                    @for($i = 5; $i >= 1; $i--)
+
+                                                        <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
+
+                                                        <label for="star{{ $i }}" class="star">
+
+                                                            ★
+
+                                                        </label>
+
+                                                    @endfor
+
+                                                </div>
+
+                                                <p id="ratingText" style="
+                                            text-align:center;
+                                            margin-top:14px;
+                                            font-size:14px;
+                                            font-weight:700;
+                                            color:#6B7280;
+                                        ">
+
+                                                    Tap a star to rate
+
+                                                </p>
+
+                                            </div>
+
+                                            {{-- REVIEW TEXTAREA --}}
+
+                                            <div style="margin-bottom:25px;">
+
+                                                <label style="
+                                                                                                            display:block;
+                                                                                                            margin-bottom:12px;
+                                                                                                            font-size:15px;
+                                                                                                            font-weight:700;
+                                                                                                            color:#111827;
+                                                                                                        ">
+                                                    Write Review
+                                                </label>
+
+                                                <textarea name="review" rows="5"
+                                                    placeholder="Tell us about food quality, delivery, packaging..." style="
+                                                                                                                width:100%;
+                                                                                                                border:1px solid #E5E7EB;
+                                                                                                                border-radius:18px;
+                                                                                                                padding:18px;
+                                                                                                                resize:none;
+                                                                                                                outline:none;
+                                                                                                                font-size:14px;
+                                                                                                                line-height:1.7;
+                                                                                                            "></textarea>
+
+                                            </div>
+
+                                            {{-- BUTTONS --}}
+
+                                            <div style="
+                                                                                                        display:flex;
+                                                                                                        justify-content:flex-end;
+                                                                                                        gap:12px;
+                                                                                                    ">
+
+                                                <button type="button" onclick="closeReviewModal()" style="
+                                                                                                                background:#F3F4F6;
+                                                                                                                color:#111827;
+                                                                                                                border:none;
+                                                                                                                padding:14px 22px;
+                                                                                                                border-radius:14px;
+                                                                                                                font-weight:700;
+                                                                                                                cursor:pointer;
+                                                                                                            ">
+
+                                                    Cancel
+
+                                                </button>
+
+                                                <button type="submit" style="
+                                                                                                                background:linear-gradient(135deg,#16A34A,#22C55E);
+                                                                                                                color:#fff;
+                                                                                                                border:none;
+                                                                                                                padding:14px 28px;
+                                                                                                                border-radius:14px;
+                                                                                                                font-weight:700;
+                                                                                                                cursor:pointer;
+                                                                                                                box-shadow:0 10px 25px rgba(34,197,94,0.25);
+                                                                                                            ">
+
+                                                    Submit Review
+
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        @else
+
+                            {{-- SHOW REVIEW --}}
+
+                            <div class="card info-card mb-4">
+
+                                <div style="
+                                                                                display:flex;
+                                                                                justify-content:space-between;
+                                                                                align-items:flex-start;
+                                                                                gap:20px;
+                                                                                flex-wrap:wrap;
+                                                                            ">
+
+                                    <div>
+
+                                        <h3 style="
+                                                                                        margin:0 0 10px;
+                                                                                        font-size:24px;
+                                                                                        font-weight:800;
+                                                                                        color:#111827;
+                                                                                    ">
+                                            Your Review
+                                        </h3>
+
+                                        <div style="
+                                                                                        font-size:28px;
+                                                                                        margin-bottom:14px;
+                                                                                    ">
+
+                                            @for($i = 1; $i <= $order->review->rating; $i++)
+
+                                                ⭐
+
+                                            @endfor
+
+                                        </div>
+
+                                        <p style="
+                                                                                        color:#4B5563;
+                                                                                        line-height:1.8;
+                                                                                        font-size:15px;
+                                                                                        margin:0;
+                                                                                    ">
+
+                                            {{ $order->review->review }}
+
+                                        </p>
+
+                                    </div>
+
+                                    <div style="
+                                                                                    background:#ECFDF5;
+                                                                                    color:#16A34A;
+                                                                                    padding:10px 18px;
+                                                                                    border-radius:30px;
+                                                                                    font-size:13px;
+                                                                                    font-weight:700;
+                                                                                ">
+                                        ✓ Submitted
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        @endif
+
+                    @endif
+
+
+                    <style>
+                        @keyframes reviewPop {
+
+                            from {
+
+                                opacity: 0;
+                                transform: scale(.9);
+
+                            }
+
+                            to {
+
+                                opacity: 1;
+                                transform: scale(1);
+
+                            }
+                        }
+                    </style>
+
+                    <script>
+
+                        function openReviewModal() {
+
+                            document.getElementById('reviewModal').style.display = 'flex';
+                        }
+
+                        function closeReviewModal() {
+
+                            document.getElementById('reviewModal').style.display = 'none';
+                        }
+
+                    </script>
                     {{-- ORDERED ITEMS --}}
                     <div class="card items-card">
                         <div class="items-header">
@@ -882,15 +1229,121 @@
         </div>
     </div>
 
-    <!-- <script>
 
-        setInterval(() => {
+    <style>
+        .star-rating {
 
-            window.location.reload();
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            gap: 8px;
+        }
 
-        }, 15000);
+        .star-rating input {
 
-    </script> -->
+            display: none;
+        }
+
+        .star-rating .star {
+
+            font-size: 52px;
+            color: #D1D5DB;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | HOVER EFFECT
+    |--------------------------------------------------------------------------
+    */
+
+        .star-rating .star:hover,
+
+        .star-rating .star:hover~.star {
+
+            color: #FBBF24;
+            transform: scale(1.12);
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | ACTIVE SELECTED
+    |--------------------------------------------------------------------------
+    */
+
+        .star-rating input:checked~.star {
+
+            color: #F59E0B;
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | SMALL ANIMATION
+    |--------------------------------------------------------------------------
+    */
+
+        .star-rating .star:active {
+
+            transform: scale(.9);
+        }
+    </style>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const stars = document.querySelectorAll(
+
+                '.star-rating input'
+            );
+
+            const text =
+                document.getElementById('ratingText');
+
+            stars.forEach(star => {
+
+                star.addEventListener('change', function () {
+
+                    let value = this.value;
+
+                    if (value == 1) {
+
+                        text.innerHTML =
+                            "😞 Poor";
+                    }
+
+                    else if (value == 2) {
+
+                        text.innerHTML =
+                            "🙂 Average";
+                    }
+
+                    else if (value == 3) {
+
+                        text.innerHTML =
+                            "😊 Good";
+                    }
+
+                    else if (value == 4) {
+
+                        text.innerHTML =
+                            "😍 Very Good";
+                    }
+
+                    else if (value == 5) {
+
+                        text.innerHTML =
+                            "🔥 Excellent";
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
+
 
 
 

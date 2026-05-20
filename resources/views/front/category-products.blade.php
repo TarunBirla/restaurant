@@ -50,7 +50,9 @@
                                     </span>
                                 </div>
                                 <p style="color:#6B7280; font-size:13px; line-height:1.6; margin:0 0 16px;">
-                                    {{ Str::limit($product->description, 80) }}
+                                    <!-- {{ Str::limit($product->description, 80) }} -->
+                                      {{ Str::limit(strip_tags($product->description), 80) }}
+
                                 </p>
                                 <div style="display:flex; gap:8px;">
                                     <a href="/product/{{ $product->id }}" class="btn-black"

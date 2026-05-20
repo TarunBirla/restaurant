@@ -2,128 +2,126 @@
 
 @section('content')
 
-<div class="max-w-5xl mx-auto">
+    <div class="max-w-5xl mx-auto">
 
-    <div class="bg-white rounded-2xl shadow p-10">
+        <div class="bg-white rounded-2xl shadow p-10">
 
-        <h1 class="text-4xl font-bold mb-8">
+            <h1 class="text-4xl font-bold mb-8">
 
-            Edit Product
+                Edit Product
 
-        </h1>
+            </h1>
 
-        <form method="POST"
-        action="/restaurant/products/{{ $product->id }}"
-        enctype="multipart/form-data">
+            <form method="POST" action="/restaurant/products/{{ $product->id }}" enctype="multipart/form-data">
 
-            @csrf
-            @method('PUT')
+                @csrf
+                @method('PUT')
 
-            <div class="grid grid-cols-2 gap-6">
+                <div class="grid grid-cols-2 gap-6">
 
-                <div>
+                    <div>
 
-                    <label class="font-bold block mb-2">
+                        <label class="font-bold block mb-2">
 
-                        Product Name
+                            Product Name
 
-                    </label>
+                        </label>
 
-                    <input
-                    type="text"
-                    name="name"
-                    value="{{ $product->name }}"
-                    class="w-full border p-4 rounded-xl">
+                        <input type="text" name="name" value="{{ $product->name }}" class="w-full border p-4 rounded-xl">
 
-                </div>
+                    </div>
 
-                <div>
+                    <div>
 
-                    <label class="font-bold block mb-2">
+                        <label class="font-bold block mb-2">
 
-                        Category
+                            Category
 
-                    </label>
+                        </label>
 
-                    <select
-                    name="category_id"
-                    class="w-full border p-4 rounded-xl">
+                        <select name="category_id" class="w-full border p-4 rounded-xl">
 
-                        @foreach($categories as $category)
+                            @foreach($categories as $category)
 
-                        <option
-                        value="{{ $category->id }}"
-                        {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
 
-                            {{ $category->name }}
+                                    {{ $category->name }}
 
-                        </option>
+                                </option>
 
-                        @endforeach
+                            @endforeach
 
-                    </select>
+                        </select>
 
-                </div>
+                    </div>
 
-                <div>
+                    <div>
 
-                    <label class="font-bold block mb-2">
+                        <label class="font-bold block mb-2">
 
-                        Price
+                            Price
 
-                    </label>
+                        </label>
 
-                    <input
-                    type="number"
-                    name="price"
-                    value="{{ $product->price }}"
-                    class="w-full border p-4 rounded-xl">
+                        <input type="number" name="price" value="{{ $product->price }}"
+                            class="w-full border p-4 rounded-xl">
 
-                </div>
+                    </div>
 
-                <div>
+                    <div>
 
-                    <label class="font-bold block mb-2">
+                        <label class="font-bold block mb-2">
 
-                        Product Image
+                            Product Image
 
-                    </label>
+                        </label>
 
-                    <input
-                    type="file"
-                    name="image"
-                    class="w-full border p-4 rounded-xl">
+                        <input type="file" name="image" class="w-full border p-4 rounded-xl">
+
+                    </div>
 
                 </div>
 
-            </div>
+                <div class="mt-6">
 
-            <div class="mt-6">
+                    <label class="font-bold block mb-2">
+                        Description
+                    </label>
 
-                <label class="font-bold block mb-2">
+                    <textarea name="description" id="description" rows="5"
+                        class="w-full border p-4 rounded-xl  h-64">{{ old('description', $product->description ?? '') }}</textarea>
 
-                    Description
+                </div>
 
-                </label>
 
-                <textarea
-                name="description"
-                rows="5"
-                class="w-full border p-4 rounded-xl">{{ $product->description }}</textarea>
+                <button class="bg-green-500 text-white px-10 py-4 rounded-xl mt-8">
 
-            </div>
+                    Update Product
 
-            <button
-            class="bg-green-500 text-white px-10 py-4 rounded-xl mt-8">
+                </button>
 
-                Update Product
+            </form>
 
-            </button>
-
-        </form>
+        </div>
 
     </div>
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
-</div>
+<script>
+ClassicEditor
+    .create(document.querySelector('#description'))
+    .then(editor => {
+        editor.editing.view.change(writer => {
+            writer.setStyle(
+                'height',
+                '250px',
+                editor.editing.view.document.getRoot()
+            );
+        });
+    })
+    .catch(error => {
+        console.error(error);
+    });
+</script>
 
 @endsection

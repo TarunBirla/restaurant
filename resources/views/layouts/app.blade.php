@@ -197,6 +197,128 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+
+    <meta
+name="csrf-token"
+content="{{ csrf_token() }}">
+
+<script type="module">
+
+import { initializeApp }
+
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+
+    getMessaging,
+    getToken,
+    onMessage
+
+}
+
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+
+const firebaseConfig = {
+
+    apiKey:
+    "AIzaSyCZiAT9MHsByPZXwiNN05bdQm3J_T6dLOY",
+
+    authDomain:
+    "food-app-67243.firebaseapp.com",
+
+    projectId:
+    "food-app-67243",
+
+    storageBucket:
+    "food-app-67243.firebasestorage.app",
+
+    messagingSenderId:
+    "27556705584",
+
+    appId:
+    "1:27556705584:web:c5a44d5b5b9e241b0a84f5",
+
+    measurementId:
+    "G-B191S3TCSD"
+};
+
+const app =
+    initializeApp(firebaseConfig);
+
+const messaging =
+    getMessaging(app);
+
+navigator.serviceWorker.register(
+
+    '/firebase-messaging-sw.js'
+
+).then(async (registration) => {
+
+    const token = await getToken(
+
+        messaging,
+
+        {
+
+            vapidKey:
+
+'BMYx8jd3DnA-TqpVy9Dp65swax68RWcrwE4-gD9BnDm7VDqdHAKOBdFAllXP_5N96pZlCST1-zfR-j5cMoAls2Y',
+
+            serviceWorkerRegistration:
+                registration
+        }
+
+    );
+
+    console.log(token);
+
+    if(token){
+
+        fetch('/save-fcm-token', {
+
+            method: 'POST',
+
+            headers: {
+
+                'Content-Type':
+                    'application/json',
+
+                'X-CSRF-TOKEN':
+
+document.querySelector(
+'meta[name="csrf-token"]'
+).content
+            },
+
+            body: JSON.stringify({
+
+                token: token
+
+            })
+        });
+    }
+});
+
+onMessage(messaging, (payload) => {
+
+    console.log(payload);
+
+    new Notification(
+
+        payload.notification.title,
+
+        {
+
+            body:
+                payload.notification.body
+
+        }
+    );
+});
+
+</script>
 </body>
 
 </html>

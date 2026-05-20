@@ -39,5 +39,10 @@ return [
         'base_url' => env('STUART_BASE_URL'),
 
     ],
+    'firebase' => [
+
+    'credentials' => env('FIREBASE_CREDENTIALS'),
+
+],
 
 ];

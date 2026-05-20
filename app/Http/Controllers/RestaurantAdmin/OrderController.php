@@ -5,7 +5,9 @@ namespace App\Http\Controllers\RestaurantAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Review;
 use Illuminate\Http\Request;
+use App\Services\FirebaseNotificationService;
 
 class OrderController extends Controller
 {
@@ -15,39 +17,39 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     */
 
-   public function index()
-{
-    $orders = Order::where(
-        'restaurant_id',
-        auth()->user()->restaurant_id
-    )
-    ->whereDate(
-        'created_at',
-        today()
-    )
-    ->latest()
-    ->get();
+    public function index()
+    {
+        $orders = Order::where(
+            'restaurant_id',
+            auth()->user()->restaurant_id
+        )
+            ->whereDate(
+                'created_at',
+                today()
+            )
+            ->latest()
+            ->get();
 
-    return view(
-        'restaurant.orders.index',
-        compact('orders')
-    );
-}
+        return view(
+            'restaurant.orders.index',
+            compact('orders')
+        );
+    }
 
-public function allOrders()
-{
-    $orders = Order::where(
-        'restaurant_id',
-        auth()->user()->restaurant_id
-    )
-    ->latest()
-    ->get();
+    public function allOrders()
+    {
+        $orders = Order::where(
+            'restaurant_id',
+            auth()->user()->restaurant_id
+        )
+            ->latest()
+            ->get();
 
-    return view(
-        'restaurant.orders.create',
-        compact('orders')
-    );
-}
+        return view(
+            'restaurant.orders.create',
+            compact('orders')
+        );
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -114,12 +116,38 @@ public function allOrders()
         |--------------------------------------------------------------------------
         */
 
+
+
         $order->update([
 
             'status' => $request->status
 
         ]);
 
+        if (
+
+            $order->user
+
+            &&
+
+            $order->user->fcm_token
+
+        ) {
+
+            $firebase =
+                new FirebaseNotificationService();
+
+            $firebase->send(
+
+                $order->user->fcm_token,
+
+                'Order Status Updated',
+
+                'Your order is now '
+                . $request->status
+
+            );
+        }
         /*
         |--------------------------------------------------------------------------
         | PAYMENT STATUS AUTO UPDATE
@@ -185,4 +213,70 @@ public function allOrders()
             'Payment Status Updated Successfully'
         );
     }
+
+    public function reviews()
+{
+    $reviews = Review::with([
+
+        'user',
+        'order'
+
+    ])
+
+    ->where(
+
+        'restaurant_id',
+
+        auth()->user()->restaurant_id
+
+    )
+
+    ->latest()
+
+    ->get();
+
+    return view(
+
+        'restaurant.reviews.index',
+
+        compact('reviews')
+
+    );
+}
+public function approveReview($id)
+{
+    $review = Review::findOrFail($id);
+
+    $review->update([
+
+        'status' => 'approved'
+
+    ]);
+
+    return back()->with(
+
+        'success',
+
+        'Review approved successfully.'
+
+    );
+}
+public function rejectReview($id)
+{
+    $review = Review::findOrFail($id);
+
+    $review->update([
+
+        'status' => 'rejected'
+
+    ]);
+
+    return back()->with(
+
+        'success',
+
+        'Review rejected successfully.'
+
+    );
+}
 }

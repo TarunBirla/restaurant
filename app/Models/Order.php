@@ -50,4 +50,9 @@ class Order extends Model
     {
         return $this->hasOne(Payment::class);
     }
+    public function review()
+{
+    return $this->hasOne(\App\Models\Review::class);
+}
+    
 }

@@ -98,7 +98,7 @@
 
                     </label>
 
-                    <textarea name="description" rows="5" class="w-full border p-4 rounded-xl"></textarea>
+                    <textarea name="description"   id="description" rows="5" class="w-full border p-4 rounded-xl  h-64"></textarea>
 
                 </div>
 
@@ -113,5 +113,24 @@
         </div>
 
     </div>
+    <!-- CKEditor CDN -->
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+<script>
+ClassicEditor
+    .create(document.querySelector('#description'))
+    .then(editor => {
+        editor.editing.view.change(writer => {
+            writer.setStyle(
+                'height',
+                '250px',
+                editor.editing.view.document.getRoot()
+            );
+        });
+    })
+    .catch(error => {
+        console.error(error);
+    });
+</script>
 
 @endsection

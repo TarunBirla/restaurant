@@ -60,8 +60,8 @@
                 <i data-lucide="store" class="nav-icon"></i> Restaurants
             </a>
             <!-- <a href="/admin/vendor" class="nav-link {{ str_contains($current, 'admin/vendor') ? 'active' : '' }}">
-                <i data-lucide="users" class="nav-icon"></i> Vendors
-            </a> -->
+                    <i data-lucide="users" class="nav-icon"></i> Vendors
+                </a> -->
 
             <p
                 style="font-size:10px; font-weight:700; color:#4B5563; text-transform:uppercase; letter-spacing:.1em; padding:0 8px; margin:18px 0 10px;">
@@ -117,6 +117,14 @@
                 <i data-lucide="badge-percent" class="nav-icon"></i>
 
                 Offers & Discounts
+
+            </a>
+            <a href="/restaurant/reviews"
+                class="nav-link {{ str_contains($current, 'restaurant/reviews') ? 'active' : '' }}">
+
+                <i data-lucide="star" class="nav-icon"></i>
+
+                Reviews
 
             </a>
 

@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Admin Login</title>
 
@@ -9,65 +13,89 @@
 
 </head>
 
-<body class="bg-gray-100">
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center p-5">
 
-<div class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md">
 
-    <div class="bg-white p-10 rounded shadow w-full max-w-md">
+        <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-10">
 
-        <h1 class="text-3xl font-bold text-center mb-8">
+            <div class="text-center mb-8">
 
-            Admin Login
+                
 
-        </h1>
+                <h1 class="text-4xl font-extrabold text-white mb-2">
 
-        @if(session('error'))
+                    Admin Login
 
-        <div class="bg-red-500 text-white p-3 rounded mb-5">
+                </h1>
 
-            {{ session('error') }}
+                <p class="text-gray-300 text-sm">
+
+                    Welcome back administrator
+
+                </p>
+
+            </div>
+
+            @if(session('error'))
+
+                <div class="bg-red-500/20 border border-red-400 text-red-200 p-4 rounded-2xl mb-6">
+
+                    {{ session('error') }}
+
+                </div>
+
+            @endif
+
+            <form method="POST" action="{{ route('admin.login') }}">
+
+                @csrf
+
+                <div class="mb-5">
+
+                    <label class="text-gray-200 text-sm mb-2 block">
+
+                        Email Address
+
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter admin email"
+                        class="w-full bg-white/10 border border-white/20 text-white placeholder-gray-400 p-4 rounded-2xl outline-none focus:border-blue-400">
+
+                </div>
+
+                <div class="mb-7">
+
+                    <label class="text-gray-200 text-sm mb-2 block">
+
+                        Password
+
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        class="w-full bg-white/10 border border-white/20 text-white placeholder-gray-400 p-4 rounded-2xl outline-none focus:border-blue-400">
+
+                </div>
+
+                <button
+                    class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-2xl shadow-xl">
+
+                    Login Admin
+
+                </button>
+
+            </form>
 
         </div>
 
-        @endif
-
-        <form method="POST"
-        action="{{ route('admin.login') }}">
-
-            @csrf
-
-            <div class="mb-5">
-
-                <label>Email</label>
-
-                <input type="email"
-                name="email"
-                class="w-full border p-3 rounded">
-
-            </div>
-
-            <div class="mb-5">
-
-                <label>Password</label>
-
-                <input type="password"
-                name="password"
-                class="w-full border p-3 rounded">
-
-            </div>
-
-            <button
-            class="w-full bg-blue-500 text-white p-3 rounded">
-
-                Login
-
-            </button>
-
-        </form>
-
     </div>
 
-</div>
-
 </body>
+
 </html>

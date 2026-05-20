@@ -8,9 +8,13 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Review;
 use App\Services\StuartService;
 use App\Models\Restaurant;
 use Illuminate\Support\Facades\Log;
+use App\Services\FirebaseNotificationService;
+
+use App\Models\User;
 
 
 class OrderController extends Controller
@@ -198,160 +202,7 @@ class OrderController extends Controller
         );
     }
 
-    //     public function placeOrder(Request $request)
-//     {
-//         Log::info('PLACE ORDER START');
-//         $request->validate([
-
-    //             'order_type' => 'required',
-
-    //             'payment_method' => 'required',
-
-
-    //             'phone' => 'required_if:payment_method,Cash On Delivery',
-
-    //             'address' => 'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
-
-    //             'pincode' => 'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
-
-    //         ]);
-//         Log::info('VALIDATION SUCCESS');
-//         $cart = session()->get('cart', []);
-
-    //         if (empty($cart)) {
-
-    //             return back();
-//         }
-
-    //         $total = 0;
-
-    //         foreach ($cart as $item) {
-
-    //             $total += $item['price']
-//                 * $item['quantity'];
-//         }
-
-    //         $restaurantId = \App\Models\Product::find(
-//             array_key_first($cart)
-//         )->restaurant_id;
-
-    //         $order = Order::create([
-
-    //             'user_id' => auth()->id(),
-
-    //             'restaurant_id' => $restaurantId,
-
-    //             'total_amount' => $total,
-
-    //             'order_type' => $request->order_type,
-//             'phone' => $request->phone,
-
-    //             'address' => $request->address,
-
-    //             'pincode' => $request->pincode,
-
-    //             'payment_method' => $request->payment_method,
-
-    //             'status' => 'pending'
-//         ]);
-//         Log::info('ORDER CREATED', [
-//             'order_id' => $order->id
-//         ]);
-
-    //         foreach ($cart as $item) {
-
-    //             OrderItem::create([
-
-    //                 'order_id' => $order->id,
-
-    //                 'product_id' => $item['id'],
-
-    //                 'quantity' => $item['quantity'],
-
-    //                 'price' => $item['price'],
-
-    //                 'total' => $item['price']
-//                     * $item['quantity']
-//             ]);
-//         }
-
-    //         /*
-//         |--------------------------------------------------------------------------
-//         | PAYMENT ENTRY
-//         |--------------------------------------------------------------------------
-//         */
-
-    //         Payment::create([
-
-    //             'order_id' => $order->id,
-
-    //             'restaurant_id' => $restaurantId,
-
-    //             'user_id' => auth()->id(),
-
-    //             'payment_method' => $request->payment_method,
-
-    //             'amount' => $total,
-
-    //             'payment_status' =>
-//                 $request->payment_method == 'Cash On Delivery'
-//                 ? 'pending'
-//                 : 'paid'
-//         ]);
-//         Log::info('PAYMENT CREATED');
-//         /*
-// |--------------------------------------------------------------------------
-// | STUART DELIVERY
-// |--------------------------------------------------------------------------
-// */
-//         Log::info('STUART DELIVERY START');
-//         if ($request->order_type == 'delivery') {
-
-    //             $restaurant = Restaurant::find(
-//                 $restaurantId
-//             );
-
-    //             $stuart = new StuartService();
-
-    //             $order->load('user');
-
-    //             $delivery = $stuart->createDelivery(
-//                 $order,
-//                 $restaurant
-//             );
-
-    //             Log::info('DELIVERY RESPONSE', [
-//                 'delivery' => $delivery
-//             ]);
-
-    //             if ($delivery) {
-
-    //                 $order->update([
-
-    //                     'stuart_job_id' =>
-//                         $delivery['id'] ?? null,
-
-    //                     'tracking_url' =>
-//                         $delivery['deliveries'][0]['tracking_url']
-//                         ?? null,
-
-    //                     'delivery_status' =>
-//                         $delivery['status']
-//                         ?? 'searching',
-//                 ]);
-//             }
-//         }
-
-
-
-    //         session()->forget('cart');
-
-    //         return redirect('/my-orders')
-//             ->with(
-//                 'success',
-//                 'Order Placed Successfully'
-//             );
-//     }
+  
 
 
     public function placeOrder(Request $request)
@@ -778,6 +629,48 @@ class OrderController extends Controller
                 : 'paid'
         ]);
 
+        $restaurantAdmin = User::where(
+
+            'restaurant_id',
+            $order->restaurant_id
+
+        )
+            ->where(
+                'role',
+                'restaurant_admin'
+            )
+            ->first();
+
+        \Log::info('RESTAURANT ADMIN FOUND', [
+
+            'restaurant_id' => $order->restaurant_id,
+            'restaurant_admin' => $restaurantAdmin
+        ]);
+
+        if (
+
+            $restaurantAdmin
+
+            &&
+
+            $restaurantAdmin->fcm_token
+
+        ) {
+
+            $firebase =
+                new FirebaseNotificationService();
+
+            $firebase->send(
+
+                $restaurantAdmin->fcm_token,
+
+                'New Order',
+
+                'You received a new order.'
+
+            );
+        }
+
         Log::info('PAYMENT CREATED');
 
         /*
@@ -1051,7 +944,8 @@ class OrderController extends Controller
 
             'items.product',
             'payment',
-            'restaurant'
+            'restaurant',
+            'review'
 
         ])
             ->where('user_id', auth()->id())
@@ -1083,4 +977,88 @@ class OrderController extends Controller
             compact('payments')
         );
     }
+
+    public function submitReview(Request $request, $id)
+{
+    $request->validate([
+
+        'rating' => 'required|integer|min:1|max:5',
+
+        'review' => 'nullable|string|max:1000'
+
+    ]);
+
+    $order = Order::where(
+
+        'user_id',
+        auth()->id()
+
+    )
+    ->where('id', $id)
+    ->firstOrFail();
+
+    /*
+    |--------------------------------------------------------------------------
+    | ONLY DELIVERED ORDER
+    |--------------------------------------------------------------------------
+    */
+
+    if ($order->delivery_status != 'delivered') {
+
+        return back()->with(
+
+            'error',
+            'Review allowed only after delivery.'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | PREVENT DUPLICATE
+    |--------------------------------------------------------------------------
+    */
+
+    $already = Review::where(
+
+        'order_id',
+        $order->id
+
+    )->exists();
+
+    if ($already) {
+
+        return back()->with(
+
+            'error',
+            'Review already submitted.'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SAVE REVIEW
+    |--------------------------------------------------------------------------
+    */
+
+    Review::create([
+
+        'user_id' => auth()->id(),
+
+        'restaurant_id' => $order->restaurant_id,
+
+        'order_id' => $order->id,
+
+        'rating' => $request->rating,
+
+        'review' => $request->review,
+         'status' => 'pending'
+
+    ]);
+
+    return back()->with(
+
+        'success',
+        'Review submitted successfully.'
+    );
+}
 }
