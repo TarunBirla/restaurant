@@ -281,7 +281,7 @@
                                         <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
                                             <span
                                                 style="font-size:10px; font-weight:700; padding:3px 8px; border-radius:10px;
-                                                                                    {{ $offer->type === 'discount' ? 'background:#DCFCE7; color:#15803D;' : 'background:#FFEDD5; color:#C2410C;' }}">
+                                                                                                {{ $offer->type === 'discount' ? 'background:#DCFCE7; color:#15803D;' : 'background:#FFEDD5; color:#C2410C;' }}">
                                                 {{ strtoupper($offer->type) }}
                                             </span>
                                         </div>
@@ -297,7 +297,7 @@
                                         @endif
                                         <span
                                             style="font-size:14px; font-weight:800;
-                                                                                {{ $offer->type === 'discount' ? 'color:#16A34A;' : 'color:#E63946;' }}">
+                                                                                            {{ $offer->type === 'discount' ? 'color:#16A34A;' : 'color:#E63946;' }}">
                                             @if($offer->value_type === 'percent')
                                                 {{ $offer->value }}% OFF
                                             @else
@@ -328,14 +328,14 @@
 
                 <a href="{{ url('/restaurant/' . $restaurant->slug) }}"
                     style="padding:10px 22px; border-radius:40px; text-decoration:none; white-space:nowrap; font-weight:600; font-size:13px; font-family:'Poppins',sans-serif; transition:all .2s; flex-shrink:0;
-                                    {{ !$activeCat ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}">
+                                        {{ !$activeCat ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}">
                     All
                 </a>
 
                 @foreach($categories as $cat)
                     <a href="{{ url('/restaurant/' . $restaurant->slug . '/' . $cat->slug) }}"
                         style="padding:10px 22px; border-radius:40px; text-decoration:none; white-space:nowrap; font-weight:600; font-size:13px; font-family:'Poppins',sans-serif; transition:all .2s; flex-shrink:0;
-                                                    {{ $activeCat === $cat->slug ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}"
+                                                            {{ $activeCat === $cat->slug ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}"
                         @if($activeCat !== $cat->slug)
                             onmouseover="this.style.background='#FFF0EC'; this.style.borderColor='#E8370E'; this.style.color='#E8370E';"
                             onmouseout="this.style.background='#fff'; this.style.borderColor='#E5E7EB'; this.style.color='#374151';"
@@ -565,122 +565,142 @@
                         const fd =
                             new FormData(form);
 
-                        const res =
-                            await fetch(
+                        try {
 
-                                '/cart/add',
+                            const res =
+                                await fetch(
 
-                                {
+                                    '/cart/add',
 
-                                    method: 'POST',
+                                    {
 
-                                    headers: {
+                                        method: 'POST',
 
-                                        'X-CSRF-TOKEN':
+                                        headers: {
 
-                                            document
-                                                .querySelector(
-                                                    'meta[name="csrf-token"]'
-                                                ).content,
+                                            'X-CSRF-TOKEN':
 
-                                        'Accept':
-                                            'application/json'
+                                                document
+                                                    .querySelector(
+                                                        'meta[name="csrf-token"]'
+                                                    ).content,
 
-                                    },
+                                            'Accept':
+                                                'application/json'
 
-                                    body: fd
+                                        },
+
+                                        body: fd
+
+                                    }
+
+                                );
+
+
+                            // LOGIN EXPIRED / NOT LOGIN
+
+                            if (
+
+                                res.status === 401
+
+                            ) {
+
+                                showToast(
+                                    'Please login first'
+                                );
+
+                                setTimeout(() => {
+
+                                    window.location.href =
+                                        '/login';
+
+                                }, 1000);
+
+                                return;
+
+                            }
+
+
+                            const data =
+                                await res.json();
+
+
+                            // CONTROLLER REDIRECT
+
+                            if (
+
+                                data.redirect
+
+                            ) {
+
+                                showToast(
+                                    data.message
+                                );
+
+                                setTimeout(() => {
+
+                                    window.location.href =
+                                        data.redirect;
+
+                                }, 1000);
+
+                                return;
+
+                            }
+
+
+                            // SUCCESS
+
+                            if (
+
+                                data.success
+
+                            ) {
+
+                                const cartCount =
+                                    document.getElementById(
+                                        'cartCount'
+                                    );
+
+                                if (cartCount) {
+
+                                    cartCount.innerHTML =
+                                        data.count;
 
                                 }
 
-                            );
-
-                        const data =
-                            await res.json();
-
-
-                        // LOGIN REQUIRED
-
-                        if (
-
-                            !data.success
-
-                            &&
-
-                            data.redirect
-
-                        ) {
-
-                            showToast(
-
-                                'Please login first'
-
-                            );
-
-                            setTimeout(() => {
-
-                                window.location.href =
-                                    data.redirect;
-
-                            }, 1000);
-
-                            return;
-
-                        }
-
-
-                        // SUCCESS
-
-                        if (
-
-                            data.success
-
-                        ) {
-
-                            if (
-
-                                document.getElementById(
-                                    'cartCount'
-                                )
-
-                            ) {
-
-                                document
-                                    .getElementById(
-                                        'cartCount'
-                                    )
-                                    .innerHTML =
-                                    data.count;
-
-                            }
-
-                            if (
-
-                                document.getElementById(
-                                    'mobileCartCount'
-                                )
-
-                            ) {
-
-                                document
-                                    .getElementById(
+                                const mobile =
+                                    document.getElementById(
                                         'mobileCartCount'
-                                    )
-                                    .innerHTML =
-                                    data.count;
+                                    );
+
+                                if (mobile) {
+
+                                    mobile.innerHTML =
+                                        data.count;
+
+                                }
+
+                                showToast(
+                                    data.message
+                                );
 
                             }
 
+                        } catch (err) {
+
+                            console.log(err);
+
                             showToast(
-                                data.message
+                                'Something went wrong'
                             );
 
                         }
 
-                    }
-
-                );
+                    });
 
             });
+
 
         function showToast(msg) {
 
@@ -700,9 +720,9 @@
 
     background:#16A34A;
 
-    color:white;
+    color:#fff;
 
-    padding:14px 20px;
+    padding:14px 22px;
 
     border-radius:12px;
 
@@ -712,13 +732,15 @@
 
     `;
 
-            document.body.appendChild(div);
+            document.body.appendChild(
+                div
+            );
 
             setTimeout(() => {
 
                 div.remove();
 
-            }, 1500);
+            }, 2000);
 
         }
 
