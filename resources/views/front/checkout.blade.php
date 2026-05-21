@@ -3,480 +3,630 @@
 @section('content')
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .co-page {
-        background: #F4F3EF;
-        min-height: 100vh;
-        font-family: 'DM Sans', sans-serif;
-        padding: 40px 20px 80px;
+    :root {
+        --red: #E63946;
+        --red-dark: #c42d0b;
+        --green: #10B981;
+        --green-dark: #059669;
+        --bg: #F4F3EF;
+        --white: #fff;
+        --border: #E8E6E0;
+        --border-soft: #F0EEE9;
+        --text: #111;
+        --muted: #9CA3AF;
+        --label: #374151;
+        --input-bg: #FAFAF8;
+        --card-radius: 20px;
+        --btn-radius: 14px;
     }
 
+    .co-page {
+        background: var(--bg);
+        min-height: 100vh;
+        /* font-family: 'DM Sans', sans-serif; */
+        padding: 32px 16px 80px;
+    }
+
+    /* ── HEADER ── */
+    .co-header {
+        max-width: 1200px;
+        margin: 0 auto 28px;
+    }
+    .co-header h1 {
+        /* font-family: 'Syne', sans-serif; */
+        font-size: clamp(24px, 5vw, 34px);
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1.1;
+    }
+    .co-header p {
+        color: var(--muted);
+        font-size: 14px;
+        margin-top: 4px;
+    }
+    .co-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+    }
+    .co-breadcrumb a {
+        color: var(--red);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    /* ── LAYOUT ── */
     .co-wrap {
         max-width: 1200px;
         margin: 0 auto;
         display: grid;
-        grid-template-columns: 1fr 420px;
-        gap: 28px;
+        grid-template-columns: 1fr 400px;
+        gap: 24px;
         align-items: start;
     }
+    .co-left { display: flex; flex-direction: column; gap: 18px; }
 
-    /* ---- LEFT PANEL ---- */
-    .co-left { display: flex; flex-direction: column; gap: 20px; }
-
+    /* ── CARD ── */
     .co-card {
-        background: #fff;
-        border-radius: 24px;
-        padding: 28px 32px;
-        border: 1px solid #E8E6E0;
+        background: var(--white);
+        border-radius: var(--card-radius);
+        padding: 24px;
+        border: 1px solid var(--border);
     }
-
     .co-card-title {
-        font-family: 'Syne', sans-serif;
-        font-size: 17px;
+        /* font-family: 'Syne', sans-serif; */
+        font-size: 16px;
         font-weight: 700;
-        color: #111;
+        color: var(--text);
         margin-bottom: 20px;
         display: flex;
         align-items: center;
         gap: 10px;
     }
-    .co-card-title .step-num {
-        width: 28px; height: 28px;
-        background: #E63946;
+    .step-num {
+        width: 26px; height: 26px;
+        background: var(--red);
         color: #fff;
         border-radius: 50%;
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 700;
         display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
     }
+    .step-meta {
+        margin-left: auto;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        /* font-family: 'DM Sans', sans-serif; */
+    }
 
-    /* ---- ORDER ITEMS ---- */
+    /* ── ORDER ITEMS ── */
     .co-item {
-        display: flex;
-        gap: 16px;
-        padding: 18px 0;
-        border-bottom: 1px solid #F0EEE9;
+        display: grid;
+        grid-template-columns: 96px 1fr auto;
+        gap: 14px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border-soft);
+        align-items: start;
     }
     .co-item:last-child { border-bottom: none; padding-bottom: 0; }
     .co-item:first-child { padding-top: 0; }
 
     .co-item-img {
-        width: 120px; height: 120px;
-        border-radius: 16px;
+        width: 96px; height: 96px;
+        border-radius: 14px;
         object-fit: cover;
-        flex-shrink: 0;
-        border: 1px solid #F0EEE9;
+        border: 1px solid var(--border-soft);
+        display: block;
     }
 
-    .co-item-body { flex: 1; min-width: 0; }
-
+    .co-item-body { min-width: 0; }
     .co-item-name {
-        /* font-family: 'Syne', sans-serif; */
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 700;
-        color: #111;
+        color: var(--text);
         margin-bottom: 6px;
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-
-    .co-item-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-
-    .badge-offer {
-        background: #FFF0EC;
-        color: #E63946;
-        border: 1px solid #FECACA;
-        padding: 3px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 700;
-    }
-    .badge-discount {
-        background: #F0FDF4;
-        color: #16A34A;
-        border: 1px solid #BBF7D0;
-        padding: 3px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 700;
-    }
-    .badge-save {
-        background: #FFFBEB;
-        color: #B45309;
-        border: 1px solid #FDE68A;
-        padding: 3px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 700;
-    }
-
-    .co-item-price-row {
+    .co-item-badges {
         display: flex;
-        align-items: center;
-        gap: 8px;
+        gap: 5px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
     }
-    .price-old { color: #9CA3AF; text-decoration: line-through; font-size: 14px; }
-    .price-new { color: #E63946; font-size: 18px; font-weight: 700;  }
-    .price-normal { color: #E63946; font-size: 18px; font-weight: 700;  }
+    .badge {
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        border: 1px solid;
+    }
+    .badge-offer   { background: #FFF0EC; color: var(--red);     border-color: #FECACA; }
+    .badge-disc    { background: #F0FDF4; color: #16A34A;        border-color: #BBF7D0; }
+    .badge-save    { background: #FFFBEB; color: #B45309;        border-color: #FDE68A; }
 
-    /* QTY CONTROLS */
+    .price-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .price-normal { color: var(--red); font-size: 17px; font-weight: 700; }
+    .price-old    { color: var(--muted); text-decoration: line-through; font-size: 13px; }
+
+    /* QTY */
     .qty-controls {
         display: flex;
         align-items: center;
-        gap: 0;
-        border: 1.5px solid #E8E6E0;
-        border-radius: 12px;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
         overflow: hidden;
         width: fit-content;
-        margin-top: 10px;
     }
     .qty-btn {
-        width: 34px; height: 34px;
+        width: 32px; height: 32px;
         display: flex; align-items: center; justify-content: center;
         text-decoration: none;
-        font-size: 18px; font-weight: 700;
-        transition: background 0.2s;
-        color: #111;
+        font-size: 17px;
+        font-weight: 700;
+        transition: background 0.18s;
+        color: var(--text);
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
     }
     .qty-btn.minus { background: #F4F3EF; }
-    .qty-btn.plus  { background: #E63946; color: #fff; }
-    .qty-btn.minus:hover { background: #E8E6E0; }
-    .qty-btn.plus:hover  { background: #c42d0b; }
+    .qty-btn.plus  { background: var(--red); color: #fff; }
+    .qty-btn.minus:hover { background: var(--border); }
+    .qty-btn.plus:hover  { background: var(--red-dark); }
     .qty-num {
-        min-width: 38px;
+        min-width: 36px;
         text-align: center;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 700;
-        color: #111;
-        border-left: 1px solid #E8E6E0;
-        border-right: 1px solid #E8E6E0;
-        height: 34px;
-        line-height: 34px;
+        color: var(--text);
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+        height: 32px;
+        line-height: 32px;
     }
+
+    /* RIGHT SIDE OF ITEM */
     .co-item-right {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
         justify-content: space-between;
-        min-width: 100px;
+        gap: 32px;
+        min-width: 80px;
     }
-    .co-item-subtotal {
-        /* font-family: 'Syne', sans-serif; */
-        font-size: 20px;
-        font-weight: 700;
-        color: #111;
-    }
-    .co-item-subtotal-label {
-        font-size: 11px;
-        color: #9CA3AF;
-        font-weight: 500;
-        margin-bottom: 2px;
-    }
+    .subtotal-block { text-align: right; }
+    .subtotal-label { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .subtotal-val   { font-size: 19px; font-weight: 700; color: var(--text); line-height: 1.2; }
     .co-remove-btn {
-        color: #9CA3AF;
+        color: var(--muted);
         font-size: 12px;
         text-decoration: none;
         font-weight: 600;
-        transition: color 0.2s;
+        transition: color 0.18s;
+        white-space: nowrap;
     }
-    .co-remove-btn:hover { color: #E63946; }
+    .co-remove-btn:hover { color: var(--red); }
 
-    /* ---- ORDER TYPE ---- */
-    .order-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    /* ── ORDER TYPE ── */
+    .ot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
     .ot-label {
-        border: 2px solid #E8E6E0;
-        border-radius: 18px;
-        padding: 18px 20px;
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: border-color 0.18s, background 0.18s;
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
+        -webkit-tap-highlight-color: transparent;
     }
-    .ot-label:hover { border-color: #E63946; background: #FFF5F5; }
+    .ot-label:hover  { border-color: var(--red); background: #FFF5F5; }
+    .ot-label.checked { border-color: var(--red); background: #FFF5F5; }
     .ot-label input[type=radio] { display: none; }
-    .ot-label.checked { border-color: #E63946; background: #FFF5F5; }
 
     .ot-icon {
-        width: 46px; height: 46px;
-        border-radius: 14px;
-        background: #F4F3EF;
+        width: 42px; height: 42px;
+        border-radius: 12px;
+        background: var(--bg);
         display: flex; align-items: center; justify-content: center;
-        font-size: 22px;
+        font-size: 20px;
         flex-shrink: 0;
-        transition: background 0.2s;
+        transition: background 0.18s;
     }
     .ot-label.checked .ot-icon { background: #FECACA; }
-    .ot-title { font-size: 15px; font-weight: 700; color: #111; }
-    .ot-sub { font-size: 12px; color: #9CA3AF; margin-top: 2px; }
-    .ot-radio-dot {
-        width: 20px; height: 20px;
+    .ot-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .ot-sub   { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+    .radio-dot {
+        width: 18px; height: 18px;
         border-radius: 50%;
         border: 2px solid #D1D5DB;
         margin-left: auto;
-        display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
-        transition: all 0.2s;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.18s;
     }
-    .ot-label.checked .ot-radio-dot {
-        border-color: #E63946;
-        background: #E63946;
-    }
-    .ot-radio-dot::after {
+    .ot-label.checked .radio-dot { border-color: var(--red); background: var(--red); }
+    .radio-dot::after {
         content: '';
-        width: 8px; height: 8px;
+        width: 7px; height: 7px;
         border-radius: 50%;
         background: #fff;
         display: none;
     }
-    .ot-label.checked .ot-radio-dot::after { display: block; }
+    .ot-label.checked .radio-dot::after { display: block; }
 
-    /* ---- DELIVERY FIELDS ---- */
-    .co-hidden { display: none; }
+    /* DELIVERY FIELDS */
+    .co-hidden { display: none !important; }
+    .delivery-fields {
+        margin-top: 22px;
+        padding-top: 22px;
+        border-top: 1px solid var(--border-soft);
+    }
+    .section-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--label);
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        margin-bottom: 14px;
+    }
 
-    .co-input-group { margin-bottom: 16px; }
+    .co-input-group { margin-bottom: 14px; }
+    .co-input-group:last-child { margin-bottom: 0; }
     .co-input-group label {
         display: block;
         font-size: 13px;
         font-weight: 600;
-        color: #374151;
-        margin-bottom: 8px;
+        color: var(--label);
+        margin-bottom: 7px;
     }
     .co-input, .co-textarea {
         width: 100%;
-        border: 1.5px solid #E8E6E0;
-        border-radius: 14px;
-        padding: 14px 18px;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 13px 16px;
         font-size: 14px;
-        font-family: 'DM Sans', sans-serif;
-        color: #111;
-        background: #FAFAF8;
+        /* font-family: 'DM Sans', sans-serif; */
+        color: var(--text);
+        background: var(--input-bg);
         outline: none;
-        transition: border-color 0.2s, background 0.2s;
+        transition: border-color 0.18s, background 0.18s;
+        -webkit-appearance: none;
     }
     .co-input:focus, .co-textarea:focus {
-        border-color: #E63946;
-        background: #fff;
+        border-color: var(--red);
+        background: var(--white);
     }
-    .co-textarea { resize: none; height: 90px; }
+    .co-textarea { resize: none; height: 88px; }
 
-    /* ---- PAYMENT ---- */
+    /* ── PAYMENT ── */
     .pm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
     .pm-label {
-        border: 2px solid #E8E6E0;
-        border-radius: 18px;
-        padding: 18px 20px;
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.18s;
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
+        -webkit-tap-highlight-color: transparent;
     }
     .pm-label input[type=radio] { display: none; }
-    .pm-label:hover { border-color: #10B981; background: #F0FDF4; }
-    .pm-label.checked { border-color: #10B981; background: #F0FDF4; }
-    .pm-label.checked .pm-radio-dot { border-color: #10B981; background: #10B981; }
+    .pm-label:hover   { border-color: var(--green); background: #F0FDF4; }
+    .pm-label.checked { border-color: var(--green); background: #F0FDF4; }
+    .pm-label.checked .pm-radio-dot { border-color: var(--green); background: var(--green); }
     .pm-label.checked .pm-radio-dot::after { display: block; }
-
-    .pm-icon {
-        width: 46px; height: 46px;
-        border-radius: 14px;
-        background: #F4F3EF;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 22px;
-        flex-shrink: 0;
-    }
     .pm-label.checked .pm-icon { background: #D1FAE5; }
 
-    .pm-title { font-size: 15px; font-weight: 700; color: #111; }
-    .pm-sub { font-size: 12px; color: #9CA3AF; margin-top: 2px; }
+    .pm-icon {
+        width: 42px; height: 42px;
+        border-radius: 12px;
+        background: var(--bg);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+        transition: background 0.18s;
+    }
+    .pm-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .pm-sub   { font-size: 11px; color: var(--muted); margin-top: 1px; }
 
     .pm-radio-dot {
-        width: 20px; height: 20px;
+        width: 18px; height: 18px;
         border-radius: 50%;
         border: 2px solid #D1D5DB;
         margin-left: auto;
-        display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
-        transition: all 0.2s;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.18s;
     }
     .pm-radio-dot::after {
         content: '';
-        width: 8px; height: 8px;
+        width: 7px; height: 7px;
         border-radius: 50%;
         background: #fff;
         display: none;
     }
 
-    /* ---- RIGHT PANEL (ORDER SUMMARY) ---- */
-    .co-right { position: sticky; top: 24px; }
+    /* ── RIGHT: SUMMARY ── */
+    .co-right { position: sticky; top: 20px; }
 
     .co-summary {
-        background: #fff;
-        border-radius: 24px;
-        padding: 28px;
-        border: 1px solid #E8E6E0;
+        background: var(--white);
+        border-radius: var(--card-radius);
+        padding: 24px;
+        border: 1px solid var(--border);
     }
 
     .summary-title {
         /* font-family: 'Syne', sans-serif; */
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 700;
-        color: #111;
-        margin-bottom: 24px;
+        color: var(--text);
+        margin-bottom: 20px;
         padding-bottom: 16px;
-        border-bottom: 1px solid #F0EEE9;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        font-size: 13px;
+        gap: 8px;
+    }
+    .summary-item .si-name {
+        color: var(--label);
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .summary-item .si-qty { color: var(--muted); font-weight: 400; }
+    .summary-item .si-price { font-weight: 700; color: var(--text); flex-shrink: 0; }
+
+    .summary-divider {
+        border: none;
+        border-top: 1px dashed var(--border);
+        margin: 14px 0;
     }
 
     .summary-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 14px;
+        margin-bottom: 10px;
         font-size: 14px;
     }
-    .summary-row .label { color: #6B7280; font-weight: 500; }
-    .summary-row .value { font-weight: 700; color: #111; }
-    .summary-row .value.discount { color: #16A34A; }
+    .summary-row .sr-label { color: #6B7280; font-weight: 500; }
+    .summary-row .sr-value { font-weight: 700; color: var(--text); }
+    .summary-row .sr-value.green { color: #16A34A; }
+    .summary-row .sr-value.free  { color: var(--green); }
 
-    .summary-divider {
-        border: none;
-        border-top: 1px dashed #E8E6E0;
-        margin: 16px 0;
-    }
-
-    .summary-total-row {
+    .summary-total {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 16px;
-        background: #F4F3EF;
-        border-radius: 14px;
-        margin-bottom: 20px;
+        padding: 14px 16px;
+        background: var(--bg);
+        border-radius: 12px;
+        margin: 16px 0 18px;
     }
-    .summary-total-label { font-size: 15px; font-weight: 700; color: #111; }
+    .summary-total-label { font-size: 15px; font-weight: 700; color: var(--text); }
     .summary-total-value {
         /* font-family: 'Syne', sans-serif; */
-        font-size: 28px;
-        font-weight: 700;
-        color: #E63946;
+        font-size: 26px;
+        font-weight:7800;
+        color: var(--red);
+    }
+
+    .saving-banner {
+        background: #F0FDF4;
+        border: 1px solid #BBF7D0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #15803D;
     }
 
     .co-place-btn {
         width: 100%;
-        background: #E63946;
+        background: var(--red);
         color: #fff;
         border: none;
-        border-radius: 16px;
-        padding: 18px;
+        border-radius: var(--btn-radius);
+        padding: 17px;
         /* font-family: 'Syne', sans-serif; */
-        font-size: 17px;
+        font-size: 16px;
         font-weight: 700;
         cursor: pointer;
-        transition: background 0.2s, transform 0.15s;
+        transition: background 0.18s, transform 0.12s;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
         text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
     }
-    .co-place-btn:hover { background: #c42d0b; transform: translateY(-1px); }
+    .co-place-btn:hover  { background: var(--red-dark); transform: translateY(-1px); }
     .co-place-btn:active { transform: translateY(0); }
 
     .secure-note {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        margin-top: 14px;
+        gap: 5px;
+        margin-top: 12px;
         font-size: 12px;
-        color: #9CA3AF;
+        color: var(--muted);
         font-weight: 500;
     }
 
-    /* ---- PAGE HEADER ---- */
-    .co-header {
-        max-width: 1200px;
-        margin: 0 auto 32px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-    .co-header-left h1 {
-        /* font-family: 'Syne', sans-serif; */
-        font-size: 34px;
-        font-weight: 700;
-        color: #111;
-    }
-    .co-header-left p { color: #9CA3AF; font-size: 14px; margin-top: 4px; }
-
-    .co-breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        color: #9CA3AF;
-    }
-    .co-breadcrumb a { color: #E63946; text-decoration: none; font-weight: 600; }
-    .co-breadcrumb span { color: #D1D5DB; }
-
-    /* ---- ERRORS ---- */
+    /* ── ERRORS ── */
     .co-errors {
         background: #FEF2F2;
         border: 1.5px solid #FECACA;
         color: #DC2626;
-        padding: 16px 20px;
-        border-radius: 16px;
-        margin-bottom: 20px;
+        padding: 14px 18px;
+        border-radius: 14px;
+        margin-bottom: 16px;
         font-size: 14px;
     }
     .co-errors ul { margin-left: 18px; }
     .co-errors li { margin-bottom: 4px; }
 
-    /* ---- EMPTY STATE ---- */
+    /* ── EMPTY ── */
     .co-empty {
         text-align: center;
-        padding: 60px 20px;
+        padding: 48px 16px;
     }
+    .co-empty-icon { font-size: 48px; margin-bottom: 14px; }
     .co-empty h3 {
+        /* font-family: 'Syne', sans-serif; */
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 6px;
+    }
+    .co-empty p { color: var(--muted); font-size: 14px; }
+
+    /* ── MOBILE STICKY FOOTER ── */
+    .mobile-footer {
+        display: none;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        background: var(--white);
+        border-top: 1px solid var(--border);
+        padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+        z-index: 100;
+        box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+    }
+    .mobile-footer-inner {
+        max-width: 500px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+    .mobile-footer-total { flex: 1; }
+    .mobile-footer-label { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .mobile-footer-amount {
         /* font-family: 'Syne', sans-serif; */
         font-size: 22px;
         font-weight: 700;
-        color: #111;
-        margin-bottom: 8px;
+        color: var(--red);
+        line-height: 1.1;
     }
-    .co-empty p { color: #9CA3AF; font-size: 14px; }
+    .mobile-footer-btn {
+        background: var(--red);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 22px;
+        /* font-family: 'Syne', sans-serif; */
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex; align-items: center; gap: 8px;
+        transition: background 0.18s;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        white-space: nowrap;
+    }
+    .mobile-footer-btn:hover { background: var(--red-dark); }
 
-    /* ---- RESPONSIVE ---- */
-    @media(max-width: 900px) {
-        .co-wrap { grid-template-columns: 1fr; }
-        .co-right { position: static; }
+    /* ── RESPONSIVE BREAKPOINTS ── */
+
+    /* Tablet / medium */
+    @media (max-width: 900px) {
+        .co-wrap    { grid-template-columns: 1fr; }
+        .co-right   { position: static; }
+        .co-summary { display: none; }           /* Summary shown in sticky footer on mobile */
+        .mobile-footer { display: block; }
+        .co-page    { padding-bottom: 120px; }   /* Make room for sticky footer */
     }
-    @media(max-width: 560px) {
-        .order-type-grid, .pm-grid { grid-template-columns: 1fr; }
-        .co-card { padding: 20px; }
-        .co-item-right { min-width: 80px; }
-        .co-page { padding: 20px 12px 60px; }
+
+    /* Small tablet */
+    @media (max-width: 640px) {
+        .co-page  { padding: 16px 12px 120px; }
+        .co-card  { padding: 18px 16px; }
+        .co-header { margin-bottom: 20px; }
+    }
+
+    /* Phone */
+    @media (max-width: 480px) {
+        .ot-grid,
+        .pm-grid { grid-template-columns: 1fr; }
+
+        .co-item {
+            grid-template-columns: 80px 1fr;
+            grid-template-rows: auto auto;
+        }
+        .co-item-img  { width: 80px; height: 80px; }
+        .co-item-right {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 4px;
+        }
+        .subtotal-block { text-align: left; }
+        .subtotal-val   { font-size: 17px; }
+
+        .co-item-name  { font-size: 14px; }
+        .price-normal  { font-size: 15px; }
+
+        .ot-label, .pm-label { padding: 14px; }
+        .ot-icon, .pm-icon   { width: 38px; height: 38px; font-size: 18px; }
+        .ot-title, .pm-title { font-size: 13px; }
+        .ot-sub, .pm-sub     { font-size: 11px; }
+    }
+
+    /* Very small (320px) */
+    @media (max-width: 360px) {
+        .co-item { grid-template-columns: 72px 1fr; }
+        .co-item-img { width: 72px; height: 72px; }
+        .co-card-title { font-size: 15px; }
+        .mobile-footer-btn { padding: 13px 16px; font-size: 14px; }
     }
 </style>
 
 <div class="co-page">
 
-   
+    <!-- HEADER -->
+    <div class="co-header">
+        
+        <h1>Checkout</h1>
+    </div>
 
     <form method="POST" action="/place-order" id="checkoutForm">
         @csrf
 
         <div class="co-wrap">
 
-            <!-- ============ LEFT SIDE ============ -->
+            <!-- ══════════ LEFT ══════════ -->
             <div class="co-left">
 
                 <!-- ERRORS -->
@@ -485,18 +635,18 @@
                     <strong style="font-weight:700;">Please fix the following:</strong>
                     <ul style="margin-top:8px;">
                         @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                            <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
                 @endif
 
-                <!-- STEP 1: ORDER ITEMS -->
+                <!-- ── STEP 1: ORDER ITEMS ── -->
                 <div class="co-card">
                     <div class="co-card-title">
                         <span class="step-num">1</span>
                         Order Items
-                        <span style="margin-left:auto; font-size:13px; font-weight:500; color:#9CA3AF; font-family:'DM Sans',sans-serif;">
+                        <span class="step-meta">
                             {{ count($cart) }} {{ Str::plural('item', count($cart)) }}
                         </span>
                     </div>
@@ -509,21 +659,25 @@
 
                     <div class="co-item">
                         <!-- IMAGE -->
-                        <img src="{{ asset('storage/'.$item['image']) }}" class="co-item-img" alt="{{ $item['name'] }}">
+                        <img src="{{ asset('storage/'.$item['image']) }}"
+                             class="co-item-img"
+                             alt="{{ $item['name'] }}"
+                             loading="lazy">
 
                         <!-- BODY -->
                         <div class="co-item-body">
-                            <div class="co-item-name">{{ $item['name'] }}</div>
+                            <div class="co-item-name" title="{{ $item['name'] }}">
+                                {{ $item['name'] }}
+                            </div>
 
-                            <!-- BADGES -->
                             @if($offer)
                             <div class="co-item-badges">
                                 @if($offer->type === 'discount')
-                                    <span class="badge-discount">🏷️ DISCOUNT</span>
+                                    <span class="badge badge-disc">🏷️ DISCOUNT</span>
                                 @else
-                                    <span class="badge-offer">🎁 OFFER</span>
+                                    <span class="badge badge-offer">🎁 OFFER</span>
                                 @endif
-                                <span class="badge-save">
+                                <span class="badge badge-save">
                                     @if($offer->value_type === 'percent')
                                         {{ $offer->value }}% OFF
                                     @else
@@ -533,10 +687,10 @@
                             </div>
                             @endif
 
-                            <!-- PRICE -->
-                            <div class="co-item-price-row">
+                            <div class="price-row">
                                 @if($offer)
-                                    <!-- <span class="price-new">£{{ number_format($item['final_price'], 2) }}</span> -->
+                                    {{-- Final price hidden per original; uncomment if needed --}}
+                                    {{-- <span class="price-normal">£{{ number_format($item['final_price'], 2) }}</span> --}}
                                 @else
                                     <span class="price-normal">£{{ number_format($item['price'], 2) }}</span>
                                 @endif
@@ -544,17 +698,17 @@
 
                             <!-- QTY CONTROLS -->
                             <div class="qty-controls">
-                                <a href="/cart/decrease/{{ $item['id'] }}" class="qty-btn minus">−</a>
-                                <span class="qty-num">{{ $item['quantity'] }}</span>
-                                <a href="/cart/increase/{{ $item['id'] }}" class="qty-btn plus">+</a>
+                                <a href="/cart/decrease/{{ $item['id'] }}" class="qty-btn minus" aria-label="Decrease quantity">−</a>
+                                <span class="qty-num" aria-label="Quantity">{{ $item['quantity'] }}</span>
+                                <a href="/cart/increase/{{ $item['id'] }}" class="qty-btn plus" aria-label="Increase quantity">+</a>
                             </div>
                         </div>
 
                         <!-- RIGHT: SUBTOTAL + REMOVE -->
                         <div class="co-item-right">
-                            <div>
-                                <div class="co-item-subtotal-label">Subtotal</div>
-                                <div class="co-item-subtotal">£{{ number_format($subtotal, 2) }}</div>
+                            <div class="subtotal-block">
+                                <div class="subtotal-label">Subtotal</div>
+                                <div class="subtotal-val">£{{ number_format($subtotal, 2) }}</div>
                             </div>
                             <a href="/cart/remove/{{ $item['id'] }}" class="co-remove-btn">Remove ✕</a>
                         </div>
@@ -562,30 +716,30 @@
 
                     @empty
                     <div class="co-empty">
-                        <div style="font-size:48px; margin-bottom:16px;">🛒</div>
+                        <div class="co-empty-icon">🛒</div>
                         <h3>Cart is Empty</h3>
                         <p>Add some items to proceed with checkout.</p>
                     </div>
                     @endforelse
                 </div>
 
-                <!-- STEP 2: ORDER TYPE -->
+                <!-- ── STEP 2: ORDER TYPE ── -->
                 <div class="co-card">
                     <div class="co-card-title">
                         <span class="step-num">2</span>
                         How would you like your order?
                     </div>
 
-                    <div class="order-type-grid">
+                    <div class="ot-grid">
                         @if($restaurant->dine_in)
                         <label class="ot-label" id="ot-dinein">
                             <input type="radio" name="order_type" value="dine_in" required>
                             <div class="ot-icon">🍽️</div>
                             <div>
                                 <div class="ot-title">Dine In</div>
-                                <div class="ot-sub">Eat inside restaurant</div>
+                                <div class="ot-sub">Eat at restaurant</div>
                             </div>
-                            <div class="ot-radio-dot"></div>
+                            <div class="radio-dot"></div>
                         </label>
                         @endif
 
@@ -595,32 +749,32 @@
                             <div class="ot-icon">🚚</div>
                             <div>
                                 <div class="ot-title">Home Delivery</div>
-                                <div class="ot-sub">Delivered to your door</div>
+                                <div class="ot-sub">Delivered to door</div>
                             </div>
-                            <div class="ot-radio-dot"></div>
+                            <div class="radio-dot"></div>
                         </label>
                         @endif
                     </div>
 
-                    <!-- DELIVERY ADDRESS (shown when delivery selected) -->
-                    <div id="deliveryFields" class="co-hidden" style="margin-top:24px; padding-top:24px; border-top:1px solid #F0EEE9;">
-                        <p style="font-size:13px; font-weight:700; color:#374151; margin-bottom:16px; text-transform:uppercase; letter-spacing:.05em;">
-                            Delivery Details
-                        </p>
+                    <!-- DELIVERY FIELDS -->
+                    <div id="deliveryFields" class="delivery-fields co-hidden">
+                        <div class="section-label">Delivery Details</div>
                         <div class="co-input-group">
-                            <label>Full Delivery Address</label>
+                            <label for="address">Full Delivery Address</label>
                             <textarea id="address" name="address" class="co-textarea"
                                 placeholder="House no., Street, Area, City..."></textarea>
                         </div>
-                        <div class="co-input-group" style="margin-bottom:0;">
-                            <label>Pin Code</label>
+                        <div class="co-input-group">
+                            <label for="pincode">Pin Code</label>
                             <input type="text" id="pincode" name="pincode" class="co-input"
-                                placeholder="e.g. SW1A 1AA">
+                                placeholder="e.g. SW1A 1AA"
+                                inputmode="text"
+                                autocomplete="postal-code">
                         </div>
                     </div>
                 </div>
 
-                <!-- STEP 3: PAYMENT -->
+                <!-- ── STEP 3: PAYMENT ── -->
                 <div class="co-card">
                     <div class="co-card-title">
                         <span class="step-num">3</span>
@@ -650,87 +804,74 @@
                     </div>
 
                     <!-- PHONE (COD only) -->
-                    <div id="phoneField" class="co-hidden" style="margin-top:20px; padding-top:20px; border-top:1px solid #F0EEE9;">
-                        <div class="co-input-group" style="margin-bottom:0;">
-                            <label>Phone Number</label>
-                            <input type="text" id="phone" name="phone" class="co-input"
-                                placeholder="e.g. +44 7700 900000">
+                    <div id="phoneField" class="co-hidden" style="margin-top:18px; padding-top:18px; border-top:1px solid var(--border-soft);">
+                        <div class="co-input-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="co-input"
+                                placeholder="e.g. +44 7700 900000"
+                                inputmode="tel"
+                                autocomplete="tel">
                         </div>
                     </div>
                 </div>
 
             </div>
+            <!-- ══════════ END LEFT ══════════ -->
 
-            <!-- ============ RIGHT SIDE: ORDER SUMMARY ============ -->
+            <!-- ══════════ RIGHT: SUMMARY (desktop only) ══════════ -->
             <div class="co-right">
                 <div class="co-summary">
-
                     <div class="summary-title">Order Summary</div>
 
-                    <!-- ITEM LIST (compact) -->
+                    <!-- Item list -->
                     @foreach($cart as $item)
-                    @php
-                        $subtotal = $item['subtotal'] ?? ($item['price'] * $item['quantity']);
-                    @endphp
-                    <div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:14px;">
-                        <span style="color:#374151; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:12px;">
-                            {{ $item['name'] }}
-                            <span style="color:#9CA3AF; font-weight:400;"> × {{ $item['quantity'] }}</span>
-                        </span>
-                        <span style="font-weight:700; color:#111; flex-shrink:0;">
-                            £{{ number_format($subtotal, 2) }}
-                        </span>
+                    @php $subtotal = $item['subtotal'] ?? ($item['price'] * $item['quantity']); @endphp
+                    <div class="summary-item">
+                        <span class="si-name">{{ $item['name'] }} <span class="si-qty">× {{ $item['quantity'] }}</span></span>
+                        <span class="si-price">£{{ number_format($subtotal, 2) }}</span>
                     </div>
                     @endforeach
 
                     <hr class="summary-divider">
 
-                    <!-- TOTALS -->
                     <div class="summary-row">
-                        <span class="label">Original Total</span>
-                        <span class="value">£{{ number_format($originalTotal, 2) }}</span>
+                        <span class="sr-label">Original Total</span>
+                        <span class="sr-value">£{{ number_format($originalTotal, 2) }}</span>
                     </div>
 
                     @if($discount > 0)
                     <div class="summary-row">
-                        <span class="label" style="color:#16A34A; display:flex; align-items:center; gap:5px;">
-                            🏷️ Discount Saved
-                        </span>
-                        <span class="value discount">− £{{ number_format($discount, 2) }}</span>
+                        <span class="sr-label" style="color:#16A34A;">🏷️ Discount Saved</span>
+                        <span class="sr-value green">− £{{ number_format($discount, 2) }}</span>
                     </div>
                     @endif
 
                     <div class="summary-row">
-                        <span class="label">Delivery</span>
-                        <span class="value" style="color:#10B981;">Free</span>
+                        <span class="sr-label">Delivery</span>
+                        <span class="sr-value free">Free</span>
                     </div>
 
                     <hr class="summary-divider">
 
-                    <!-- FINAL TOTAL -->
-                    <div class="summary-total-row">
+                    <div class="summary-total">
                         <span class="summary-total-label">Total to Pay</span>
                         <span class="summary-total-value">£{{ number_format($finalTotal, 2) }}</span>
                     </div>
 
                     @if($discount > 0)
-                    <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:12px; padding:12px 16px; margin-bottom:20px; display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:#15803D;">
+                    <div class="saving-banner">
                         🎉 You're saving £{{ number_format($discount, 2) }} on this order!
                     </div>
                     @endif
 
-                    <!-- PLACE ORDER BUTTON -->
                     <button type="submit" class="co-place-btn" form="checkoutForm">
                         Place Order
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                         </svg>
                     </button>
 
-                    <div class="secure-note">
-                        🔒 Secure & encrypted checkout
-                    </div>
-
+                    <div class="secure-note">🔒 Secure &amp; encrypted checkout</div>
                 </div>
             </div>
 
@@ -739,16 +880,33 @@
 
 </div>
 
+<!-- ══════════ MOBILE STICKY FOOTER ══════════ -->
+<div class="mobile-footer" id="mobileFooter">
+    <div class="mobile-footer-inner">
+        <div class="mobile-footer-total">
+            <div class="mobile-footer-label">Total to Pay</div>
+            <div class="mobile-footer-amount">£{{ number_format($finalTotal, 2) }}</div>
+        </div>
+        <button type="submit" form="checkoutForm" class="mobile-footer-btn">
+            Place Order
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
 <script>
-    /* ---- ORDER TYPE toggle ---- */
-    document.querySelectorAll('input[name="order_type"]').forEach(radio => {
+(function () {
+    /* ── ORDER TYPE ── */
+    document.querySelectorAll('input[name="order_type"]').forEach(function(radio) {
         radio.addEventListener('change', function () {
-            document.querySelectorAll('.ot-label').forEach(l => l.classList.remove('checked'));
+            document.querySelectorAll('.ot-label').forEach(function(l) { l.classList.remove('checked'); });
             this.closest('.ot-label').classList.add('checked');
 
-            const df = document.getElementById('deliveryFields');
-            const addr = document.getElementById('address');
-            const pin  = document.getElementById('pincode');
+            var df   = document.getElementById('deliveryFields');
+            var addr = document.getElementById('address');
+            var pin  = document.getElementById('pincode');
 
             if (this.value === 'delivery') {
                 df.classList.remove('co-hidden');
@@ -762,14 +920,14 @@
         });
     });
 
-    /* ---- PAYMENT METHOD toggle ---- */
-    document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+    /* ── PAYMENT METHOD ── */
+    document.querySelectorAll('input[name="payment_method"]').forEach(function(radio) {
         radio.addEventListener('change', function () {
-            document.querySelectorAll('.pm-label').forEach(l => l.classList.remove('checked'));
+            document.querySelectorAll('.pm-label').forEach(function(l) { l.classList.remove('checked'); });
             this.closest('.pm-label').classList.add('checked');
 
-            const pf    = document.getElementById('phoneField');
-            const phone = document.getElementById('phone');
+            var pf    = document.getElementById('phoneField');
+            var phone = document.getElementById('phone');
 
             if (this.value === 'Cash On Delivery') {
                 pf.classList.remove('co-hidden');
@@ -781,9 +939,9 @@
         });
     });
 
-    /* ---- FORM SUBMIT: route based on payment ---- */
+    /* ── FORM SUBMIT: route based on payment ── */
     document.getElementById('checkoutForm').addEventListener('submit', function (e) {
-        const pm = document.querySelector('input[name="payment_method"]:checked');
+        var pm = document.querySelector('input[name="payment_method"]:checked');
         if (pm && pm.value === 'online') {
             e.preventDefault();
             this.action = "{{ route('payment.pay') }}";
@@ -792,6 +950,13 @@
             this.action = '/place-order';
         }
     });
+
+    /* ── HIDE MOBILE FOOTER when no cart items ── */
+    @if(count($cart) === 0)
+    var mf = document.getElementById('mobileFooter');
+    if (mf) mf.style.display = 'none';
+    @endif
+})();
 </script>
 
 @endsection

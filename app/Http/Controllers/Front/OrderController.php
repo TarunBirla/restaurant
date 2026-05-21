@@ -341,76 +341,45 @@ class OrderController extends Controller
                     ->pluck('id')
                     ->toArray();
 
-            /*
-            |--------------------------------------------------------------------------
-            | FULL COMBO MATCH
-            |--------------------------------------------------------------------------
-            */
-
-            $allMatched = !array_diff(
-
-                $offerProductIds,
-
-                $cartProductIds
-            );
-
-            /*
-            |--------------------------------------------------------------------------
-            | APPLY OFFER
-            |--------------------------------------------------------------------------
-            */
+            $allMatched =
+                !array_diff(
+                    $offerProductIds,
+                    $cartProductIds
+                );
 
             if ($allMatched) {
 
-                foreach ($cart as $item) {
+                if (
+
+                    $offer->value_type
+                    == 'percent'
+
+                ) {
+
+                    $discount +=
+                        (
+                            $originalTotal
+                            *
+                            $offer->value
+                        )
+                        /
+                        100;
+
+                } else {
 
                     /*
-                    |--------------------------------------------------------------------------
-                    | ONLY OFFER PRODUCTS
-                    |--------------------------------------------------------------------------
+                    FLAT DISCOUNT
+                    SIRF EK BAR
                     */
 
-                    if (
-                        in_array(
-                            $item['id'],
-                            $offerProductIds
-                        )
-                    ) {
+                    $discount +=
+                        $offer->value;
 
-                        /*
-                        |--------------------------------------------------------------------------
-                        | PERCENT
-                        |--------------------------------------------------------------------------
-                        */
-
-                        if (
-                            $offer->value_type
-                            == 'percent'
-                        ) {
-
-                            $discount +=
-                                (
-                                    (
-                                        $item['price']
-                                        * $offer->value
-                                    ) / 100
-                                )
-                                * $item['quantity'];
-                        }
-
-                        /*
-                        |--------------------------------------------------------------------------
-                        | FLAT
-                        |--------------------------------------------------------------------------
-                        */ else {
-
-                            $discount +=
-                                $offer->value
-                                * $item['quantity'];
-                        }
-                    }
                 }
+
+                break;
             }
+
         }
 
         /*
@@ -431,6 +400,12 @@ class OrderController extends Controller
         | CREATE ORDER
         |--------------------------------------------------------------------------
         */
+
+        /*
+ |--------------------------------------------------------------------------
+ | CREATE ORDER
+ |--------------------------------------------------------------------------
+ */
 
         $order = Order::create([
 
@@ -468,113 +443,18 @@ class OrderController extends Controller
                 $order->id
         ]);
 
+
         /*
         |--------------------------------------------------------------------------
         | ORDER ITEMS
         |--------------------------------------------------------------------------
+        |
+        | PRODUCT PRICE SAME RAHEGA
+        | OFFER SIRF ORDER TOTAL PAR LAGEGA
+        |
         */
 
         foreach ($cart as $item) {
-
-            /*
-            |--------------------------------------------------------------------------
-            | DEFAULT PRICE
-            |--------------------------------------------------------------------------
-            */
-
-            $finalPrice =
-                $item['price'];
-
-            /*
-            |--------------------------------------------------------------------------
-            | FIND OFFER
-            |--------------------------------------------------------------------------
-            */
-
-            foreach ($offers as $offer) {
-
-                $offerProductIds =
-                    $offer->products
-                        ->pluck('id')
-                        ->toArray();
-
-                $allMatched = !array_diff(
-
-                    $offerProductIds,
-
-                    $cartProductIds
-                );
-
-                /*
-                |--------------------------------------------------------------------------
-                | OFFER PRODUCT
-                |--------------------------------------------------------------------------
-                */
-
-                if (
-
-                    $allMatched
-
-                    &&
-
-                    in_array(
-                        $item['id'],
-                        $offerProductIds
-                    )
-
-                ) {
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | PERCENT
-                    |--------------------------------------------------------------------------
-                    */
-
-                    if (
-                        $offer->value_type
-                        == 'percent'
-                    ) {
-
-                        $discountAmount =
-                            (
-                                $item['price']
-                                * $offer->value
-                            ) / 100;
-                    }
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | FLAT
-                    |--------------------------------------------------------------------------
-                    */ else {
-
-                        $discountAmount =
-                            $offer->value;
-                    }
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | FINAL PRICE
-                    |--------------------------------------------------------------------------
-                    */
-
-                    $finalPrice = max(
-
-                        $item['price']
-                        - $discountAmount,
-
-                        0
-                    );
-
-                    break;
-                }
-            }
-
-            /*
-            |--------------------------------------------------------------------------
-            | SAVE ORDER ITEM
-            |--------------------------------------------------------------------------
-            */
 
             OrderItem::create([
 
@@ -588,13 +468,58 @@ class OrderController extends Controller
                     $item['quantity'],
 
                 'price' =>
-                    $finalPrice,
+                    $item['price'],
 
                 'total' =>
-                    $finalPrice
-                    * $item['quantity']
+
+                    $item['price']
+                    *
+                    $item['quantity']
+
             ]);
+
         }
+
+
+        Log::info('ORDER ITEMS SAVED');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE FINAL ORDER TOTAL
+        |--------------------------------------------------------------------------
+        */
+
+        $order->update([
+
+            'total_amount' =>
+
+                max(
+
+                    $originalTotal
+                    -
+                    $discount,
+
+                    0
+
+                )
+
+        ]);
+
+
+        Log::info('FINAL TOTAL UPDATED', [
+
+            'original_total' =>
+                $originalTotal,
+
+            'discount' =>
+                $discount,
+
+            'final_total' =>
+                $order->total_amount
+
+        ]);
+
 
         /*
         |--------------------------------------------------------------------------
@@ -617,7 +542,7 @@ class OrderController extends Controller
                 $request->payment_method,
 
             'amount' =>
-                $finalTotal,
+                $order->total_amount,
 
             'payment_status' =>
 
@@ -627,6 +552,7 @@ class OrderController extends Controller
                 ? 'pending'
 
                 : 'paid'
+
         ]);
 
 

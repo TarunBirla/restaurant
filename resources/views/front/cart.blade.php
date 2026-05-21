@@ -2,175 +2,243 @@
 
 @section('content')
 
-    <div class="bg-gray-100 mx-auto max-w-7xl py-10 px-5">
-
-        <div class="container mx-auto">
-
-            <div class="grid grid-cols-12 gap-8">
-
-                <!-- SIDEBAR -->
-
-                <div class="col-span-3">
-
-                    @include('front.layouts.user-sidebar')
-
-                </div>
-
-
-
-
-
-                <!-- CONTENT -->
-
-                <div class="col-span-9">
-
-                    <div class="bg-white rounded-3xl shadow p-8">
-
-                        <h1 class="text-4xl font-bold mb-10">
-
-                            My Cart
-
-                        </h1>
-
-                        @php $total = 0; @endphp
-
-                        @forelse($cart as $item)
-
-                            @php
-                                $total += $item['price'] * $item['quantity'];
-                            @endphp
-
-                            <div class="flex justify-between items-center border-b py-5">
-
-                                <div class="flex items-center gap-5">
-
-                                    <img src="{{ asset('storage/' . $item['image']) }}"
-                                        class="w-24 h-24 rounded-xl object-cover">
-
-                                    <div>
-
-                                        <h2 class="text-2xl font-bold">
-
-                                            {{ $item['name'] }}
-
-                                        </h2>
-
-                                        <div class="flex items-center gap-3 mt-3">
-
-                                            <!-- DECREASE -->
-
-                                            <a href="/cart/decrease/{{ $item['id'] }}"
-                                                class="w-9 h-9 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold">
-
-                                                -
-
-                                            </a>
-
-                                            <!-- QTY -->
-
-                                            <span class="text-lg font-bold">
-
-                                                {{ $item['quantity'] }}
-
-                                            </span>
-
-                                            <!-- INCREASE -->
-
-                                            <a href="/cart/increase/{{ $item['id'] }}"
-                                                class="w-9 h-9 bg-green-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
-
-                                                +
-
-                                            </a>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div>
-
-                                    <p class="text-2xl font-bold">
-
-                                        £{{ $item['price'] }}
-
-                                        <span class="text-gray-500 text-lg">
-
-                                            x
-
-                                        </span>
-
-                                        {{ $item['quantity'] }}
-
-                                        <span class="text-gray-500 text-lg">
-
-                                            =
-
-                                        </span>
-
-                                        <span class="text-red-500">
-
-                                            £{{ $item['price'] * $item['quantity'] }}
-
-                                        </span>
-
-                                    </p>
-
-                                    <a href="/cart/remove/{{ $item['id'] }}" class="text-red-500 mt-3 inline-block">
-
-                                        Remove
-
-                                    </a>
-
-                                </div>
-
-                            </div>
-
-                        @empty
-
-                            <p class="text-center py-20 text-gray-500">
-
-                                Cart Empty
-
-                            </p>
-
-                        @endforelse
-
-                        @if(count($cart) > 0)
-
-                            <div class="flex justify-between mt-10">
-
-                                <h2 class="text-3xl font-bold">
-
-                                    Total
-
-                                </h2>
-
-                                <h2 class="text-3xl font-bold">
-
-                                    £{{ $total }}
-
-                                </h2>
-
-                            </div>
-
-                            <a href="/checkout" class="bg-green-500 text-white px-10 py-4 rounded-xl inline-block mt-8">
-
-                                Checkout
-
-                            </a>
-
-                        @endif
-
-                    </div>
-
-                </div>
-
-            </div>
-
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.cart-page {
+    background: #F4F3EF;
+    min-height: 100vh;
+    padding: 32px 16px 100px;
+    /* font-family: 'DM Sans', sans-serif; */
+}
+.cart-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+.cart-card {
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid #E8E6E0;
+    padding: 28px 28px;
+}
+.cart-title {
+    /* font-family: 'Syne', sans-serif; */
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 24px;
+}
+
+/* cart item */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid #F0EEE9;
+}
+.cart-item:last-of-type { border-bottom: none; }
+.cart-item-img {
+    width: 80px; height: 80px;
+    border-radius: 16px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid #F0EEE9;
+}
+.cart-item-name {
+    /* font-family: 'Syne', sans-serif; */
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 10px;
+}
+.qty-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1.5px solid #E8E6E0;
+    border-radius: 12px;
+    overflow: hidden;
+    width: fit-content;
+}
+.qty-btn {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    font-size: 18px; font-weight: 700;
+    color: #111;
+    transition: background .15s;
+}
+.qty-btn.minus { background: #F4F3EF; }
+.qty-btn.plus  { background: #E63946; color: #fff; }
+.qty-btn.minus:hover { background: #E8E6E0; }
+.qty-btn.plus:hover  { background: #c42d0b; }
+.qty-num {
+    min-width: 36px;
+    text-align: center;
+    font-size: 14px; font-weight: 700;
+    color: #111;
+    border-left: 1px solid #E8E6E0;
+    border-right: 1px solid #E8E6E0;
+    height: 32px; line-height: 32px;
+}
+.cart-item-price {
+    /* font-family: 'Syne', sans-serif; */
+    font-size: 17px;
+    font-weight: 700;
+    color: #E63946;
+    white-space: nowrap;
+    text-align: right;
+}
+.cart-remove {
+    display: inline-block;
+    margin-top: 8px;
+    color: #9CA3AF;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color .15s;
+}
+.cart-remove:hover { color: #E63946; }
+
+/* total row */
+.cart-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0 0;
+    margin-top: 8px;
+    border-top: 2px dashed #E8E6E0;
+}
+.cart-total-label {
+    /* font-family: 'Syne', sans-serif; */
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+}
+.cart-total-value {
+    /* font-family: 'Syne', sans-serif; */
+    font-size: 26px;
+    font-weight: 700;
+    color: #E63946;
+}
+.checkout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #E63946;
+    color: #fff;
+    border-radius: 14px;
+    padding: 16px 32px;
+    /* font-family: 'Syne', sans-serif; */
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: background .2s, transform .15s;
+}
+.checkout-btn:hover { background: #c42d0b; transform: translateY(-1px); }
+
+/* empty */
+.cart-empty {
+    text-align: center;
+    padding: 60px 20px;
+}
+.cart-empty-icon { font-size: 56px; margin-bottom: 16px; }
+.cart-empty h3 {
+    /* font-family: 'Syne', sans-serif; */
+    font-size: 20px; font-weight: 700; color: #111; margin-bottom: 6px;
+}
+.cart-empty p { color: #9CA3AF; font-size: 14px; }
+
+.mob-page-title {
+    display: none;
+    /* font-family: 'Syne', sans-serif; */
+    font-size: 26px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 18px;
+}
+
+@media(max-width: 900px) { .cart-wrap { grid-template-columns: 1fr; } }
+@media(max-width: 640px) {
+    .cart-page { padding: 20px 14px 100px; }
+    .mob-page-title { display: block; }
+    .cart-card { padding: 20px 16px; }
+    .cart-title { font-size: 22px; }
+    .cart-item { flex-wrap: wrap; }
+    .cart-item-img { width: 68px; height: 68px; }
+    .checkout-btn { width: 100%; justify-content: center; }
+}
+</style>
+
+<div class="cart-page">
+    <div class="cart-wrap">
+
+        {{-- SIDEBAR --}}
+        <div>
+            @include('front.layouts.user-sidebar')
         </div>
 
+        {{-- CONTENT --}}
+        <div>
+            <div class="mob-page-title">My Cart</div>
+
+            <div class="cart-card">
+                <h1 class="cart-title">My Cart</h1>
+
+                @php $total = 0; @endphp
+
+                @forelse($cart as $item)
+                    @php $total += $item['price'] * $item['quantity']; @endphp
+
+                    <div class="cart-item">
+                        <div style="display:flex; align-items:center; gap:14px; flex:1; min-width:0;">
+                            <img src="{{ asset('storage/' . $item['image']) }}" class="cart-item-img" alt="{{ $item['name'] }}">
+                            <div style="flex:1; min-width:0;">
+                                <div class="cart-item-name">{{ $item['name'] }}</div>
+                                <div class="qty-row">
+                                    <a href="/cart/decrease/{{ $item['id'] }}" class="qty-btn minus">−</a>
+                                    <span class="qty-num">{{ $item['quantity'] }}</span>
+                                    <a href="/cart/increase/{{ $item['id'] }}" class="qty-btn plus">+</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align:right; flex-shrink:0;">
+                            <div class="cart-item-price">£{{ number_format($item['price'] * $item['quantity'], 2) }}</div>
+                            <div style="font-size:12px; color:#9CA3AF; margin-top:2px;">£{{ number_format($item['price'],2) }} each</div>
+                            <a href="/cart/remove/{{ $item['id'] }}" class="cart-remove">Remove ✕</a>
+                        </div>
+                    </div>
+
+                @empty
+                    <div class="cart-empty">
+                        <div class="cart-empty-icon">🛒</div>
+                        <h3>Cart is Empty</h3>
+                        <p>Add some delicious items to get started!</p>
+                    </div>
+                @endforelse
+
+                @if(count($cart) > 0)
+                    <div class="cart-total-row">
+                        <span class="cart-total-label">Total</span>
+                        <span class="cart-total-value">£{{ number_format($total, 2) }}</span>
+                    </div>
+                    <a href="/checkout" class="checkout-btn">
+                        Checkout
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </a>
+                @endif
+            </div>
+        </div>
     </div>
+</div>
 
 @endsection
