@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+    @laravelPWA
     <style>
         * {
             box-sizing: border-box;
@@ -219,25 +220,26 @@
         const firebaseConfig = {
 
             apiKey:
-                "AIzaSyCZiAT9MHsByPZXwiNN05bdQm3J_T6dLOY",
+                "{{ config('services.firebase.api_key') }}",
 
             authDomain:
-                "food-app-67243.firebaseapp.com",
+                "{{ config('services.firebase.auth_domain') }}",
 
             projectId:
-                "food-app-67243",
+                "{{ config('services.firebase.project_id') }}",
 
             storageBucket:
-                "food-app-67243.firebasestorage.app",
+                "{{ config('services.firebase.storage_bucket') }}",
 
             messagingSenderId:
-                "27556705584",
+                "{{ config('services.firebase.sender_id') }}",
 
             appId:
-                "1:27556705584:web:c5a44d5b5b9e241b0a84f5",
+                "{{ config('services.firebase.app_id') }}",
 
             measurementId:
-                "G-B191S3TCSD"
+                "{{ config('services.firebase.measurement_id') }}"
+
         };
 
         const app =
@@ -258,9 +260,7 @@
 
                 {
 
-                    vapidKey:
-
-                        'BMYx8jd3DnA-TqpVy9Dp65swax68RWcrwE4-gD9BnDm7VDqdHAKOBdFAllXP_5N96pZlCST1-zfR-j5cMoAls2Y',
+                    vapidKey: "{{ config('services.firebase.vapid_key') }}",
 
                     serviceWorkerRegistration:
                         registration
@@ -297,20 +297,20 @@
             }
         });
 
-       onMessage(messaging, (payload) => {
+        onMessage(messaging, (payload) => {
 
-    console.log(
-        'MESSAGE RECEIVED',
-        payload
-    );
+            console.log(
+                'MESSAGE RECEIVED',
+                payload
+            );
 
-    alert(
-        payload.notification.title
-        + ' - ' +
-        payload.notification.body
-    );
+            alert(
+                payload.notification.title
+                + ' - ' +
+                payload.notification.body
+            );
 
-});
+        });
     </script>
 </body>
 

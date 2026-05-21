@@ -134,6 +134,8 @@ class OrderController extends Controller
 
         ) {
 
+            \Log::info('SEND ORDER STATUS TO USER');
+
             $firebase =
                 new FirebaseNotificationService();
 
@@ -141,12 +143,17 @@ class OrderController extends Controller
 
                 $order->user->fcm_token,
 
-                'Order Status Updated',
+                'Order Updated',
 
-                'Your order is now '
-                . $request->status
+                'Order #'
+                . $order->id
+                . ' is now '
+                . strtoupper(
+                    $request->status
+                )
 
             );
+
         }
         /*
         |--------------------------------------------------------------------------
@@ -192,91 +199,103 @@ class OrderController extends Controller
         );
     }
 
-    public function updatePaymentStatus(Request $request, $id)
-    {
+    public function updatePaymentStatus(
+        Request $request,
+        $id
+    ) {
         $order = Order::where(
+
             'restaurant_id',
             auth()->user()->restaurant_id
+
         )->findOrFail($id);
 
         Payment::where(
+
             'order_id',
             $order->id
+
         )->update([
 
-                    'payment_status' => $request->payment_status
+                    'payment_status' =>
+                        $request->payment_status
 
                 ]);
 
+        
+
         return back()->with(
+
             'success',
+
             'Payment Status Updated Successfully'
+
         );
     }
 
     public function reviews()
-{
-    $reviews = Review::with([
+    {
+        $reviews = Review::with([
 
-        'user',
-        'order'
+            'user',
+            'order'
 
-    ])
+        ])
 
-    ->where(
+            ->where(
 
-        'restaurant_id',
+                'restaurant_id',
 
-        auth()->user()->restaurant_id
+                auth()->user()->restaurant_id
 
-    )
+            )
 
-    ->latest()
+            ->latest()
 
-    ->get();
+            ->get();
 
-    return view(
+        return view(
 
-        'restaurant.reviews.index',
+            'restaurant.reviews.index',
 
-        compact('reviews')
+            compact('reviews')
 
-    );
-}
-public function approveReview($id)
-{
-    $review = Review::findOrFail($id);
+        );
+    }
+    public function approveReview($id)
+    {
+        $review = Review::findOrFail($id);
 
-    $review->update([
+        $review->update([
 
-        'status' => 'approved'
+            'status' => 'approved'
 
-    ]);
+        ]);
 
-    return back()->with(
+        return back()->with(
 
-        'success',
+            'success',
 
-        'Review approved successfully.'
+            'Review approved successfully.'
 
-    );
-}
-public function rejectReview($id)
-{
-    $review = Review::findOrFail($id);
+        );
+    }
+    public function rejectReview($id)
+    {
+        $review = Review::findOrFail($id);
 
-    $review->update([
+        $review->update([
 
-        'status' => 'rejected'
+            'status' => 'rejected'
 
-    ]);
+        ]);
 
-    return back()->with(
+        return back()->with(
 
-        'success',
+            'success',
 
-        'Review rejected successfully.'
+            'Review rejected successfully.'
 
-    );
-}
+        );
+    }
 }
