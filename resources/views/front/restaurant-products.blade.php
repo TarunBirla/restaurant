@@ -412,13 +412,25 @@
                                     onclick="openAR('{{ asset('storage/' . $product->image) }}')" style="flex:1;">
                                     3D View
                                 </a>
-                                <form method="POST" action="/cart/add" style="flex:1;">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="current_url" value="{{ url()->current() }}">
-                                    <button class="btn-primary" type="submit">
-                                        Add
-                                    </button>
+                                <!-- <form method="POST" action="/cart/add" style="flex:1;"> -->
+                                    <form
+class="addCartForm"
+style="flex:1;"
+>
+                                   @csrf
+
+<input
+type="hidden"
+name="product_id"
+value="{{ $product->id }}">
+
+<button
+class="btn-primary"
+type="submit">
+
+Add
+
+</button>
                                 </form>
                             </div>
                         </div>
@@ -540,5 +552,134 @@
             setInterval(() => goTo(cur >= max() ? 0 : cur + 1), 3500);
         }
     </script>
+<script>
 
+document
+.querySelectorAll(
+'.addCartForm'
+)
+
+.forEach(form=>{
+
+form.addEventListener(
+
+'submit',
+
+async function(e){
+
+e.preventDefault();
+
+const fd=
+new FormData(form);
+
+const res=
+await fetch(
+
+'/cart/add',
+
+{
+
+method:'POST',
+
+headers:{
+
+'X-CSRF-TOKEN':
+
+document
+.querySelector(
+
+'meta[name="csrf-token"]'
+
+).content
+
+},
+
+body:fd
+
+}
+
+);
+
+const data=
+await res.json();
+
+if(
+
+data.redirect
+
+){
+
+location.href=
+data.redirect;
+
+return;
+
+}
+
+if(
+
+data.success
+
+){
+
+document
+.getElementById(
+'cartCount'
+)
+.innerHTML=
+data.count;
+
+showToast(
+data.message
+);
+
+}
+
+}
+
+);
+
+});
+
+function showToast(msg){
+
+const div=
+document.createElement(
+'div'
+);
+
+div.innerHTML=
+msg;
+
+div.style=`
+
+position:fixed;
+top:20px;
+right:20px;
+background:#16A34A;
+color:#fff;
+padding:14px 22px;
+border-radius:12px;
+z-index:999999;
+font-weight:700;
+
+`;
+
+document.body.appendChild(div);
+
+setTimeout(
+
+()=>{
+
+div.remove();
+
+},
+
+2500
+
+);
+
+}
+
+</script>
 @endsection

@@ -20,131 +20,113 @@ class CartController extends Controller
             compact('cart')
         );
     }
-   
 
-   public function add(Request $request)
-{
-    if (!auth()->check()) {
 
-        session([
-            'url.intended' => url()->full()
-        ]);
+    public function add(Request $request)
+    {
+        if (!auth()->check()) {
 
-        return redirect()
-            ->route('login')
-            ->with(
-                'error',
-                'Please login first'
+            return response()->json([
+
+                'success' => false,
+
+                'message' => 'Please login first',
+
+                'redirect' => route('login')
+
+            ]);
+        }
+
+        $product =
+            Product::findOrFail(
+                $request->product_id
             );
-    }
 
-    $product =
-        Product::findOrFail(
-            $request->product_id
-        );
-
-    $cart =
-        session()->get(
-            'cart',
-            []
-        );
-
-    /*
-    |--------------------------------------------------
-    | SINGLE RESTAURANT CART
-    |--------------------------------------------------
-    */
-
-    if (!empty($cart)) {
-
-        $firstItem =
-            reset($cart);
-
-        $oldProduct =
-            Product::find(
-                $firstItem['id']
+        $cart =
+            session()->get(
+                'cart',
+                []
             );
+
+        /*
+        SINGLE RESTAURANT
+        */
+
+        if (!empty($cart)) {
+
+            $firstItem =
+                reset($cart);
+
+            $oldProduct =
+                Product::find(
+                    $firstItem['id']
+                );
+
+            if (
+
+                $oldProduct
+
+                &&
+
+                $oldProduct->restaurant_id
+                !=
+                $product->restaurant_id
+
+            ) {
+
+                session()->forget('cart');
+
+                $cart = [];
+            }
+        }
 
         if (
-
-            $oldProduct
-
-            &&
-
-            $oldProduct->restaurant_id
-            !=
-            $product->restaurant_id
-
-        ) {
-
-            session()->forget(
-                'cart'
-            );
-
-            $cart = [];
-
-            Log::info(
-                'OLD CART REMOVED'
-            );
-        }
-    }
-
-    /*
-    |--------------------------------------------------
-    | ADD PRODUCT
-    |--------------------------------------------------
-    */
-
-    if (
-
-        isset(
+            isset(
             $cart[$product->id]
         )
+        ) {
 
-    ) {
+            $cart[
+                $product->id
+            ]['quantity']++;
 
-        $cart[
-            $product->id
-        ]['quantity']++;
+        } else {
 
-    } else {
+            $cart[
+                $product->id
+            ] = [
 
-        $cart[
-            $product->id
-        ] = [
+                'id' => $product->id,
 
-            'id' =>
-                $product->id,
+                'name' => $product->name,
 
-            'name' =>
-                $product->name,
+                'price' => $product->price,
 
-            'price' =>
-                $product->price,
+                'image' => $product->image,
 
-            'image' =>
-                $product->image,
+                'quantity' => 1
+            ];
+        }
 
-            'quantity' => 1
-
-        ];
-    }
-
-    session()->put(
-        'cart',
-        $cart
-    );
-
-    return redirect('/cart')
-
-        ->with(
-
-            'success',
-
-            'Product added to cart'
-
+        session()->put(
+            'cart',
+            $cart
         );
-}
+
+        return response()->json([
+
+            'success' => true,
+
+            'message' => 'Added to cart successfully',
+
+            'count' =>
+
+                collect($cart)
+
+                    ->sum('quantity')
+
+        ]);
+    }
     public function increase($id)
     {
         $cart = session()->get('cart', []);

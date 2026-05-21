@@ -138,7 +138,7 @@
     <!-- ══════════════════════════════════════
          CATEGORIES
     ══════════════════════════════════════ -->
-    <section id="categories" style="max-width:1280px; margin:0 auto; padding:80px 24px;">
+    <!-- <section id="categories" style="max-width:1280px; margin:0 auto; padding:80px 24px;">
         <div
             style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:36px; flex-wrap:wrap; gap:12px;">
             <div>
@@ -165,13 +165,13 @@
                 </a>
             @endforeach
         </div>
-    </section>
+    </section> -->
 
 
     <!-- ══════════════════════════════════════
          FEATURED PRODUCTS
     ══════════════════════════════════════ -->
-    <section id="products" style="background:#fff; padding:80px 0;">
+    <!-- <section id="products" style="background:#fff; padding:80px 0;">
         <div style="max-width:1280px; margin:0 auto; padding:0 24px;">
             <div
                 style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:36px; flex-wrap:wrap; gap:12px;">
@@ -218,7 +218,6 @@
                                     </span>
                                 </div>
                                 <p style="color:#6B7280; font-size:13px; line-height:1.6; margin:0 0 16px;">
-                                    <!-- {{ Str::limit($product->description, 80) }} -->
                                       {{ Str::limit(strip_tags($product->description), 80) }}
                                 </p>
                                 <div style="display:flex; gap:8px;">
@@ -239,7 +238,7 @@
                 @endforeach
             </div>
         </div>
-    </section>
+    </section> -->
 
 
     <!-- ══════════════════════════════════════
