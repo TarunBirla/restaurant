@@ -281,7 +281,7 @@
                                         <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
                                             <span
                                                 style="font-size:10px; font-weight:700; padding:3px 8px; border-radius:10px;
-                                                            {{ $offer->type === 'discount' ? 'background:#DCFCE7; color:#15803D;' : 'background:#FFEDD5; color:#C2410C;' }}">
+                                                                                    {{ $offer->type === 'discount' ? 'background:#DCFCE7; color:#15803D;' : 'background:#FFEDD5; color:#C2410C;' }}">
                                                 {{ strtoupper($offer->type) }}
                                             </span>
                                         </div>
@@ -295,8 +295,9 @@
                                                 {{ $offer->description }}
                                             </p>
                                         @endif
-                                        <span style="font-size:14px; font-weight:800;
-                                                        {{ $offer->type === 'discount' ? 'color:#16A34A;' : 'color:#E63946;' }}">
+                                        <span
+                                            style="font-size:14px; font-weight:800;
+                                                                                {{ $offer->type === 'discount' ? 'color:#16A34A;' : 'color:#E63946;' }}">
                                             @if($offer->value_type === 'percent')
                                                 {{ $offer->value }}% OFF
                                             @else
@@ -327,14 +328,14 @@
 
                 <a href="{{ url('/restaurant/' . $restaurant->slug) }}"
                     style="padding:10px 22px; border-radius:40px; text-decoration:none; white-space:nowrap; font-weight:600; font-size:13px; font-family:'Poppins',sans-serif; transition:all .2s; flex-shrink:0;
-                            {{ !$activeCat ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}">
+                                    {{ !$activeCat ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}">
                     All
                 </a>
 
                 @foreach($categories as $cat)
                     <a href="{{ url('/restaurant/' . $restaurant->slug . '/' . $cat->slug) }}"
                         style="padding:10px 22px; border-radius:40px; text-decoration:none; white-space:nowrap; font-weight:600; font-size:13px; font-family:'Poppins',sans-serif; transition:all .2s; flex-shrink:0;
-                                    {{ $activeCat === $cat->slug ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}"
+                                                    {{ $activeCat === $cat->slug ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}"
                         @if($activeCat !== $cat->slug)
                             onmouseover="this.style.background='#FFF0EC'; this.style.borderColor='#E8370E'; this.style.color='#E8370E';"
                             onmouseout="this.style.background='#fff'; this.style.borderColor='#E5E7EB'; this.style.color='#374151';"
@@ -413,24 +414,16 @@
                                     3D View
                                 </a>
                                 <!-- <form method="POST" action="/cart/add" style="flex:1;"> -->
-                                    <form
-class="addCartForm"
-style="flex:1;"
->
-                                   @csrf
+                                <form class="addCartForm" style="flex:1;">
+                                    @csrf
 
-<input
-type="hidden"
-name="product_id"
-value="{{ $product->id }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-<button
-class="btn-primary"
-type="submit">
+                                    <button class="btn-primary" type="submit">
 
-Add
+                                        Add
 
-</button>
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -552,134 +545,182 @@ Add
             setInterval(() => goTo(cur >= max() ? 0 : cur + 1), 3500);
         }
     </script>
-<script>
+    <script>
 
-document
-.querySelectorAll(
-'.addCartForm'
-)
+        document
+            .querySelectorAll(
+                '.addCartForm'
+            )
 
-.forEach(form=>{
+            .forEach(form => {
 
-form.addEventListener(
+                form.addEventListener(
 
-'submit',
+                    'submit',
 
-async function(e){
+                    async function (e) {
 
-e.preventDefault();
+                        e.preventDefault();
 
-const fd=
-new FormData(form);
+                        const fd =
+                            new FormData(form);
 
-const res=
-await fetch(
+                        const res =
+                            await fetch(
 
-'/cart/add',
+                                '/cart/add',
 
-{
+                                {
 
-method:'POST',
+                                    method: 'POST',
 
-headers:{
+                                    headers: {
 
-'X-CSRF-TOKEN':
+                                        'X-CSRF-TOKEN':
 
-document
-.querySelector(
+                                            document
+                                                .querySelector(
+                                                    'meta[name="csrf-token"]'
+                                                ).content,
 
-'meta[name="csrf-token"]'
+                                        'Accept':
+                                            'application/json'
 
-).content
+                                    },
 
-},
+                                    body: fd
 
-body:fd
+                                }
 
-}
+                            );
 
-);
+                        const data =
+                            await res.json();
 
-const data=
-await res.json();
 
-if(
+                        // LOGIN REQUIRED
 
-data.redirect
+                        if (
 
-){
+                            !data.success
 
-location.href=
-data.redirect;
+                            &&
 
-return;
+                            data.redirect
 
-}
+                        ) {
 
-if(
+                            showToast(
 
-data.success
+                                'Please login first'
 
-){
+                            );
 
-document
-.getElementById(
-'cartCount'
-)
-.innerHTML=
-data.count;
+                            setTimeout(() => {
 
-showToast(
-data.message
-);
+                                window.location.href =
+                                    data.redirect;
 
-}
+                            }, 1000);
 
-}
+                            return;
 
-);
+                        }
 
-});
 
-function showToast(msg){
+                        // SUCCESS
 
-const div=
-document.createElement(
-'div'
-);
+                        if (
 
-div.innerHTML=
-msg;
+                            data.success
 
-div.style=`
+                        ) {
 
-position:fixed;
-top:20px;
-right:20px;
-background:#16A34A;
-color:#fff;
-padding:14px 22px;
-border-radius:12px;
-z-index:999999;
-font-weight:700;
+                            if (
 
-`;
+                                document.getElementById(
+                                    'cartCount'
+                                )
 
-document.body.appendChild(div);
+                            ) {
 
-setTimeout(
+                                document
+                                    .getElementById(
+                                        'cartCount'
+                                    )
+                                    .innerHTML =
+                                    data.count;
 
-()=>{
+                            }
 
-div.remove();
+                            if (
 
-},
+                                document.getElementById(
+                                    'mobileCartCount'
+                                )
 
-2500
+                            ) {
 
-);
+                                document
+                                    .getElementById(
+                                        'mobileCartCount'
+                                    )
+                                    .innerHTML =
+                                    data.count;
 
-}
+                            }
 
-</script>
+                            showToast(
+                                data.message
+                            );
+
+                        }
+
+                    }
+
+                );
+
+            });
+
+        function showToast(msg) {
+
+            const div =
+                document.createElement(
+                    'div'
+                );
+
+            div.innerHTML =
+                msg;
+
+            div.style = `
+
+    position:fixed;
+    top:20px;
+    right:20px;
+
+    background:#16A34A;
+
+    color:white;
+
+    padding:14px 20px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    z-index:999999;
+
+    `;
+
+            document.body.appendChild(div);
+
+            setTimeout(() => {
+
+                div.remove();
+
+            }, 1500);
+
+        }
+
+    </script>
 @endsection

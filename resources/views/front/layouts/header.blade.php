@@ -31,102 +31,102 @@
 
 
                 @auth
-                                    <a href="/cart"
-                                        style="padding:8px 15px; border-radius:10px; font-weight:500; font-size:14px; color:#0D0D0D; text-decoration:none; display:flex; align-items:center; gap:6px; transition:background .18s;"
-                                        onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='transparent'">
-                                        <i data-lucide="shopping-cart" style="width:16px; height:16px;"></i> Cart
-                                        <span id="cartCount" style="
-                    background:#E8370E;
-                    color:white;
-                    padding:2px 8px;
-                    border-radius:20px;
-                    font-size:12px;
-                    margin-left:5px;
-                    ">
+                    <a href="/cart"
+                        style="padding:8px 15px; border-radius:10px; font-weight:500; font-size:14px; color:#0D0D0D; text-decoration:none; display:flex; align-items:center; gap:6px; transition:background .18s;"
+                        onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='transparent'">
+                        <i data-lucide="shopping-cart" style="width:16px; height:16px;"></i> Cart
+                        <span id="cartCount" style="
+                        background:#E8370E;
+                        color:white;
+                        padding:2px 8px;
+                        border-radius:20px;
+                        font-size:12px;
+                        margin-left:5px;
+                        ">
 
-                                            {{ collect(session('cart', []))->sum('quantity') }}
+                            {{ collect(session('cart', []))->sum('quantity') }}
 
-                                        </span>
-                                    </a>
-                                    <a href="/my-orders"
-                                        style="padding:8px 15px; border-radius:10px; font-weight:500; font-size:14px; color:#0D0D0D; text-decoration:none; display:flex; align-items:center; gap:6px; transition:background .18s;"
-                                        onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='transparent'">
-                                        <i data-lucide="package" style="width:16px; height:16px;"></i> Orders
-                                    </a>
+                        </span>
+                    </a>
+                    <a href="/my-orders"
+                        style="padding:8px 15px; border-radius:10px; font-weight:500; font-size:14px; color:#0D0D0D; text-decoration:none; display:flex; align-items:center; gap:6px; transition:background .18s;"
+                        onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='transparent'">
+                        <i data-lucide="package" style="width:16px; height:16px;"></i> Orders
+                    </a>
 
 
-                                    <!-- USER DROPDOWN -->
-                                    <div style="position:relative;"
-                                        onmouseenter="document.getElementById('userDropdown').style.display='block'"
-                                        onmouseleave="document.getElementById('userDropdown').style.display='none'">
-                                        <button
-                                            style="display:flex; align-items:center; gap:9px; background:#F5F5F0; border:none; padding:7px 13px 7px 7px; border-radius:12px; cursor:pointer; transition:background .18s;"
-                                            onmouseover="this.style.background='#EBEBEB'" onmouseout="this.style.background='#F5F5F0'">
-                                            <div class="avatar" style="width:34px; height:34px; font-size:14px;">
-                                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                                            </div>
-                                            <div style="text-align:left;">
-                                                <p
-                                                    style="font-family:'Poppins',sans-serif; font-weight:700; font-size:13px; margin:0; line-height:1.3;">
-                                                    {{ auth()->user()->name }}
-                                                </p>
-                                                <p style="font-size:10px; color:#6B7280; margin:0; text-transform:capitalize;">
-                                                    {{ auth()->user()->role }}
-                                                </p>
-                                            </div>
-                                            <i data-lucide="chevron-down" style="width:14px; height:14px; color:#6B7280;"></i>
-                                        </button>
+                    <!-- USER DROPDOWN -->
+                    <div style="position:relative;"
+                        onmouseenter="document.getElementById('userDropdown').style.display='block'"
+                        onmouseleave="document.getElementById('userDropdown').style.display='none'">
+                        <button
+                            style="display:flex; align-items:center; gap:9px; background:#F5F5F0; border:none; padding:7px 13px 7px 7px; border-radius:12px; cursor:pointer; transition:background .18s;"
+                            onmouseover="this.style.background='#EBEBEB'" onmouseout="this.style.background='#F5F5F0'">
+                            <div class="avatar" style="width:34px; height:34px; font-size:14px;">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                            <div style="text-align:left;">
+                                <p
+                                    style="font-family:'Poppins',sans-serif; font-weight:700; font-size:13px; margin:0; line-height:1.3;">
+                                    {{ auth()->user()->name }}
+                                </p>
+                                <p style="font-size:10px; color:#6B7280; margin:0; text-transform:capitalize;">
+                                    {{ auth()->user()->role }}
+                                </p>
+                            </div>
+                            <i data-lucide="chevron-down" style="width:14px; height:14px; color:#6B7280;"></i>
+                        </button>
 
-                                        <div id="userDropdown"
-                                            style="display:none; position:absolute; right:0; top:100%; margin-top:8px; width:210px; background:#fff; border-radius:16px; box-shadow:0 16px 48px rgba(0,0,0,.14); overflow:hidden; z-index:200; border:1px solid #F0F0EC;">
-                                            <a href="/dashboard"
-                                                style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
-                                                onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
-                                                <i data-lucide="layout-dashboard" style="width:15px; height:15px; color:#E8370E;"></i>
-                                                Dashboard
-                                            </a>
-                                            <a href="/profile"
-                                                style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
-                                                onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
-                                                <i data-lucide="user" style="width:15px; height:15px; color:#E8370E;"></i> My Profile
-                                            </a>
-                                            <a href="/my-orders"
-                                                style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
-                                                onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
-                                                <i data-lucide="package" style="width:15px; height:15px; color:#E8370E;"></i> My Orders
-                                            </a>
-                                            <a href="/cart">
+                        <div id="userDropdown"
+                            style="display:none; position:absolute; right:0; top:100%; margin-top:8px; width:210px; background:#fff; border-radius:16px; box-shadow:0 16px 48px rgba(0,0,0,.14); overflow:hidden; z-index:200; border:1px solid #F0F0EC;">
+                            <a href="/dashboard"
+                                style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
+                                onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
+                                <i data-lucide="layout-dashboard" style="width:15px; height:15px; color:#E8370E;"></i>
+                                Dashboard
+                            </a>
+                            <a href="/profile"
+                                style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
+                                onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
+                                <i data-lucide="user" style="width:15px; height:15px; color:#E8370E;"></i> My Profile
+                            </a>
+                            <a href="/my-orders"
+                                style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
+                                onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
+                                <i data-lucide="package" style="width:15px; height:15px; color:#E8370E;"></i> My Orders
+                            </a>
+                            <a href="/cart">
 
-                                                <i data-lucide="shopping-cart"></i>
+                                <i data-lucide="shopping-cart"></i>
 
-                                                Cart
+                                Cart
 
-                                                <span id="cartCount" style="
-                    background:#E8370E;
-                    color:white;
-                    padding:2px 8px;
-                    border-radius:20px;
-                    font-size:12px;
-                    margin-left:5px;
-                    ">
+                                <span id="cartCount" style="
+                        background:#E8370E;
+                        color:white;
+                        padding:2px 8px;
+                        border-radius:20px;
+                        font-size:12px;
+                        margin-left:5px;
+                        ">
 
-                                                    {{ collect(session('cart', []))->sum('quantity') }}
+                                    {{ collect(session('cart', []))->sum('quantity') }}
 
-                                                </span>
+                                </span>
 
-                                            </a>
-                                            <div style="border-top:1px solid #F0F0EC; margin:4px 0;"></div>
-                                            <form method="POST" action="/logout">
-                                                @csrf
-                                                <button
-                                                    style="display:flex; align-items:center; gap:10px; padding:13px 17px; width:100%; background:none; border:none; cursor:pointer; font-size:13px; font-weight:600; color:#E8370E; transition:background .15s; font-family:'Poppins',sans-serif;"
-                                                    onmouseover="this.style.background='#FFF0EC'"
-                                                    onmouseout="this.style.background='transparent'">
-                                                    <i data-lucide="log-out" style="width:15px; height:15px;"></i> Logout
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
+                            </a>
+                            <div style="border-top:1px solid #F0F0EC; margin:4px 0;"></div>
+                            <form method="POST" action="/logout">
+                                @csrf
+                                <button
+                                    style="display:flex; align-items:center; gap:10px; padding:13px 17px; width:100%; background:none; border:none; cursor:pointer; font-size:13px; font-weight:600; color:#E8370E; transition:background .15s; font-family:'Poppins',sans-serif;"
+                                    onmouseover="this.style.background='#FFF0EC'"
+                                    onmouseout="this.style.background='transparent'">
+                                    <i data-lucide="log-out" style="width:15px; height:15px;"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 @endauth
 
                 @guest
@@ -155,67 +155,55 @@
             Restaurants</a>
 
         @auth
-           <a
-href="/cart"
+                    <a href="/cart" style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+            position:relative;
+            ">
 
-style="
-display:flex;
-align-items:center;
-gap:10px;
-position:relative;
-"
+                        <i data-lucide="shopping-cart" style="
+            width:18px;
+            height:18px;
+            color:#E8370E;
+            ">
+                        </i>
 
->
+                        Cart
 
-<i
-data-lucide="shopping-cart"
-style="
-width:18px;
-height:18px;
-color:#E8370E;
-">
-</i>
+                        <span id="mobileCartCount" style="
+            background:#E8370E;
+            color:#fff;
+            min-width:22px;
+            height:22px;
+            padding:0 7px;
+            border-radius:999px;
 
-Cart
+            display:flex;
+            align-items:center;
+            justify-content:center;
 
-<span
-id="mobileCartCount"
+            font-size:11px;
+            font-weight:700;
+            margin-left:auto;
+            ">
 
-style="
-background:#E8370E;
-color:#fff;
-min-width:22px;
-height:22px;
-padding:0 7px;
-border-radius:999px;
+                            {{ collect(session('cart', []))->sum('quantity') }}
 
-display:flex;
-align-items:center;
-justify-content:center;
+                        </span>
 
-font-size:11px;
-font-weight:700;
-margin-left:auto;
-"
-
->
-
-{{ collect(session('cart',[]))->sum('quantity') }}
-
-</span>
-
-</a>
-            <a href="/my-orders"><i data-lucide="package" style="width:18px; height:18px; color:#E8370E;"></i> My Orders</a>
-            <a href="/dashboard"><i data-lucide="layout-dashboard" style="width:18px; height:18px; color:#E8370E;"></i>
-                Dashboard</a>
-            <a href="/profile"><i data-lucide="user" style="width:18px; height:18px; color:#E8370E;"></i> My Profile</a>
-            <form method="POST" action="/logout" style="border-bottom:none;">
-                @csrf
-                <button
-                    style="display:flex; align-items:center; gap:10px; width:100%; background:none; border:none; padding:13px 0; font-size:14px; font-weight:600; color:#E8370E; cursor:pointer; font-family:'Poppins',sans-serif; border-bottom:none;">
-                    <i data-lucide="log-out" style="width:18px; height:18px;"></i> Logout
-                </button>
-            </form>
+                    </a>
+                    <a href="/my-orders"><i data-lucide="package" style="width:18px; height:18px; color:#E8370E;"></i> My Orders</a>
+                    <a href="/dashboard"><i data-lucide="layout-dashboard" style="width:18px; height:18px; color:#E8370E;"></i>
+                        Dashboard</a>
+                    <a href="/profile"><i data-lucide="user" style="width:18px; height:18px; color:#E8370E;"></i> My Profile</a>
+                    <form method="POST" action="/logout" style="border-bottom:none;">
+                        @csrf
+                        <button
+                            style="display:flex; align-items:center; gap:10px; width:100%; background:none; border:none; padding:13px 0; font-size:14px; font-weight:600; color:#E8370E; cursor:pointer; font-family:'Poppins',sans-serif; border-bottom:none;">
+                            <i data-lucide="log-out" style="width:18px; height:18px;"></i> Logout
+                        </button>
+                    </form>
         @endauth
 
         @guest
