@@ -22,50 +22,129 @@ class CartController extends Controller
     }
    
 
-    public function add(Request $request)
-    {
-        if (!auth()->check()) {
+   public function add(Request $request)
+{
+    if (!auth()->check()) {
 
-            session([
-                'url.intended' => url()->full()
-            ]);
+        session([
+            'url.intended' => url()->full()
+        ]);
 
-            return redirect()
-                ->route('login')
-                ->with('error', 'Please login first');
-        }
+        return redirect()
+            ->route('login')
+            ->with(
+                'error',
+                'Please login first'
+            );
+    }
 
-        $product = Product::findOrFail(
+    $product =
+        Product::findOrFail(
             $request->product_id
         );
 
-        $cart = session()->get('cart', []);
+    $cart =
+        session()->get(
+            'cart',
+            []
+        );
 
-        if (isset($cart[$product->id])) {
+    /*
+    |--------------------------------------------------
+    | SINGLE RESTAURANT CART
+    |--------------------------------------------------
+    */
 
-            $cart[$product->id]['quantity']++;
+    if (!empty($cart)) {
 
-        } else {
+        $firstItem =
+            reset($cart);
 
-            $cart[$product->id] = [
+        $oldProduct =
+            Product::find(
+                $firstItem['id']
+            );
 
-                'id' => $product->id,
+        if (
 
-                'name' => $product->name,
+            $oldProduct
 
-                'price' => $product->price,
+            &&
 
-                'image' => $product->image,
+            $oldProduct->restaurant_id
+            !=
+            $product->restaurant_id
 
-                'quantity' => 1
-            ];
+        ) {
+
+            session()->forget(
+                'cart'
+            );
+
+            $cart = [];
+
+            Log::info(
+                'OLD CART REMOVED'
+            );
         }
-
-        session()->put('cart', $cart);
-
-        return redirect('/cart')
-            ->with('success', 'Product added');
     }
+
+    /*
+    |--------------------------------------------------
+    | ADD PRODUCT
+    |--------------------------------------------------
+    */
+
+    if (
+
+        isset(
+            $cart[$product->id]
+        )
+
+    ) {
+
+        $cart[
+            $product->id
+        ]['quantity']++;
+
+    } else {
+
+        $cart[
+            $product->id
+        ] = [
+
+            'id' =>
+                $product->id,
+
+            'name' =>
+                $product->name,
+
+            'price' =>
+                $product->price,
+
+            'image' =>
+                $product->image,
+
+            'quantity' => 1
+
+        ];
+    }
+
+    session()->put(
+        'cart',
+        $cart
+    );
+
+    return redirect('/cart')
+
+        ->with(
+
+            'success',
+
+            'Product added to cart'
+
+        );
+}
     public function increase($id)
     {
         $cart = session()->get('cart', []);

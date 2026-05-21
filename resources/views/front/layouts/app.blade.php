@@ -9,10 +9,10 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-        
-        @laravelPWA
 
-   
+    @laravelPWA
+
+
     <style>
         :root {
             --primary: #E8370E;
@@ -432,7 +432,7 @@
 
                             {
 
-                                vapidKey:"{{ config('services.firebase.vapid_key') }}",
+                                vapidKey: "{{ config('services.firebase.vapid_key') }}",
 
                                 serviceWorkerRegistration:
                                     registration
@@ -520,6 +520,161 @@
         });
 
     </script>
+
+    <!-- INSTALL POPUP -->
+
+    <div id="installPopup" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+z-index:999999;
+justify-content:center;
+align-items:center;
+">
+
+        <div style="
+width:350px;
+background:white;
+padding:30px;
+border-radius:20px;
+text-align:center;
+">
+
+            <h2>
+
+                Install HYST
+
+            </h2>
+
+            <p>
+
+                Install app for better experience.
+
+            </p>
+
+            <button id="installBtn" style="
+background:#E8370E;
+color:white;
+padding:14px 30px;
+border:none;
+border-radius:10px;
+margin-top:20px;
+cursor:pointer;
+">
+
+                Install
+
+            </button>
+
+            <br>
+
+            <button onclick="closeInstall()" style="
+margin-top:12px;
+">
+
+                Later
+
+            </button>
+
+        </div>
+
+    </div>
+    <script>
+
+let deferredPrompt;
+
+function closeInstall(){
+
+document
+.getElementById(
+'installPopup'
+)
+.style.display='none';
+
+}
+
+window.addEventListener(
+
+'beforeinstallprompt',
+
+(e)=>{
+
+console.log(
+'INSTALL READY'
+);
+
+e.preventDefault();
+
+deferredPrompt=e;
+
+setTimeout(()=>{
+
+document
+.getElementById(
+'installPopup'
+)
+.style.display='flex';
+
+},3000);
+
+}
+
+);
+
+document
+
+.getElementById(
+'installBtn'
+)
+
+.addEventListener(
+
+'click',
+
+async()=>{
+
+if(!deferredPrompt){
+
+alert(
+
+'Install unavailable'
+
+);
+
+return;
+
+}
+
+deferredPrompt.prompt();
+
+await deferredPrompt.userChoice;
+
+closeInstall();
+
+}
+
+);
+
+window.addEventListener(
+
+'appinstalled',
+
+()=>{
+
+alert(
+
+'App Installed'
+
+);
+
+closeInstall();
+
+}
+
+);
+
+</script>
 </body>
 
 </html>

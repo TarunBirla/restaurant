@@ -629,30 +629,41 @@ class OrderController extends Controller
                 : 'paid'
         ]);
 
-        $restaurantAdmin = User::where(
 
-            'restaurant_id',
-            $order->restaurant_id
+        $restaurantAdmin =
+            User::where(
 
-        )
+                'restaurant_id',
+                $order->restaurant_id
 
-            ->where(
-                'role',
-                'restaurant_admin'
             )
-            ->first();
 
-        \Log::info('RESTAURANT ADMIN QUERY RESULT', [
+                ->where(
+                    'role',
+                    'restaurant_admin'
+                )
 
-            'restaurant_id' => $order->restaurant_id,
+                ->first();
 
-            'admin_id' => $restaurantAdmin->id ?? null,
 
-            'admin_name' => $restaurantAdmin->name ?? null,
+        Log::info(
 
-            'admin_token' => $restaurantAdmin->fcm_token ?? null
+            'RESTAURANT FOUND',
 
-        ]);
+            [
+
+                'id' =>
+                    $restaurantAdmin->id ?? null,
+
+                'token' =>
+                    !empty(
+                    $restaurantAdmin->fcm_token
+                )
+
+            ]
+
+        );
+
 
         if (
 
@@ -660,14 +671,12 @@ class OrderController extends Controller
 
             &&
 
+            !empty(
             $restaurantAdmin->fcm_token
+        )
 
         ) {
 
-            \Log::info(
-                'START SENDING RESTAURANT NOTIFICATION'
-            );
-
             $firebase =
                 new FirebaseNotificationService();
 
@@ -681,27 +690,7 @@ class OrderController extends Controller
 
             );
 
-        } else {
-
-            \Log::error(
-                'RESTAURANT TOKEN NOT FOUND'
-            );
-        } {
-
-            $firebase =
-                new FirebaseNotificationService();
-
-            $firebase->send(
-
-                $restaurantAdmin->fcm_token,
-
-                'New Order',
-
-                'You received a new order.'
-
-            );
         }
-
         Log::info('PAYMENT CREATED');
 
         /*

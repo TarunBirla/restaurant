@@ -12,11 +12,15 @@ class FirebaseNotificationService
 
     public function __construct()
     {
-        $factory = (new Factory)
+        $factory =
+            (new Factory)
+
             ->withServiceAccount(
+
                 storage_path(
                     'app/firebase/firebase.json'
                 )
+
             );
 
         $this->messaging =
@@ -31,44 +35,89 @@ class FirebaseNotificationService
 
         try {
 
-            \Log::info('FCM SEND FUNCTION START', [
+            /*
+            -----------------------
+            TOKEN CHECK
+            -----------------------
+            */
 
-                'token' => $token,
-                'title' => $title,
-                'body' => $body
+            if (
+                empty($token)
+            ) {
 
-            ]);
+                \Log::error(
+                    'FCM TOKEN NULL'
+                );
+
+                return false;
+            }
+
+            \Log::info(
+                'FCM SEND START',
+                [
+
+                    'token' =>
+                        substr(
+                            $token,
+                            0,
+                            20
+                        ),
+
+                    'title' =>
+                        $title
+                ]
+            );
 
             $message =
                 CloudMessage::withTarget(
 
                     'token',
-                    $token
 
-                )->withNotification(
+                    (string)$token
 
-                        Notification::create(
+                )
 
-                            $title,
-                            $body
-                        )
-                    );
+                ->withNotification(
 
-            \Log::info('FCM MESSAGE CREATED');
+                    Notification::create(
+
+                        $title,
+
+                        $body
+                    )
+                );
 
             $this->messaging
-                ->send($message);
+                ->send(
+                    $message
+                );
 
-            \Log::info('FCM SEND SUCCESS');
-
-        } catch (\Exception $e) {
-
-            \Log::error(
-                'FCM ERROR: '
-                . $e->getMessage()
+            \Log::info(
+                'FCM SEND SUCCESS'
             );
 
-            \Log::error($e);
+            return true;
+
+        }
+
+        catch (
+            \Exception $e
+        ) {
+
+            \Log::error(
+
+                'FCM SEND FAILED',
+
+                [
+
+                    'message' =>
+                        $e->getMessage()
+
+                ]
+
+            );
+
+            return false;
         }
     }
 }
