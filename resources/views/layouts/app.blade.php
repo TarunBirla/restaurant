@@ -10,7 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
-    @laravelPWA
+       {!! LaravelPWA::meta() !!}
+
     <style>
         * {
             box-sizing: border-box;
@@ -153,13 +154,8 @@
 
 <body>
 
-    <!-- SIDEBAR OVERLAY (mobile) -->
     <div id="sidebar-overlay" onclick="closeSidebar()"></div>
-
-    <!-- SIDEBAR -->
     @include('layouts.sidebar')
-
-    <!-- MAIN -->
     <div id="main-content">
         @include('layouts.navbar')
 

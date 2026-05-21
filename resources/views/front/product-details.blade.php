@@ -4,14 +4,12 @@
 
 
 
-    <!-- PRODUCT DETAIL -->
     <section style="background:#F5F5F0; padding:60px 0 80px;">
         <div style="max-width:1280px; margin:0 auto; padding:0 24px;">
 
             <div class="product-detail-grid"
                 style="display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;">
 
-                <!-- IMAGE SIDE -->
                 <div>
                     <div
                         style="border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.12); position:relative; background:#fff;">
@@ -66,7 +64,6 @@
                     </div>
                 </div>
 
-                <!-- CONTENT SIDE -->
                 <div>
 
                     <!-- CATEGORY TAG -->
