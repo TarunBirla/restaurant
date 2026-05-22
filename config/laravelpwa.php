@@ -1,16 +1,25 @@
 <?php
 
 return [
-    'name' => 'LaravelPWA',
+    'name' => 'HYST',
+
     'manifest' => [
-        'name' => env('APP_NAME', 'My PWA App'),
-        'short_name' => 'PWA',
+
+        'name' => 'HYST',
+
+        'short_name' => 'HYST',
+
         'start_url' => '/',
-        'background_color' => '#ffffff',
-        'theme_color' => '#000000',
+
+        'background_color' => '#E8370E',
+
+        'theme_color' => '#E8370E',
+
         'display' => 'standalone',
-        'orientation'=> 'any',
-        'status_bar'=> 'black',
+
+        'orientation' => 'portrait',
+
+        'status_bar' => 'default',
         'icons' => [
             '72x72' => [
                 'path' => '/images/icons/icon-72x72.png',

@@ -582,99 +582,99 @@ margin-top:12px;
     </div>
     <script>
 
-let deferredPrompt;
+        let deferredPrompt;
 
-function closeInstall(){
+        function closeInstall() {
 
-document
-.getElementById(
-'installPopup'
-)
-.style.display='none';
+            document
+                .getElementById(
+                    'installPopup'
+                )
+                .style.display = 'none';
 
-}
+        }
 
-window.addEventListener(
+        window.addEventListener(
 
-'beforeinstallprompt',
+            'beforeinstallprompt',
 
-(e)=>{
+            (e) => {
 
-console.log(
-'INSTALL READY'
-);
+                console.log(
+                    'INSTALL READY'
+                );
 
-e.preventDefault();
+                e.preventDefault();
 
-deferredPrompt=e;
+                deferredPrompt = e;
 
-setTimeout(()=>{
+                setTimeout(() => {
 
-document
-.getElementById(
-'installPopup'
-)
-.style.display='flex';
+                    document
+                        .getElementById(
+                            'installPopup'
+                        )
+                        .style.display = 'flex';
 
-},3000);
+                }, 3000);
 
-}
+            }
 
-);
+        );
 
-document
+        document
 
-.getElementById(
-'installBtn'
-)
+            .getElementById(
+                'installBtn'
+            )
 
-.addEventListener(
+            .addEventListener(
 
-'click',
+                'click',
 
-async()=>{
+                async () => {
 
-if(!deferredPrompt){
+                    if (!deferredPrompt) {
 
-alert(
+                        alert(
 
-'Install unavailable'
+                            'Install unavailable'
 
-);
+                        );
 
-return;
+                        return;
 
-}
+                    }
 
-deferredPrompt.prompt();
+                    deferredPrompt.prompt();
 
-await deferredPrompt.userChoice;
+                    await deferredPrompt.userChoice;
 
-closeInstall();
+                    closeInstall();
 
-}
+                }
 
-);
+            );
 
-window.addEventListener(
+        window.addEventListener(
 
-'appinstalled',
+            'appinstalled',
 
-()=>{
+            () => {
 
-alert(
+                alert(
 
-'App Installed'
+                    'App Installed'
 
-);
+                );
 
-closeInstall();
+                closeInstall();
 
-}
+            }
 
-);
+        );
 
-</script>
+    </script>
 </body>
 
 </html>
