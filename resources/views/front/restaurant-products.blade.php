@@ -439,84 +439,102 @@
                                 {{-- <form class="addCartForm"
                                     style="flex:1;"
                                     data-product="{{ $product->id }}"> --}}
-                                <form class="addCartForm"
-                                style="flex:1;"
-                                data-product="{{ $product->id }}"
-                                data-qty="{{ session('cart')[$product->id]['quantity'] ?? 0 }}">    
+                                @auth
+                                    <form class="addCartForm"
+                                        style="flex:1;"
+                                        data-product="{{ $product->id }}"
+                                        data-qty="{{ session('cart')[$product->id]['quantity'] ?? 0 }}">    
 
-                                    @csrf
+                                        @csrf
 
-                                    <input type="hidden"
-                                        name="product_id"
-                                        value="{{ $product->id }}">
+                                        <input type="hidden"
+                                            name="product_id"
+                                            value="{{ $product->id }}">
 
-                                    <input type="hidden"
-                                        name="quantity"
-                                        value="1"
-                                        class="qtyInput">
+                                        <input type="hidden"
+                                            name="quantity"
+                                            value="1"
+                                            class="qtyInput">
 
-                                    {{-- ADD BUTTON --}}
-                                    <button class="btn-primary addBtn"
-                                        type="submit">
+                                        {{-- ADD BUTTON --}}
+                                        <button class="btn-primary addBtn"
+                                            type="submit">
+
+                                            Add
+
+                                        </button>
+
+                                        {{-- QUANTITY BOX --}}
+                                        <div class="qtyBox"
+                                            style="
+                                                display:none;
+                                                align-items:center;
+                                                overflow:hidden;
+                                                border-radius:14px;
+                                                border:1px solid #E5E7EB;
+                                                height:42px;
+                                            ">
+
+                                            <button type="button"
+                                                class="qtyMinus"
+                                                style="
+                                                    width:42px;
+                                                    height:42px;
+                                                    border:none;
+                                                    background:#F5F5F0;
+                                                    font-size:22px;
+                                                    font-weight:700;
+                                                    cursor:pointer;
+                                                ">
+                                                −
+                                            </button>
+
+                                            <div class="qtyValue"
+                                                style="
+                                                    width:48px;
+                                                    text-align:center;
+                                                    font-weight:700;
+                                                    font-size:15px;
+                                                    background:#fff;
+                                                ">
+                                                1
+                                            </div>
+
+                                            <button type="button"
+                                                class="qtyPlus"
+                                                style="
+                                                    width:42px;
+                                                    height:42px;
+                                                    border:none;
+                                                    background:#E63946;
+                                                    color:#fff;
+                                                    font-size:22px;
+                                                    font-weight:700;
+                                                    cursor:pointer;
+                                                ">
+                                                +
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+                                @else
+
+                                    <a href="{{ route('login', ['redirect' => url()->current()]) }}"
+                                        class="btn-primary"
+                                        style="
+                                            flex:1;
+                                            display:flex;
+                                            justify-content:center;
+                                            align-items:center;
+                                            text-decoration:none;
+                                        ">
 
                                         Add
 
-                                    </button>
+                                    </a>
 
-                                    {{-- QUANTITY BOX --}}
-                                    <div class="qtyBox"
-                                        style="
-                                            display:none;
-                                            align-items:center;
-                                            overflow:hidden;
-                                            border-radius:14px;
-                                            border:1px solid #E5E7EB;
-                                            height:42px;
-                                        ">
-
-                                        <button type="button"
-                                            class="qtyMinus"
-                                            style="
-                                                width:42px;
-                                                height:42px;
-                                                border:none;
-                                                background:#F5F5F0;
-                                                font-size:22px;
-                                                font-weight:700;
-                                                cursor:pointer;
-                                            ">
-                                            −
-                                        </button>
-
-                                        <div class="qtyValue"
-                                            style="
-                                                width:48px;
-                                                text-align:center;
-                                                font-weight:700;
-                                                font-size:15px;
-                                                background:#fff;
-                                            ">
-                                            1
-                                        </div>
-
-                                        <button type="button"
-                                            class="qtyPlus"
-                                            style="
-                                                width:42px;
-                                                height:42px;
-                                                border:none;
-                                                background:#E63946;
-                                                color:#fff;
-                                                font-size:22px;
-                                                font-weight:700;
-                                                cursor:pointer;
-                                            ">
-                                            +
-                                        </button>
-
-                                    </div>
-
-                                </form>
+                                @endauth
 
                             </div>
                         </div>
@@ -883,6 +901,7 @@ document.querySelectorAll('.addCartForm').forEach(form => {
                     document.querySelector('meta[name="csrf-token"]').content,
 
                     'Accept':'application/json'
+                    
                 },
 
                 body:fd

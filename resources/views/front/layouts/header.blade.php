@@ -199,7 +199,7 @@
                 @endauth
 
                 @guest
-                    <a href="/login" class="btn-black"
+                    <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="btn-black"
                         style="padding:9px 18px; font-size:13px; margin-left:4px; display:flex; align-items:center; gap:7px; text-decoration:none;">
                         <i data-lucide="log-in" style="width:15px; height:15px;"></i> Login
                     </a>

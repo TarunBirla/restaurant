@@ -11,7 +11,7 @@ class UsersController extends Controller
     public function showLogin(Request $request)
     {
         // store previous url manually
-        session(['previous_url' => url()->previous()]);
+       session(['previous_url' => $request->redirect]);
        
         return view('auth.login');
     }
@@ -25,9 +25,12 @@ class UsersController extends Controller
 
             // return redirect('/');
             // return redirect()->intended('/');
-             $previous = session('previous_url');
+            // $request->session()->regenerate();
 
-            // avoid redirect loop to login page
+           
+
+            $previous = session('previous_url');
+
             if (!$previous || str_contains($previous, '/login')) {
                 $previous = '/';
             }
