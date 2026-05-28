@@ -23,7 +23,7 @@
             <div class="text-center mb-8">
 
                 
-
+                <input type="hidden" name="previous_url" value="{{ $previous }}">
                 <h1 class="text-4xl font-extrabold text-gray-800 mb-2">
 
                     User Login

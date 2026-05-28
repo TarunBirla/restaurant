@@ -11,7 +11,10 @@ class UsersController extends Controller
     public function showLogin()
     {
        
-        return view('auth.login');
+        // return view('auth.login');
+        return view('auth.login', [
+            'previous' => url()->previous()
+        ]);
     }
 
     public function login(Request $request)
@@ -23,10 +26,21 @@ class UsersController extends Controller
 
             // return redirect('/');
             // return redirect()->intended('/');
-            $request->session()->regenerate();
-            return redirect(
-                $request->redirect ?? '/'
-            )->with('success', 'Login Successfully!');
+             $request->session()->regenerate();
+
+            $previous = $request->previous_url;
+
+            // avoid redirecting back to login page
+            if (
+                $previous &&
+                !str_contains($previous, '/login')
+            ) {
+                return redirect($previous)
+                    ->with('success', 'Login Successfully!');
+            }
+
+            return redirect('/')
+                ->with('success', 'Login Successfully!');
         }
 
         return back()->with('error', 'Invalid Login');
