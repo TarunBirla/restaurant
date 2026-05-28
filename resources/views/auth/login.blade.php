@@ -22,7 +22,7 @@
 
             <div class="text-center mb-8">
 
-                
+                {{dd(session('previous_url'))}}
 
                 <h1 class="text-4xl font-extrabold text-gray-800 mb-2">
 
