@@ -32,9 +32,6 @@
     </div>
 
 
-
-
-
     <div class="grid grid-cols-3 gap-8">
 
         <div class="bg-white rounded-2xl shadow p-8">
@@ -52,12 +49,12 @@
 
             </p>
 
-            <p class="mb-3">
+            {{-- <p class="mb-3">
 
                 <strong>Email:</strong>
                 {{ $order->user->email }}
 
-            </p>
+            </p> --}}
 
         </div>
 <div class="bg-white rounded-2xl shadow p-8">
@@ -279,5 +276,126 @@
     </div>
 
 </div>
+
+{{-- FLOATING MESSAGE BUTTON --}}
+<button
+    onclick="openMessageModal()"
+    style="
+        position:fixed;
+        bottom:30px;
+        right:30px;
+        width:64px;
+        height:64px;
+        border-radius:50%;
+        border:none;
+        background:#2563EB;
+        color:#fff;
+        cursor:pointer;
+        box-shadow:0 10px 30px rgba(37,99,235,.35);
+        z-index:9999;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    ">
+
+    <svg width="28"
+        height="28"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24">
+
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M8 10h8M8 14h5M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4-.8L3 20l1.2-3.2A7.64 7.64 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+
+    </svg>
+
+</button>
+
+{{-- MESSAGE MODAL --}}
+<div id="messageModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.5);
+        z-index:99999;
+        align-items:center;
+        justify-content:center;
+    ">
+
+    <div style="
+        width:100%;
+        max-width:500px;
+        background:#fff;
+        border-radius:24px;
+        padding:30px;
+        position:relative;
+    ">
+
+        <button
+            onclick="closeMessageModal()"
+            style="
+                position:absolute;
+                top:15px;
+                right:15px;
+                border:none;
+                background:none;
+                font-size:22px;
+                cursor:pointer;
+            ">
+
+            ✕
+
+        </button>
+
+        <h2 class="text-2xl font-bold mb-6">
+
+            Send Message
+
+        </h2>
+
+        <form method="POST"
+            action="{{ route('restaurant.orders.message', $order->id) }}">
+
+            @csrf
+
+            <textarea
+                name="message"
+                rows="5"
+                required
+                placeholder="Write message..."
+                class="w-full border rounded-2xl p-4"></textarea>
+
+            <button
+                class="bg-blue-500 text-white px-8 py-3 rounded-xl mt-5">
+
+                Send Message
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+function openMessageModal() {
+
+    document.getElementById('messageModal').style.display = 'flex';
+
+}
+
+function closeMessageModal() {
+
+    document.getElementById('messageModal').style.display = 'none';
+
+}
+
+</script>
 
 @endsection

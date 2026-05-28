@@ -156,6 +156,16 @@ Route::middleware(['auth'])->group(function () {
         '/my-orders/{id}',
         [OrderController::class, 'orderDetails']
     );
+
+
+    Route::post(
+
+        '/order/cancel/{id}',
+
+        [OrderController::class, 'cancelOrder']
+
+    )->middleware('auth');
+
     Route::get(
         '/profile',
         [FrontProfileController::class, 'index']
@@ -218,6 +228,11 @@ Route::middleware(['auth', 'super_admin'])
         )->name('orders.status');
 
     });
+
+    Route::post(
+        '/restaurant/orders/{id}/message',
+        [RestaurantOrderController::class, 'sendMessage']
+    )->name('restaurant.orders.message');
 
 Route::middleware(['auth', 'restaurant_admin'])
     ->prefix('restaurant')

@@ -569,6 +569,110 @@
             </div>
             @endif
 
+            {{-- CANCEL ORDER --}}
+            @if(
+                !in_array(
+                    $order->delivery_status,
+                    [
+                        'waiting_at_pickup',
+                        'picking',
+                        'in_transit',
+                        'delivered',
+                        'canceled'
+                    ]
+                )
+            )
+
+            <div class="od-card" style="margin-bottom:20px;">
+
+                <div class="od-info-body">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        gap:20px;
+                        flex-wrap:wrap;
+                    ">
+
+                        <div>
+
+                            <h3 style="
+                                font-size:18px;
+                                font-weight:700;
+                                color:#111827;
+                                margin-bottom:8px;
+                            ">
+                                Cancel Order
+                            </h3>
+
+                            <p style="
+                                font-size:13px;
+                                color:#6B7280;
+                                line-height:1.7;
+                                margin:0 0 14px;
+                                max-width:620px;
+                            ">
+
+                                You can cancel this order only before pickup starts.
+                                Once the driver picks up your order from the restaurant,
+                                cancellation will no longer be available.
+
+                            </p>
+
+                            <div style="
+                                background:#FEF2F2;
+                                border:1px solid #FECACA;
+                                color:#B91C1C;
+                                padding:12px 14px;
+                                border-radius:14px;
+                                font-size:13px;
+                                font-weight:600;
+                                line-height:1.6;
+                            ">
+
+                                ⚠️ Cancellation is allowed only before pickup stage.
+
+                            </div>
+
+                        </div>
+
+                        <form method="POST"
+                            action="/order/cancel/{{ $order->id }}"
+                            onsubmit="return confirm('Are you sure you want to cancel this order?')">
+
+                            @csrf
+
+                            <button type="submit"
+                                style="
+                                    background:#DC2626;
+                                    color:#fff;
+                                    border:none;
+                                    padding:14px 24px;
+                                    border-radius:14px;
+                                    font-size:14px;
+                                    font-weight:700;
+                                    cursor:pointer;
+                                    white-space:nowrap;
+                                    transition:.2s;
+                                "
+                                onmouseover="this.style.background='#B91C1C'"
+                                onmouseout="this.style.background='#DC2626'">
+
+                                Cancel Order
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            @endif
+
             {{-- PAYMENT + DELIVERY --}}
             <div class="od-info-grid" style="margin-bottom:20px;">
                 {{-- Payment --}}
@@ -635,6 +739,117 @@
                 </div>
                 @endif
             @endif
+
+            {{-- ORDER MESSAGES --}}
+            <div class="od-card" style="margin-bottom:20px;">
+
+                <div class="items-header"
+                    style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                    ">
+
+                    <h2>Messages</h2>
+
+                    @if($messages->count())
+                        <span style="
+                            background:#EFF6FF;
+                            color:#2563EB;
+                            padding:6px 12px;
+                            border-radius:999px;
+                            font-size:12px;
+                            font-weight:700;
+                        ">
+                            {{ $messages->count() }} Messages
+                        </span>
+                    @endif
+
+                </div>
+
+                <div style="padding:22px;">
+
+                    @forelse($messages as $message)
+
+                        <div style="
+                            margin-bottom:18px;
+                            display:flex;
+                            {{ $message->sender_id == auth()->id() ? 'justify-content:flex-end;' : 'justify-content:flex-start;' }}
+                        ">
+
+                            <div style="
+                                max-width:80%;
+                                padding:14px 16px;
+                                border-radius:18px;
+                                {{ $message->sender_id == auth()->id()
+                                    ? 'background:#2563EB; color:#fff; border-bottom-right-radius:4px;'
+                                    : 'background:#F3F4F6; color:#111827; border-bottom-left-radius:4px;'
+                                }}
+                            ">
+
+                                <div style="
+                                    font-size:13px;
+                                    line-height:1.7;
+                                    margin-bottom:8px;
+                                    word-break:break-word;
+                                ">
+
+                                    {{ $message->message }}
+
+                                </div>
+
+                                <div style="
+                                    font-size:11px;
+                                    opacity:.7;
+                                    text-align:right;
+                                ">
+
+                                    {{ $message->created_at->format('d M Y h:i A') }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @empty
+
+                        <div style="
+                            text-align:center;
+                            padding:30px 20px;
+                        ">
+
+                            <div style="
+                                font-size:42px;
+                                margin-bottom:10px;
+                            ">
+                                💬
+                            </div>
+
+                            <h3 style="
+                                font-size:16px;
+                                font-weight:700;
+                                color:#111827;
+                                margin-bottom:6px;
+                            ">
+                                No Messages Yet
+                            </h3>
+
+                            <p style="
+                                color:#6B7280;
+                                font-size:13px;
+                                margin:0;
+                            ">
+                                Restaurant messages about your order will appear here.
+                            </p>
+
+                        </div>
+
+                    @endforelse
+
+                </div>
+
+            </div>
 
             {{-- ORDERED ITEMS --}}
             <div class="od-card">

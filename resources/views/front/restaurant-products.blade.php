@@ -398,6 +398,7 @@
                             @endif
                         </div>
 
+
                         <div style="padding:16px;">
                             <h3
                                 style="font-weight:700; font-size:15px; margin:0 0 6px; line-height:1.3; color:#0D0D0D; font-family:'Poppins',sans-serif;">
@@ -408,7 +409,7 @@
                                 {{ Str::limit(strip_tags($product->description), 80) }}
 
                             </p>
-                            <div style="display:flex; gap:8px;">
+                            {{-- <div style="display:flex; gap:8px;">
                                 <a href="javascript:void(0)" class="btn-black"
                                     onclick="openAR('{{ asset('storage/' . $product->image) }}')" style="flex:1;">
                                     3D View
@@ -425,6 +426,98 @@
 
                                     </button>
                                 </form>
+                            </div> --}}
+                            <div style="display:flex; gap:8px; align-items:center;">
+
+                                <a href="javascript:void(0)"
+                                    class="btn-black"
+                                    onclick="openAR('{{ asset('storage/' . $product->image) }}')"
+                                    style="flex:1;">
+                                    3D View
+                                </a>
+
+                                {{-- <form class="addCartForm"
+                                    style="flex:1;"
+                                    data-product="{{ $product->id }}"> --}}
+                                <form class="addCartForm"
+                                style="flex:1;"
+                                data-product="{{ $product->id }}"
+                                data-qty="{{ session('cart')[$product->id]['quantity'] ?? 0 }}">    
+
+                                    @csrf
+
+                                    <input type="hidden"
+                                        name="product_id"
+                                        value="{{ $product->id }}">
+
+                                    <input type="hidden"
+                                        name="quantity"
+                                        value="1"
+                                        class="qtyInput">
+
+                                    {{-- ADD BUTTON --}}
+                                    <button class="btn-primary addBtn"
+                                        type="submit">
+
+                                        Add
+
+                                    </button>
+
+                                    {{-- QUANTITY BOX --}}
+                                    <div class="qtyBox"
+                                        style="
+                                            display:none;
+                                            align-items:center;
+                                            overflow:hidden;
+                                            border-radius:14px;
+                                            border:1px solid #E5E7EB;
+                                            height:42px;
+                                        ">
+
+                                        <button type="button"
+                                            class="qtyMinus"
+                                            style="
+                                                width:42px;
+                                                height:42px;
+                                                border:none;
+                                                background:#F5F5F0;
+                                                font-size:22px;
+                                                font-weight:700;
+                                                cursor:pointer;
+                                            ">
+                                            −
+                                        </button>
+
+                                        <div class="qtyValue"
+                                            style="
+                                                width:48px;
+                                                text-align:center;
+                                                font-weight:700;
+                                                font-size:15px;
+                                                background:#fff;
+                                            ">
+                                            1
+                                        </div>
+
+                                        <button type="button"
+                                            class="qtyPlus"
+                                            style="
+                                                width:42px;
+                                                height:42px;
+                                                border:none;
+                                                background:#E63946;
+                                                color:#fff;
+                                                font-size:22px;
+                                                font-weight:700;
+                                                cursor:pointer;
+                                            ">
+                                            +
+                                        </button>
+
+                                    </div>
+
+                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -714,23 +807,23 @@
 
             div.style = `
 
-    position:fixed;
-    top:20px;
-    right:20px;
+            position:fixed;
+            top:20px;
+            right:20px;
 
-    background:#16A34A;
+            background:#16A34A;
 
-    color:#fff;
+            color:#fff;
 
-    padding:14px 22px;
+            padding:14px 22px;
 
-    border-radius:12px;
+            border-radius:12px;
 
-    font-weight:700;
+            font-weight:700;
 
-    z-index:999999;
+            z-index:999999;
 
-    `;
+            `;
 
             document.body.appendChild(
                 div
@@ -745,4 +838,195 @@
         }
 
     </script>
+   <script>
+
+document.querySelectorAll('.addCartForm').forEach(form => {
+
+    const addBtn   = form.querySelector('.addBtn');
+    const qtyBox   = form.querySelector('.qtyBox');
+    const qtyValue = form.querySelector('.qtyValue');
+
+    const productId =
+        form.querySelector('[name="product_id"]').value;
+
+    // REAL SESSION QTY
+    let qty = parseInt(
+        form.dataset.qty || 0
+    );
+
+    // SHOW EXISTING QTY
+    if(qty > 0){
+
+        addBtn.style.display = 'none';
+
+        qtyBox.style.display = 'flex';
+
+        qtyValue.innerText = qty;
+
+    }
+
+    // ADD
+    form.addEventListener('submit', async function(e){
+
+        e.preventDefault();
+
+        const fd = new FormData(form);
+
+        try{
+
+            const res = await fetch('/cart/add', {
+
+                method:'POST',
+
+                headers:{
+                    'X-CSRF-TOKEN':
+                    document.querySelector('meta[name="csrf-token"]').content,
+
+                    'Accept':'application/json'
+                },
+
+                body:fd
+
+            });
+
+            const data = await res.json();
+
+            if(data.success){
+
+                qty = 1;
+
+                form.dataset.qty = qty;
+
+                addBtn.style.display = 'none';
+
+                qtyBox.style.display = 'flex';
+
+                qtyValue.innerText = qty;
+
+                updateCounts(data.count);
+
+            }
+
+        }catch(err){
+
+            console.log(err);
+
+        }
+
+    });
+
+
+    // PLUS
+    form.querySelector('.qtyPlus')
+    .addEventListener('click', async () => {
+
+        try{
+
+            await fetch(
+                `/cart/increase/${productId}`
+            );
+
+            qty++;
+
+            form.dataset.qty = qty;
+
+            qtyValue.innerText = qty;
+
+            updateCountFromPage();
+
+        }catch(err){
+
+            console.log(err);
+
+        }
+
+    });
+
+
+    // MINUS
+    form.querySelector('.qtyMinus')
+    .addEventListener('click', async () => {
+
+        try{
+
+            if(qty > 1){
+
+                await fetch(
+                    `/cart/decrease/${productId}`
+                );
+
+                qty--;
+
+                form.dataset.qty = qty;
+
+                qtyValue.innerText = qty;
+
+            }else{
+
+                await fetch(
+                    `/cart/remove/${productId}`
+                );
+
+                qty = 0;
+
+                form.dataset.qty = qty;
+
+                qtyBox.style.display = 'none';
+
+                addBtn.style.display = 'flex';
+
+            }
+
+            updateCountFromPage();
+
+        }catch(err){
+
+            console.log(err);
+
+        }
+
+    });
+
+});
+
+
+// UPDATE COUNT
+function updateCountFromPage(){
+
+    fetch('/cart-count')
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        updateCounts(data.count);
+
+    });
+
+}
+
+
+function updateCounts(count){
+
+    const cartCount =
+        document.getElementById('cartCount');
+
+    if(cartCount){
+
+        cartCount.innerHTML = count;
+
+    }
+
+    const mobile =
+        document.getElementById('mobileCartCount');
+
+    if(mobile){
+
+        mobile.innerHTML = count;
+
+    }
+
+}
+
+</script>
 @endsection

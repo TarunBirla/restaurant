@@ -10,6 +10,7 @@
     <title>User Login</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
@@ -85,6 +86,32 @@
         </div>
 
     </div>
+
+@if(session('success'))
+
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: '{{ session('success') }}',
+        confirmButtonColor: '#111827'
+    });
+</script>
+
+@endif
+
+@if(session('error'))
+
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '{{ session('error') }}',
+        confirmButtonColor: '#E63946'
+    });
+</script>
+
+@endif
 
 </body>
 

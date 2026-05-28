@@ -37,6 +37,8 @@ class UserRegisterController extends Controller
             'role' => 'user'
         ]);
 
-        return redirect('/login');
+        // return redirect('/login');
+        return redirect('/login')
+            ->with('success', 'Registration Successful!');
     }
 }

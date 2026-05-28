@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\RestaurantAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Message;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Review;
@@ -76,6 +77,35 @@ class OrderController extends Controller
         );
     }
 
+    public function sendMessage(Request $request, $id)
+    {
+        $request->validate([
+
+            'message' => 'required'
+
+        ]);
+
+        $order = Order::findOrFail($id);
+
+        Message::create([
+
+            'sender_id' => auth()->id(),
+
+            'receiver_id' => $order->user_id,
+
+            'order_id' => $order->id,
+
+            'message' => $request->message,
+
+            'is_read' => 0
+
+        ]);
+
+        return back()->with(
+            'success',
+            'Message Sent Successfully'
+        );
+    }
     /*
     |--------------------------------------------------------------------------
     | UPDATE STATUS

@@ -76,6 +76,7 @@ class HomeController extends Controller
             compact('product','reviews')
         );
     }
+
     public function restaurants(Request $request)
     {
         $ip = $request->ip();
@@ -222,7 +223,6 @@ class HomeController extends Controller
                 'products',
                 'categories',
                 'offers'
-
             )
         );
     }

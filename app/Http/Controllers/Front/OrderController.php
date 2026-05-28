@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -215,6 +216,7 @@ class OrderController extends Controller
         |--------------------------------------------------------------------------
         */
 
+
         $request->validate([
 
             'order_type' =>
@@ -226,11 +228,14 @@ class OrderController extends Controller
             'phone' =>
                 'required_if:payment_method,Cash On Delivery',
 
-            'address' =>
-                'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
+            // 'address' =>
+            //     'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
 
-            'pincode' =>
-                'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
+            // 'pincode' =>
+            //     'required_if:order_type,delivery|required_if:payment_method,Cash On Delivery',
+            'address' => 'nullable|required_if:order_type,delivery',
+
+            'pincode' => 'nullable|required_if:order_type,delivery',
 
         ]);
 
@@ -402,10 +407,10 @@ class OrderController extends Controller
         */
 
         /*
- |--------------------------------------------------------------------------
- | CREATE ORDER
- |--------------------------------------------------------------------------
- */
+        |--------------------------------------------------------------------------
+        | CREATE ORDER
+        |--------------------------------------------------------------------------
+        */
 
         $order = Order::create([
 
@@ -896,10 +901,20 @@ class OrderController extends Controller
         ])
             ->where('user_id', auth()->id())
             ->findOrFail($id);
+         
+        $messages = Message::where('order_id', $order->id)
+        ->where(function($q){
+
+            $q->where('sender_id', auth()->id())
+            ->orWhere('receiver_id', auth()->id());
+
+        })
+        ->latest()
+        ->get();    
 
         return view(
             'front.order-details',
-            compact('order')
+            compact('order', 'messages')
         );
     }
 
@@ -1005,6 +1020,110 @@ class OrderController extends Controller
 
             'success',
             'Review submitted successfully.'
+        );
+    }
+
+    public function cancelOrder($id)
+    {
+        $order = Order::where(
+
+            'user_id',
+            auth()->id()
+
+        )->findOrFail($id);
+
+        /*
+        |--------------------------------------------------------------------------
+        | CANNOT CANCEL AFTER PICKUP
+        |--------------------------------------------------------------------------
+        */
+
+        $blockedStatuses = [
+
+            'waiting_at_pickup',
+            'picking',
+            'in_transit',
+            'delivered'
+
+        ];
+
+        if (
+
+            in_array(
+                $order->delivery_status,
+                $blockedStatuses
+            )
+
+        ) {
+
+            return back()->with(
+
+                'error',
+
+                'Order cannot be cancelled after pickup has started.'
+
+            );
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ALREADY CANCELLED
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+
+            $order->delivery_status == 'canceled'
+
+        ) {
+
+            return back()->with(
+
+                'error',
+
+                'Order already cancelled.'
+
+            );
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | CANCEL ORDER
+        |--------------------------------------------------------------------------
+        */
+
+        $order->update([
+
+            'delivery_status' => 'canceled',
+
+            'status' => 'cancelled'
+
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | PAYMENT UPDATE
+        |--------------------------------------------------------------------------
+        */
+
+        if ($order->payment) {
+
+            $order->payment->update([
+
+                'payment_status' => 'cancelled'
+
+            ]);
+
+        }
+
+        return back()->with(
+
+            'success',
+
+            'Order cancelled successfully.'
+
         );
     }
 }

@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
-    public function showLogin()
+    public function showLogin(Request $request)
     {
+        session(['url.intended' => url()->previous()]);
         return view('auth.login');
     }
 
@@ -21,7 +22,10 @@ class UsersController extends Controller
         ])) {
 
             // return redirect('/');
-            return redirect()->intended('/');
+            // return redirect()->intended('/');
+            $request->session()->regenerate();
+            return redirect()->intended('/')
+                ->with('success', 'Login Successfully!');
         }
 
         return back()->with('error', 'Invalid Login');

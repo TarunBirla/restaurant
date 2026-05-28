@@ -56,10 +56,11 @@
 
 
                     <!-- USER DROPDOWN -->
-                    <div style="position:relative;"
+                    {{-- <div style="position:relative;"
                         onmouseenter="document.getElementById('userDropdown').style.display='block'"
-                        onmouseleave="document.getElementById('userDropdown').style.display='none'">
-                        <button
+                        onmouseleave="document.getElementById('userDropdown').style.display='none'"> --}}
+                        <div style="position:relative;" id="userDropdownWrapper">
+                        {{-- <button
                             style="display:flex; align-items:center; gap:9px; background:#F5F5F0; border:none; padding:7px 13px 7px 7px; border-radius:12px; cursor:pointer; transition:background .18s;"
                             onmouseover="this.style.background='#EBEBEB'" onmouseout="this.style.background='#F5F5F0'">
                             <div class="avatar" style="width:34px; height:34px; font-size:14px;">
@@ -75,10 +76,36 @@
                                 </p>
                             </div>
                             <i data-lucide="chevron-down" style="width:14px; height:14px; color:#6B7280;"></i>
+                        </button> --}}
+
+                        <button
+                            onclick="toggleUserDropdown(event)"
+                            style="display:flex; align-items:center; gap:9px; background:#F5F5F0; border:none; padding:7px 13px 7px 7px; border-radius:12px; cursor:pointer; transition:background .18s;"
+                            onmouseover="this.style.background='#EBEBEB'"
+                            onmouseout="this.style.background='#F5F5F0'">
+
+                            <div class="avatar" style="width:34px; height:34px; font-size:14px;">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+
+                            <div style="text-align:left;">
+                                <p style="font-family:'Poppins',sans-serif; font-weight:700; font-size:13px; margin:0; line-height:1.3;">
+                                    {{ auth()->user()->name }}
+                                </p>
+
+                                <p style="font-size:10px; color:#6B7280; margin:0; text-transform:capitalize;">
+                                    {{ auth()->user()->role }}
+                                </p>
+                            </div>
+
+                            <i data-lucide="chevron-down" style="width:14px; height:14px; color:#6B7280;"></i>
                         </button>
 
-                        <div id="userDropdown"
+                        {{-- <div id="userDropdown"
                             style="display:none; position:absolute; right:0; top:100%; margin-top:8px; width:210px; background:#fff; border-radius:16px; box-shadow:0 16px 48px rgba(0,0,0,.14); overflow:hidden; z-index:200; border:1px solid #F0F0EC;">
+                             --}}
+                            <div id="userDropdown"
+                                style="display:none; position:absolute; right:0; top:100%; margin-top:8px; width:210px; background:#fff; border-radius:16px; box-shadow:0 16px 48px rgba(0,0,0,.14); overflow:hidden; z-index:200; border:1px solid #F0F0EC;">
                             <a href="/dashboard"
                                 style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
                                 onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
@@ -95,7 +122,7 @@
                                 onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
                                 <i data-lucide="package" style="width:15px; height:15px; color:#E8370E;"></i> My Orders
                             </a>
-                            <a href="/cart">
+                            {{-- <a href="/cart">
 
                                 <i data-lucide="shopping-cart"></i>
 
@@ -109,6 +136,48 @@
                         font-size:12px;
                         margin-left:5px;
                         ">
+
+                                    {{ collect(session('cart', []))->sum('quantity') }}
+
+                                </span>
+
+                            </a> --}}
+                            <a href="/cart"
+                                style="
+                                    display:flex;
+                                    align-items:center;
+                                    gap:10px;
+                                    padding:13px 17px;
+                                    text-decoration:none;
+                                    color:#0D0D0D;
+                                    font-size:13px;
+                                    font-weight:500;
+                                    transition:background .15s;
+                                "
+                                onmouseover="this.style.background='#F5F5F0'"
+                                onmouseout="this.style.background='#fff'">
+
+                                <i data-lucide="shopping-cart"
+                                    style="width:15px; height:15px; color:#E8370E;">
+                                </i>
+
+                                <span>Cart</span>
+
+                                <span id="cartCount"
+                                    style="
+                                        background:#E8370E;
+                                        color:white;
+                                        min-width:20px;
+                                        height:20px;
+                                        border-radius:999px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        font-size:11px;
+                                        font-weight:700;
+                                        margin-left:auto;
+                                        padding:0 6px;
+                                    ">
 
                                     {{ collect(session('cart', []))->sum('quantity') }}
 
@@ -213,8 +282,36 @@
     </div>
 </header>
 
+{{-- <script>
+    function toggleMobileMenu() {
+        document.getElementById('mobileMenu').classList.toggle('active');
+    }
+</script> --}}
+
 <script>
     function toggleMobileMenu() {
         document.getElementById('mobileMenu').classList.toggle('active');
     }
+
+    function toggleUserDropdown(event) {
+        event.stopPropagation();
+
+        const dropdown = document.getElementById('userDropdown');
+
+        if (dropdown.style.display === 'block') {
+            dropdown.style.display = 'none';
+        } else {
+            dropdown.style.display = 'block';
+        }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+
+        const wrapper = document.getElementById('userDropdownWrapper');
+
+        if (!wrapper.contains(event.target)) {
+            document.getElementById('userDropdown').style.display = 'none';
+        }
+    });
 </script>

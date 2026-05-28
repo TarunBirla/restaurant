@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     @laravelPWA
 
 
@@ -675,6 +678,32 @@ margin-top:12px;
         );
 
     </script>
+
+@if(session('success'))
+
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: '{{ session('success') }}',
+        confirmButtonColor: '#111827'
+    });
+</script>
+
+@endif
+
+@if(session('error'))
+
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '{{ session('error') }}',
+        confirmButtonColor: '#E63946'
+    });
+</script>
+
+@endif
 </body>
 
 </html>
