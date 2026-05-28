@@ -27,6 +27,8 @@ class UsersController extends Controller
             // return redirect()->intended('/');
              $previous = session('previous_url');
 
+             dd($previous);
+
             // avoid redirect loop to login page
             if (!$previous || str_contains($previous, '/login')) {
                 $previous = '/';
