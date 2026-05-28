@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
-    public function showLogin(Request $request)
+    public function showLogin()
     {
-        session(['url.intended' => url()->previous()]);
+       
         return view('auth.login');
     }
 
