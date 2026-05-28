@@ -24,8 +24,9 @@ class UsersController extends Controller
             // return redirect('/');
             // return redirect()->intended('/');
             $request->session()->regenerate();
-            return redirect()->intended('/')
-                ->with('success', 'Login Successfully!');
+            return redirect(
+                $request->redirect ?? '/'
+            )->with('success', 'Login Successfully!');
         }
 
         return back()->with('error', 'Invalid Login');
