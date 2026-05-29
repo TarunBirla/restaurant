@@ -29,7 +29,7 @@
                     <div style="display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;">
                         <div
                             style="display:flex; align-items:center; gap:8px; background:#fff; padding:10px 16px; border-radius:12px; border:1px solid #F0F0EC; flex:1; min-width:120px;">
-                            <i data-lucide="clock" style="width:16px; height:16px; color:#E8370E; flex-shrink:0;"></i>
+                            <i data-lucide="clock" style="width:16px; height:16px; color:#C25A2A; flex-shrink:0;"></i>
                             <div>
                                 <p
                                     style="font-size:10px; color:#9CA3AF; margin:0; font-weight:500; text-transform:uppercase; letter-spacing:.05em;">
@@ -70,9 +70,9 @@
                     @if($product->category)
                         <div
                             style="display:inline-flex; align-items:center; gap:6px; background:#FFF0EC; border:1px solid rgba(232,55,14,0.2); padding:6px 14px; border-radius:999px; margin-bottom:18px;">
-                            <i data-lucide="tag" style="width:12px; height:12px; color:#E8370E;"></i>
+                            <i data-lucide="tag" style="width:12px; height:12px; color:#C25A2A;"></i>
                             <span
-                                style="font-size:12px; font-weight:600; color:#E8370E; font-family:'Poppins',sans-serif;">{{ $product->category->name }}</span>
+                                style="font-size:12px; font-weight:600; color:#C25A2A; font-family:'Poppins',sans-serif;">{{ $product->category->name }}</span>
                         </div>
                     @endif
 
@@ -84,7 +84,7 @@
                     <!-- PRICE -->
                     <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:24px;">
                         <span
-                            style="font-family:'Poppins',sans-serif; font-size:42px; font-weight:800; color:#E8370E; line-height:1;">
+                            style="font-family:'Poppins',sans-serif; font-size:42px; font-weight:800; color:#C25A2A; line-height:1;">
                             £{{ $product->price }}
                         </span>
                         <span style="font-size:14px; color:#9CA3AF; font-weight:500;">per serving</span>

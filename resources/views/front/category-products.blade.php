@@ -9,7 +9,7 @@
                 style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:36px; flex-wrap:wrap; gap:12px;">
                 <div>
                     <p
-                        style="color:#E8370E; font-family:'Poppins',sans-serif; font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 6px;">
+                        style="color:#C25A2A; font-family:'Poppins',sans-serif; font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 6px;">
                         Today's Pick</p>
                     <h2 class="section-title"
                         style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; margin:0; letter-spacing:-.4px;">
@@ -45,7 +45,7 @@
                                         {{ $product->name }}
                                     </h3>
                                     <span
-                                        style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#E8370E; white-space:nowrap;">
+                                        style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#C25A2A; white-space:nowrap;">
                                         £{{ $product->price }}
                                     </span>
                                 </div>

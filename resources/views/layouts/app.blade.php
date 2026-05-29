@@ -66,7 +66,7 @@
         #main-content {
             margin-left: 260px;
             min-height: 100vh;
-            background: #F5F5F0;
+            background: rgba(245, 240, 232, 0.95);
         }
 
         .nav-link {
@@ -89,7 +89,7 @@
         }
 
         .nav-link.active {
-            background: #E8370E;
+            background: #C25A2A;
             color: #fff;
             font-weight: 600;
             box-shadow: 0 4px 14px rgba(232, 55, 14, .35);
@@ -351,7 +351,7 @@ Install app for better experience.
 id="installBtn"
 
 style="
-background:#E8370E;
+background:#C25A2A;
 color:white;
 padding:14px 30px;
 border:none;

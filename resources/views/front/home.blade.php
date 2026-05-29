@@ -14,15 +14,15 @@
 
                     <div
                         style="display:inline-flex; align-items:center; gap:8px; background:rgba(232,55,14,0.18); border:1px solid rgba(232,55,14,0.4); padding:7px 16px; border-radius:999px; margin-bottom:22px;">
-                        <i data-lucide="zap" style="width:14px; height:14px; color:#E8370E; flex-shrink:0;"></i>
+                        <i data-lucide="zap" style="width:14px; height:14px; color:#C25A2A; flex-shrink:0;"></i>
                         <span
-                            style="font-size:12px; font-weight:600; color:#E8370E; font-family:'Poppins',sans-serif; letter-spacing:.04em;">Fast
+                            style="font-size:12px; font-weight:600; color:#C25A2A; font-family:'Poppins',sans-serif; letter-spacing:.04em;">Fast
                             Delivery In 30 Min</span>
                     </div>
 
                     <h1 class="hero-title"
                         style="font-family:'Poppins',sans-serif; font-size:48px; font-weight:800; line-height:1.15; margin:0 0 18px; letter-spacing:-.5px;">
-                        Delicious Food<br><span style="color:#E8370E;">Delivered</span> To<br>Your Door
+                        Delicious Food<br><span style="color:#C25A2A;">Delivered</span> To<br>Your Door
                     </h1>
 
                     <p
@@ -70,14 +70,14 @@
     <!-- ══════════════════════════════════════
          QR CODE SECTION
     ══════════════════════════════════════ -->
-    <section style="padding:80px 0; background:linear-gradient(135deg,#FFF7F4,#FFFFFF);">
+    <section style="padding:80px 0; background:rgba(245, 240, 232, 0.95);">
         <div style="max-width:1280px; margin:auto; padding:0 24px;">
             <div class="qr-wrapper" style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:56px; align-items:center;">
 
                 <!-- LEFT -->
                 <div>
                     <span
-                        style="background:#FFE7E0; color:#E8370E; padding:7px 18px; border-radius:50px; font-size:12px; font-weight:700; display:inline-block; margin-bottom:18px; font-family:'Poppins',sans-serif; letter-spacing:.04em;">
+                        style="background:#FFE7E0; color:#C25A2A; padding:7px 18px; border-radius:50px; font-size:12px; font-weight:700; display:inline-block; margin-bottom:18px; font-family:'Poppins',sans-serif; letter-spacing:.04em;">
                         Scan & Order
                     </span>
                     <h2 class="qr-title section-title"
@@ -90,7 +90,7 @@
                     <div style="display:flex; gap:20px; flex-wrap:wrap;">
                         <div style="display:flex; align-items:center; gap:12px;">
                             <div
-                                style="width:46px; height:46px; background:#E8370E; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                style="width:46px; height:46px; background:#C25A2A; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                                 <i data-lucide="utensils" style="width:20px; height:20px; color:#fff;"></i>
                             </div>
                             <div>
@@ -117,7 +117,7 @@
                         style="background:#fff; padding:36px; border-radius:28px; box-shadow:0 20px 60px rgba(0,0,0,.09); text-align:center; border:1px solid #F1F1F1; max-width:340px; width:100%;">
                         <div
                             style="width:88px; height:88px; background:#FFF2EE; border-radius:22px; margin:0 auto 22px; display:flex; align-items:center; justify-content:center;">
-                            <i data-lucide="qr-code" style="width:42px; height:42px; color:#E8370E;"></i>
+                            <i data-lucide="qr-code" style="width:42px; height:42px; color:#C25A2A;"></i>
                         </div>
                         <h3
                             style="font-size:24px; font-weight:800; margin-bottom:8px; font-family:'Poppins',sans-serif; color:#0D0D0D;">
@@ -143,7 +143,7 @@
             style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:36px; flex-wrap:wrap; gap:12px;">
             <div>
                 <p
-                    style="color:#E8370E; font-family:'Poppins',sans-serif; font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 6px;">
+                    style="color:#C25A2A; font-family:'Poppins',sans-serif; font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 6px;">
                     Browse</p>
                 <h2 class="section-title"
                     style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; margin:0; letter-spacing:-.4px;">
@@ -156,7 +156,7 @@
             @foreach($categories as $category)
                 <a href="/category/{{ $category->id }}"
                     style="background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.06); text-decoration:none; transition:all .22s; display:flex; align-items:center; justify-content:center; padding:20px 16px; border:1px solid #F0F0EC;"
-                    onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0,0,0,.12)'; this.style.borderColor='#E8370E';"
+                    onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0,0,0,.12)'; this.style.borderColor='#C25A2A';"
                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(0,0,0,.06)'; this.style.borderColor='#F0F0EC';">
                     <h3
                         style="font-family:'Poppins',sans-serif; font-weight:700; font-size:15px; margin:0; color:#0D0D0D; text-align:center;">
@@ -177,7 +177,7 @@
                 style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:36px; flex-wrap:wrap; gap:12px;">
                 <div>
                     <p
-                        style="color:#E8370E; font-family:'Poppins',sans-serif; font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 6px;">
+                        style="color:#C25A2A; font-family:'Poppins',sans-serif; font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 6px;">
                         Today's Pick</p>
                     <h2 class="section-title"
                         style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; margin:0; letter-spacing:-.4px;">
@@ -213,7 +213,7 @@
                                         {{ $product->name }}
                                     </h3>
                                     <span
-                                        style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#E8370E; white-space:nowrap;">
+                                        style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#C25A2A; white-space:nowrap;">
                                         £{{ $product->price }}
                                     </span>
                                 </div>
@@ -251,14 +251,14 @@
                 <div>
                     <div
                         style="display:inline-flex; align-items:center; gap:8px; background:rgba(232,55,14,0.15); border:1px solid rgba(232,55,14,0.3); padding:7px 16px; border-radius:999px; margin-bottom:22px;">
-                        <i data-lucide="tag" style="width:14px; height:14px; color:#E8370E;"></i>
+                        <i data-lucide="tag" style="width:14px; height:14px; color:#C25A2A;"></i>
                         <span
-                            style="font-size:12px; font-weight:700; color:#E8370E; font-family:'Poppins',sans-serif; letter-spacing:.05em;">Limited
+                            style="font-size:12px; font-weight:700; color:#C25A2A; font-family:'Poppins',sans-serif; letter-spacing:.05em;">Limited
                             Time Offer</span>
                     </div>
                     <h2 class="offer-title"
                         style="font-family:'Poppins',sans-serif; font-size:48px; font-weight:800; line-height:1.2; margin:0 0 18px; letter-spacing:-.5px;">
-                        Get <span style="color:#E8370E;">30% Off</span><br>On Your First Order
+                        Get <span style="color:#C25A2A;">30% Off</span><br>On Your First Order
                     </h2>
                     <p style="color:#D1D5DB; font-size:16px; line-height:1.8; margin:0 0 32px; max-width:420px;">
                         Enjoy premium dishes from top restaurants. Fresh food, fast delivery, best experience guaranteed.
@@ -273,7 +273,7 @@
                     <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=2081"
                         style="width:100%; border-radius:22px; box-shadow:0 24px 60px rgba(232,55,14,0.2); display:block;">
                     <div
-                        style="position:absolute; top:-16px; right:-16px; width:76px; height:76px; border-radius:50%; background:#E8370E; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:800; color:#fff; font-size:14px; line-height:1.2; text-align:center; box-shadow:0 8px 24px rgba(232,55,14,.5);">
+                        style="position:absolute; top:-16px; right:-16px; width:76px; height:76px; border-radius:50%; background:#C25A2A; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:800; color:#fff; font-size:14px; line-height:1.2; text-align:center; box-shadow:0 8px 24px rgba(232,55,14,.5);">
                         30%<br><span style="font-size:10px; font-weight:600;">OFF</span>
                     </div>
                 </div>
@@ -286,10 +286,10 @@
     <!-- ══════════════════════════════════════
          WHY CHOOSE US
     ══════════════════════════════════════ -->
-    <section style="max-width:1280px; margin:0 auto; padding:80px 24px;">
+    <section style="max-width:1280px; margin:0 auto; padding:80px 24px; background:rgba(245, 240, 232, 0.95);">
         <div style="text-align:center; margin-bottom:52px;">
             <p
-                style="color:#E8370E; font-family:'Poppins',sans-serif; font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 8px;">
+                style="color:#C25A2A; font-family:'Poppins',sans-serif; font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 8px;">
                 Our Promise</p>
             <h2 class="section-title"
                 style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; margin:0 0 10px; letter-spacing:-.4px;">
@@ -303,7 +303,7 @@
                     ['icon' => 'leaf', 'title' => 'Fresh Food', 'desc' => 'High quality fresh ingredients sourced daily from local farms.', 'color' => '#16A34A'],
                     ['icon' => 'truck', 'title' => 'Fast Delivery', 'desc' => 'Quick and safe delivery right at your doorstep in 30 minutes.', 'color' => '#2563EB'],
                     ['icon' => 'shield-check', 'title' => 'Secure Payment', 'desc' => '100% secure online payment with end-to-end encryption.', 'color' => '#7C3AED'],
-                    ['icon' => 'star', 'title' => 'Best Quality', 'desc' => 'Premium taste with excellent 5-star customer service always.', 'color' => '#E8370E'],
+                    ['icon' => 'star', 'title' => 'Best Quality', 'desc' => 'Premium taste with excellent 5-star customer service always.', 'color' => '#C25A2A'],
                 ];
             @endphp
             @foreach($features as $f)

@@ -18,7 +18,7 @@
 
     <style>
         :root {
-            --primary: #E8370E;
+            --primary: #C25A2A;
             --primary-dark: #C42D0A;
             --primary-light: #FFF0EC;
             --black: #0D0D0D;
@@ -557,7 +557,7 @@ text-align:center;
             </p>
 
             <button id="installBtn" style="
-background:#E8370E;
+background:#C25A2A;
 color:white;
 padding:14px 30px;
 border:none;

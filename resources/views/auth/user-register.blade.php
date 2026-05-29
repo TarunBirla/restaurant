@@ -15,7 +15,7 @@
 
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-green-100 via-emerald-50 to-teal-100 flex items-center justify-center p-5">
+<body class="min-h-screen bg-[rgba(245, 240, 232, 0.95)] flex items-center justify-center p-5">
 
     <div class="w-full max-w-md">
 
@@ -91,7 +91,7 @@
                 </div>
 
                 <button
-                    class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-2xl shadow-lg">
+                    class="w-full bg-[#c25a2a] hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-2xl shadow-lg">
 
                     Create Account
 

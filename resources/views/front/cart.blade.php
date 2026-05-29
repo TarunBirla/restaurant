@@ -6,7 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 .cart-page {
-    background: #F4F3EF;
+    background: rgba(245, 240, 232, 0.95);
     min-height: 100vh;
     padding: 32px 16px 100px;
     /* font-family: 'DM Sans', sans-serif; */
@@ -74,7 +74,7 @@
     color: #111;
     transition: background .15s;
 }
-.qty-btn.minus { background: #F4F3EF; }
+.qty-btn.minus { background: rgba(245, 240, 232, 0.95); }
 .qty-btn.plus  { background: #E63946; color: #fff; }
 .qty-btn.minus:hover { background: #E8E6E0; }
 .qty-btn.plus:hover  { background: #c42d0b; }

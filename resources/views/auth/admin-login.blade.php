@@ -13,11 +13,11 @@
 
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center p-5">
+<body class="min-h-screen bg-[rgba(245, 240, 232, 0.95)] flex items-center justify-center p-5">
 
     <div class="w-full max-w-md">
 
-        <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-10">
+        <div class="bg-gray-900 border border-white/20 rounded-3xl shadow-2xl p-10">
 
             <div class="text-center mb-8">
 
@@ -84,7 +84,7 @@
                 </div>
 
                 <button
-                    class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-2xl shadow-xl">
+                    class="w-full bg-[#c25a2a] hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-2xl shadow-xl">
 
                     Login Admin
 

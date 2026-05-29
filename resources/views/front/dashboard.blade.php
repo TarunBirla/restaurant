@@ -6,7 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 .dash-page {
-    background: #F4F3EF;
+    background: rgba(245, 240, 232, 0.95);
     min-height: 100vh;
     padding: 32px 16px 100px;
     /* font-family: 'DM Sans', sans-serif; */

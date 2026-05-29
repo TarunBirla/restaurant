@@ -12,7 +12,7 @@
         --red-dark: #c42d0b;
         --green: #10B981;
         --green-dark: #059669;
-        --bg: #F4F3EF;
+        --bg: rgba(245, 240, 232, 0.95);
         --white: #fff;
         --border: #E8E6E0;
         --border-soft: #F0EEE9;
@@ -180,7 +180,7 @@
         user-select: none;
         -webkit-tap-highlight-color: transparent;
     }
-    .qty-btn.minus { background: #F4F3EF; }
+    .qty-btn.minus { background: rgba(245, 240, 232, 0.95); }
     .qty-btn.plus  { background: var(--red); color: #fff; }
     .qty-btn.minus:hover { background: var(--border); }
     .qty-btn.plus:hover  { background: var(--red-dark); }

@@ -364,7 +364,7 @@
     }
 </style>
 
-<section style="background:#F8F9FA; padding:20px 0; min-height:100vh;">
+<section style="background:rgba(245, 240, 232, 0.95); padding:20px 0; min-height:100vh;">
 
     <div style="max-width:1300px; margin:auto; padding:0 20px;">
 

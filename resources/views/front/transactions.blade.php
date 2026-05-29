@@ -7,7 +7,7 @@
    TRANSACTIONS PAGE — RESPONSIVE
    ============================================= */
 .txn-page {
-    background: #F4F3EF;
+    background: rgba(245, 240, 232, 0.95);
     min-height: 100vh;
     padding: 32px 16px 100px;
 }

@@ -1,11 +1,11 @@
-<header style="background:#fff; box-shadow:0 1px 0 #F0F0EC; position:sticky; top:0; z-index:100;">
+<header style="background:rgba(245, 240, 232, 0.95); box-shadow:0 1px 0 #F0F0EC; position:sticky; top:0; z-index:100;">
     <div style=" margin:0 auto; padding:0 24px;" class="mx-auto max-w-7xl">
         <div style="display:flex; align-items:center; justify-content:space-between; height:68px;">
 
             <!-- LOGO -->
             <a href="/" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
                 <div
-                    style="width:38px; height:38px; background:#E8370E; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    style="width:38px; height:38px; background:#C25A2A; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                     <i data-lucide="utensils" style="color:#fff; width:20px; height:20px;"></i>
                 </div>
                 <span
@@ -36,7 +36,7 @@
                         onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='transparent'">
                         <i data-lucide="shopping-cart" style="width:16px; height:16px;"></i> Cart
                         <span id="cartCount" style="
-                        background:#E8370E;
+                        background:#C25A2A;
                         color:white;
                         padding:2px 8px;
                         border-radius:20px;
@@ -109,18 +109,18 @@
                             <a href="/dashboard"
                                 style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
                                 onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
-                                <i data-lucide="layout-dashboard" style="width:15px; height:15px; color:#E8370E;"></i>
+                                <i data-lucide="layout-dashboard" style="width:15px; height:15px; color:#C25A2A;"></i>
                                 Dashboard
                             </a>
                             <a href="/profile"
                                 style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
                                 onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
-                                <i data-lucide="user" style="width:15px; height:15px; color:#E8370E;"></i> My Profile
+                                <i data-lucide="user" style="width:15px; height:15px; color:#C25A2A;"></i> My Profile
                             </a>
                             <a href="/my-orders"
                                 style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
                                 onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
-                                <i data-lucide="package" style="width:15px; height:15px; color:#E8370E;"></i> My Orders
+                                <i data-lucide="package" style="width:15px; height:15px; color:#C25A2A;"></i> My Orders
                             </a>
                             {{-- <a href="/cart">
 
@@ -129,7 +129,7 @@
                                 Cart
 
                                 <span id="cartCount" style="
-                        background:#E8370E;
+                        background:#C25A2A;
                         color:white;
                         padding:2px 8px;
                         border-radius:20px;
@@ -158,14 +158,14 @@
                                 onmouseout="this.style.background='#fff'">
 
                                 <i data-lucide="shopping-cart"
-                                    style="width:15px; height:15px; color:#E8370E;">
+                                    style="width:15px; height:15px; color:#C25A2A;">
                                 </i>
 
                                 <span>Cart</span>
 
                                 <span id="cartCount"
                                     style="
-                                        background:#E8370E;
+                                        background:#C25A2A;
                                         color:white;
                                         min-width:20px;
                                         height:20px;
@@ -188,7 +188,7 @@
                             <form method="POST" action="/logout">
                                 @csrf
                                 <button
-                                    style="display:flex; align-items:center; gap:10px; padding:13px 17px; width:100%; background:none; border:none; cursor:pointer; font-size:13px; font-weight:600; color:#E8370E; transition:background .15s; font-family:'Poppins',sans-serif;"
+                                    style="display:flex; align-items:center; gap:10px; padding:13px 17px; width:100%; background:none; border:none; cursor:pointer; font-size:13px; font-weight:600; color:#C25A2A; transition:background .15s; font-family:'Poppins',sans-serif;"
                                     onmouseover="this.style.background='#FFF0EC'"
                                     onmouseout="this.style.background='transparent'">
                                     <i data-lucide="log-out" style="width:15px; height:15px;"></i> Logout
@@ -219,8 +219,8 @@
 
     <!-- MOBILE MENU -->
     <div class="mobile-menu" id="mobileMenu">
-        <a href="/"><i data-lucide="home" style="width:18px; height:18px; color:#E8370E;"></i> Home</a>
-        <a href="/restaurants"><i data-lucide="package" style="width:18px; height:18px; color:#E8370E;"></i>
+        <a href="/"><i data-lucide="home" style="width:18px; height:18px; color:#C25A2A;"></i> Home</a>
+        <a href="/restaurants"><i data-lucide="package" style="width:18px; height:18px; color:#C25A2A;"></i>
             Restaurants</a>
 
         @auth
@@ -234,14 +234,14 @@
                         <i data-lucide="shopping-cart" style="
             width:18px;
             height:18px;
-            color:#E8370E;
+            color:#C25A2A;
             ">
                         </i>
 
                         Cart
 
                         <span id="mobileCartCount" style="
-            background:#E8370E;
+            background:#C25A2A;
             color:#fff;
             min-width:22px;
             height:22px;
@@ -262,22 +262,22 @@
                         </span>
 
                     </a>
-                    <a href="/my-orders"><i data-lucide="package" style="width:18px; height:18px; color:#E8370E;"></i> My Orders</a>
-                    <a href="/dashboard"><i data-lucide="layout-dashboard" style="width:18px; height:18px; color:#E8370E;"></i>
+                    <a href="/my-orders"><i data-lucide="package" style="width:18px; height:18px; color:#C25A2A;"></i> My Orders</a>
+                    <a href="/dashboard"><i data-lucide="layout-dashboard" style="width:18px; height:18px; color:#C25A2A;"></i>
                         Dashboard</a>
-                    <a href="/profile"><i data-lucide="user" style="width:18px; height:18px; color:#E8370E;"></i> My Profile</a>
+                    <a href="/profile"><i data-lucide="user" style="width:18px; height:18px; color:#C25A2A;"></i> My Profile</a>
                     <form method="POST" action="/logout" style="border-bottom:none;">
                         @csrf
                         <button
-                            style="display:flex; align-items:center; gap:10px; width:100%; background:none; border:none; padding:13px 0; font-size:14px; font-weight:600; color:#E8370E; cursor:pointer; font-family:'Poppins',sans-serif; border-bottom:none;">
+                            style="display:flex; align-items:center; gap:10px; width:100%; background:none; border:none; padding:13px 0; font-size:14px; font-weight:600; color:#C25A2A; cursor:pointer; font-family:'Poppins',sans-serif; border-bottom:none;">
                             <i data-lucide="log-out" style="width:18px; height:18px;"></i> Logout
                         </button>
                     </form>
         @endauth
 
         @guest
-            <a href="/login"><i data-lucide="log-in" style="width:18px; height:18px; color:#E8370E;"></i> Login</a>
-            <a href="/register"><i data-lucide="user-plus" style="width:18px; height:18px; color:#E8370E;"></i> Register</a>
+            <a href="/login"><i data-lucide="log-in" style="width:18px; height:18px; color:#C25A2A;"></i> Login</a>
+            <a href="/register"><i data-lucide="user-plus" style="width:18px; height:18px; color:#C25A2A;"></i> Register</a>
         @endguest
     </div>
 </header>

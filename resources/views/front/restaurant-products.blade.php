@@ -77,8 +77,8 @@
         }
 
         .res-slide-btn:hover {
-            background: #E8370E;
-            border-color: #E8370E;
+            background: #C25A2A;
+            border-color: #C25A2A;
             color: #fff;
         }
 
@@ -100,7 +100,7 @@
         }
 
         .res-dot.active {
-            background: #E8370E;
+            background: #C25A2A;
             width: 20px;
             border-radius: 4px;
         }
@@ -113,7 +113,7 @@
         }
 
         .badge-primary {
-            background: #E8370E;
+            background: #C25A2A;
             color: #fff;
             padding: 4px 10px;
             border-radius: 20px;
@@ -144,7 +144,7 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            background: #E8370E;
+            background: #C25A2A;
             color: #fff;
             padding: 10px;
             border-radius: 12px;
@@ -183,11 +183,11 @@
 
     {{-- ======== RESTAURANT HEADER ======== --}}
     <section
-        style="background:linear-gradient(135deg,#0D0D0D 0%,#1a1a1a 100%); padding:44px 0; border-bottom:3px solid #E8370E;">
+        style="background:linear-gradient(135deg,#0D0D0D 0%,#1a1a1a 100%); padding:44px 0; border-bottom:3px solid #C25A2A;">
         <div style="max-width:1280px; margin:0 auto; padding:0 24px;">
             <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
                 <div
-                    style="width:68px; height:68px; background:#E8370E; border-radius:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    style="width:68px; height:68px; background:#C25A2A; border-radius:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                     <svg width="32" height="32" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24">
                         <path
                             d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2M7 2v20M21 15V2a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3zm0 0v7" />
@@ -195,7 +195,7 @@
                 </div>
                 <div>
                     <p
-                        style="color:#E8370E; font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; margin:0 0 4px;">
+                        style="color:#C25A2A; font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; margin:0 0 4px;">
                         Restaurant</p>
                     <h1
                         style="font-size:30px; font-weight:800; color:#fff; margin:0; letter-spacing:-.4px; font-family:'Poppins',sans-serif;">
@@ -223,7 +223,7 @@
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
                     <div>
                         <p
-                            style="color:#E8370E; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin:0 0 3px;">
+                            style="color:#C25A2A; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin:0 0 3px;">
                             Deals for You</p>
                         <h2 style="font-size:20px; font-weight:800; color:#0D0D0D; margin:0; font-family:'Poppins',sans-serif;">
                             Offers &amp; Discounts
@@ -318,7 +318,7 @@
     @endif
 
     {{-- ======== MENU SECTION ======== --}}
-    <section style="background:#F5F5F0; padding:40px 0 80px;">
+    <section style="background:rgba(245, 240, 232, 0.95); padding:40px 0 80px;">
         <div style="max-width:1280px; margin:0 auto; padding:0 24px;">
 
             {{-- Category Filter Tabs --}}
@@ -328,16 +328,16 @@
 
                 <a href="{{ url('/restaurant/' . $restaurant->slug) }}"
                     style="padding:10px 22px; border-radius:40px; text-decoration:none; white-space:nowrap; font-weight:600; font-size:13px; font-family:'Poppins',sans-serif; transition:all .2s; flex-shrink:0;
-                                        {{ !$activeCat ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}">
+                                        {{ !$activeCat ? 'background:#C25A2A; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}">
                     All
                 </a>
 
                 @foreach($categories as $cat)
                     <a href="{{ url('/restaurant/' . $restaurant->slug . '/' . $cat->slug) }}"
                         style="padding:10px 22px; border-radius:40px; text-decoration:none; white-space:nowrap; font-weight:600; font-size:13px; font-family:'Poppins',sans-serif; transition:all .2s; flex-shrink:0;
-                                                            {{ $activeCat === $cat->slug ? 'background:#E8370E; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}"
+                                                            {{ $activeCat === $cat->slug ? 'background:#C25A2A; color:#fff; box-shadow:0 4px 14px rgba(232,55,14,.35);' : 'background:#fff; color:#374151; border:1.5px solid #E5E7EB;' }}"
                         @if($activeCat !== $cat->slug)
-                            onmouseover="this.style.background='#FFF0EC'; this.style.borderColor='#E8370E'; this.style.color='#E8370E';"
+                            onmouseover="this.style.background='#FFF0EC'; this.style.borderColor='#C25A2A'; this.style.color='#C25A2A';"
                             onmouseout="this.style.background='#fff'; this.style.borderColor='#E5E7EB'; this.style.color='#374151';"
                         @endif>
                         {{ $cat->name }}
@@ -350,7 +350,7 @@
                 style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:10px;">
                 <div>
                     <p
-                        style="color:#E8370E; font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 5px;">
+                        style="color:#C25A2A; font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; margin:0 0 5px;">
                         Today's Pick</p>
                     <h2 style="font-size:26px; font-weight:800; margin:0; color:#0D0D0D; font-family:'Poppins',sans-serif;">
                         {{ $activeCat ? ($categories->firstWhere('slug', $activeCat)->name ?? 'Menu') : 'All Items' }}
@@ -381,7 +381,7 @@
 
                             <div
                                 style="position:absolute; top:12px; right:12px; background:rgba(255,255,255,0.95); border-radius:999px; padding:4px 12px;">
-                                <span style="font-size:14px; font-weight:800; color:#E8370E;">£{{ $product->price }}</span>
+                                <span style="font-size:14px; font-weight:800; color:#C25A2A;">£{{ $product->price }}</span>
                             </div>
 
                             {{-- If product has an active offer/discount --}}
@@ -545,7 +545,7 @@
                         style="grid-column:1/-1; text-align:center; padding:80px 20px; background:#fff; border-radius:20px; border:1px solid #F0F0EC;">
                         <div
                             style="width:80px; height:80px; background:#FFF0EC; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
-                            <svg width="36" height="36" fill="none" stroke="#E8370E" stroke-width="2" viewBox="0 0 24 24">
+                            <svg width="36" height="36" fill="none" stroke="#C25A2A" stroke-width="2" viewBox="0 0 24 24">
                                 <path
                                     d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
                                 <path d="M12 22V12M3.27 6.96L12 12.01l8.73-5.05" />

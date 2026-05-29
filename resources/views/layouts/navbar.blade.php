@@ -1,4 +1,4 @@
-<div style="background:#fff; border-bottom:1px solid #F0F0EC; padding:0 28px; height:68px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:30;">
+<div style="background:rgba(245, 240, 232, 0.95); border-bottom:1px solid #F0F0EC; padding:0 28px; height:68px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:30;">
 
     <!-- LEFT: Mobile toggle + Page title -->
     <div style="display:flex; align-items:center; gap:14px;">
@@ -45,7 +45,7 @@
         <button style="width:40px; height:40px; background:#F5F5F0; border:none; border-radius:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; position:relative; transition:background .18s;"
                 onmouseover="this.style.background='#EBEBEB'" onmouseout="this.style.background='#F5F5F0'">
             <i data-lucide="bell" style="width:18px; height:18px; color:#374151;"></i>
-            <span style="position:absolute; top:8px; right:8px; width:8px; height:8px; background:#E8370E; border-radius:50%; border:2px solid #fff;"></span>
+            <span style="position:absolute; top:8px; right:8px; width:8px; height:8px; background:#C25A2A; border-radius:50%; border:2px solid #fff;"></span>
         </button>
 
         <!-- Divider -->
@@ -53,7 +53,7 @@
 
         <!-- User Info -->
         <div style="display:flex; align-items:center; gap:10px; background:#F5F5F0; padding:7px 14px 7px 7px; border-radius:12px;">
-            <div style="width:34px; height:34px; background:#E8370E; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:'Poppins',sans-serif; font-weight:800; font-size:14px; color:#fff;">
+            <div style="width:34px; height:34px; background:#C25A2A; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:'Poppins',sans-serif; font-weight:800; font-size:14px; color:#fff;">
                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
             </div>
             <div style="display:none;" class="user-info-text">

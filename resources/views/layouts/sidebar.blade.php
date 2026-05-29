@@ -4,7 +4,7 @@
     <div style="padding: 24px 20px; border-bottom: 1px solid #1F1F1F;">
         <a href="/" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
             <div
-                style="width:38px; height:38px; background:#E8370E; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                style="width:38px; height:38px; background:#C25A2A; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                 <i data-lucide="utensils" style="color:#fff; width:20px; height:20px;"></i>
             </div>
             <span
@@ -18,7 +18,7 @@
     <!-- <div style="padding: 18px 20px; border-bottom: 1px solid #1F1F1F;">
         <div style="display:flex; align-items:center; gap:11px;">
             <div
-                style="width:40px; height:40px; background:#E8370E; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:'Poppins',sans-serif; font-weight:800; font-size:16px; color:#fff;">
+                style="width:40px; height:40px; background:#C25A2A; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:'Poppins',sans-serif; font-weight:800; font-size:16px; color:#fff;">
                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
             </div>
             <div style="overflow:hidden;">
@@ -27,7 +27,7 @@
                     {{ auth()->user()->name }}
                 </p>
                 <span
-                    style="font-size:11px; font-weight:600; color:#E8370E; background:rgba(232,55,14,.15); padding:2px 10px; border-radius:999px; display:inline-block; margin-top:3px; text-transform:capitalize; letter-spacing:.04em;">
+                    style="font-size:11px; font-weight:600; color:#C25A2A; background:rgba(232,55,14,.15); padding:2px 10px; border-radius:999px; display:inline-block; margin-top:3px; text-transform:capitalize; letter-spacing:.04em;">
                     {{ str_replace('_', ' ', auth()->user()->role) }}
                 </span>
             </div>
@@ -174,7 +174,7 @@
             @csrf
             <button type="submit"
                 style="width:100%; display:flex; align-items:center; gap:11px; padding:11px 18px; border-radius:12px; background:none; border:none; cursor:pointer; font-family:'Poppins',sans-serif; font-size:14px; font-weight:500; color:#9CA3AF; transition:all .18s; text-align:left;"
-                onmouseover="this.style.background='rgba(232,55,14,.15)'; this.style.color='#E8370E';"
+                onmouseover="this.style.background='rgba(232,55,14,.15)'; this.style.color='#C25A2A';"
                 onmouseout="this.style.background='none'; this.style.color='#9CA3AF';">
                 <i data-lucide="log-out" style="width:18px; height:18px; flex-shrink:0;"></i>
                 Logout
