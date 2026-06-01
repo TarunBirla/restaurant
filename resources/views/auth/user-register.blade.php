@@ -99,6 +99,13 @@
 
             </form>
 
+                <div class="text-center mt-4 flex justify-center">
+                    <a href="/login"
+                        class="text-[#c25a2a] font-semibold">
+                        Already have an account? Login
+                    </a>
+                </div>
+
         </div>
 
     </div>

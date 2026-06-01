@@ -77,6 +77,12 @@
                         class="w-full border border-gray-200 p-4 rounded-2xl outline-none focus:border-red-400">
 
                 </div>
+                <div class="text-end mb-4 flex justify-end">
+                    <a href="/forgot-password"
+                        class="text-[#c25a2a] font-semibold">
+                        Forgot Password?
+                    </a>
+                </div>
 
                 <button
                     class="w-full bg-[#c25a2a] hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-2xl shadow-lg">
@@ -86,7 +92,12 @@
                 </button>
 
             </form>
-
+                <div class="text-center mt-4 flex justify-center">
+                    <a href="/register"
+                        class="text-[#c25a2a] font-semibold">
+                        Don't have an account ? Sign Up
+                    </a>
+                </div>
         </div>
 
     </div>

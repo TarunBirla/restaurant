@@ -360,6 +360,9 @@ Route::get('/login', [UsersController::class, 'showLogin'])
 // Route::post('/login-user', [UsersController::class, 'login']);
 Route::post('/login', [UsersController::class, 'login'])
     ->name('login.submit');
+
+Route::get('/forgot-password', [UsersController::class, 'showForgotPassword']);
+Route::post('/forgot-password', [UsersController::class, 'forgotPassword']);    
 // Route::get(
 //     '/restaurant/{slug}',
 //     [HomeController::class, 'restaurantProducts']
