@@ -9,6 +9,7 @@ class RestaurantPaymentController extends Controller
 {
     public function index()
     {
+        $restaurant = auth()->user()->restaurant;
         $payments = Payment::with([
             'order',
             'order.user'
@@ -26,7 +27,7 @@ class RestaurantPaymentController extends Controller
 
         return view(
             'restaurant.payments.index',
-            compact('payments')
+            compact('payments','restaurant')
         );
     }
 

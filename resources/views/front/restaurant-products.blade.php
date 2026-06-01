@@ -431,7 +431,7 @@
 
                                 <a href="javascript:void(0)"
                                     class="btn-black"
-                                    onclick="openAR('{{ asset('storage/' . $product->image) }}')"
+                                    onclick="openAR('{{ asset('storage/' . ($product->image_3d ?: $product->image)) }}')"
                                     style="flex:1;">
                                     3D View
                                 </a>
@@ -520,7 +520,7 @@
                                     </form>
                                 @else
 
-                                    <a href="{{ route('login', ['redirect' => url()->current()]) }}"
+                                    <a href="{{ route('login', ['redirect' => urlencode(url()->full())]) }}"
                                         class="btn-primary"
                                         style="
                                             flex:1;

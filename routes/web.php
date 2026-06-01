@@ -56,6 +56,9 @@ Route::post(
     [PaymentController::class, 'pay']
 )->name('payment.pay');
 
+
+
+
 Route::match(
     ['get', 'post'],
     '/payment/notify',
@@ -307,8 +310,19 @@ Route::middleware(['auth', 'restaurant_admin'])
         // ✅ ADD THIS
         Route::post(
             '/orders/payment-status/{id}',
-            [OrderController::class, 'updatePaymentStatus']
+            [RestaurantOrderController::class, 'updatePaymentStatus']
         )->name('orders.payment.status');
+
+        Route::post(
+            '/orders/{id}/refund',
+            [RestaurantOrderController::class, 'refundPayment']
+        )->name('orders.refund');
+
+        Route::post(
+            '/payment-settings',
+            [RestaurantController::class, 'updatePaymentSettings']
+        )->name('payment.settings.update');
+
         Route::get(
             '/all-payments',
             [RestaurantPaymentController::class, 'allPayments']

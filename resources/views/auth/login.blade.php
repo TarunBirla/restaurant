@@ -42,6 +42,10 @@
 
                 @csrf
 
+                <input type="hidden"
+                name="redirect"
+                value="{{ old('redirect', $redirect ?? '/') }}">
+
                 <div class="mb-5">
 
                     <label class="text-gray-700 text-sm font-semibold mb-2 block">
@@ -87,30 +91,15 @@
 
     </div>
 
-@if(session('success'))
-
+@if(request('message'))
 <script>
     Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: '{{ session('success') }}',
+        icon: @json(request('type', 'success')),
+        title: @json(ucfirst(request('type', 'success'))),
+        text: @json(request('message')),
         confirmButtonColor: '#111827'
     });
 </script>
-
-@endif
-
-@if(session('error'))
-
-<script>
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: '{{ session('error') }}',
-        confirmButtonColor: '#E63946'
-    });
-</script>
-
 @endif
 
 </body>

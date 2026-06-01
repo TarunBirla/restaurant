@@ -641,6 +641,11 @@
                 </div>
                 @endif
 
+                <input
+                type="hidden"
+                name="restaurant_id"
+                value="{{ $restaurant->id }}">
+
                 <!-- ── STEP 1: ORDER ITEMS ── -->
                 <div class="co-card">
                     <div class="co-card-title">
@@ -782,17 +787,25 @@
                     </div>
 
                     <div class="pm-grid">
-                        <label class="pm-label" id="pm-online">
-                            <input type="radio" name="payment_method" value="online" required>
-                            <div class="pm-icon">💳</div>
-                            <div>
-                                <div class="pm-title">Online Payment</div>
-                                <div class="pm-sub">UPI / Card / Wallet</div>
-                            </div>
-                            <div class="pm-radio-dot"></div>
-                        </label>
+                        @if($paymentEnabled)
+                            <label class="pm-label" id="pm-online">
+                                <input type="radio" name="payment_method" value="online" required>
+                                <div class="pm-icon">💳</div>
+                                <div>
+                                    <div class="pm-title">Online Payment</div>
+                                    <div class="pm-sub">UPI / Card / Wallet</div>
+                                </div>
+                                <div class="pm-radio-dot"></div>
+                            </label>
+                        @else
 
-                        <label class="pm-label" id="pm-cod">
+                            <div class="bg-yellow-100 text-yellow-800 p-4 rounded-xl">
+                                Online payment is currently unavailable for this restaurant.
+                            </div>
+
+                        @endif
+
+                        {{-- <label class="pm-label" id="pm-cod">
                             <input type="radio" name="payment_method" value="Cash On Delivery" required>
                             <div class="pm-icon">💵</div>
                             <div>
@@ -800,7 +813,7 @@
                                 <div class="pm-sub">Pay after delivery</div>
                             </div>
                             <div class="pm-radio-dot"></div>
-                        </label>
+                        </label> --}}
                     </div>
 
                     <!-- PHONE (COD only) -->

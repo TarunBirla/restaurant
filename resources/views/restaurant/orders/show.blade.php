@@ -151,55 +151,89 @@
         </div>
         <div class="mt-8 border-t pt-6">
 
-    <h3 class="text-lg font-bold mb-4">
-        Update Payment Status
-    </h3>
+            <h3 class="text-lg font-bold mb-4">
+                Update Payment Status
+            </h3>
+            
 
-    <form method="POST"
-    action="{{ route('restaurant.orders.payment.status', $order->id) }}">
+            <form method="POST"
+            action="{{ route('restaurant.orders.payment.status', $order->id) }}">
 
-        @csrf
+                @csrf
 
-        <select
-        name="payment_status"
-        class="w-full border rounded-xl p-4">
+                <select
+                name="payment_status"
+                class="w-full border rounded-xl p-4">
 
-            <option
-            value="pending"
-            {{ optional($order->payment)->payment_status == 'pending' ? 'selected' : '' }}>
-                Pending
-            </option>
+                    <option
+                    value="pending"
+                    {{ optional($order->payment)->payment_status == 'pending' ? 'selected' : '' }}>
+                        Pending
+                    </option>
 
-            <option
-            value="paid"
-            {{ optional($order->payment)->payment_status == 'paid' ? 'selected' : '' }}>
-                Paid
-            </option>
+                    <option
+                    value="paid"
+                    {{ optional($order->payment)->payment_status == 'paid' ? 'selected' : '' }}>
+                        Paid
+                    </option>
 
-            <option
-            value="failed"
-            {{ optional($order->payment)->payment_status == 'failed' ? 'selected' : '' }}>
-                Failed
-            </option>
+                    <option
+                    value="failed"
+                    {{ optional($order->payment)->payment_status == 'failed' ? 'selected' : '' }}>
+                        Failed
+                    </option>
 
-            <option
-            value="cancelled"
-            {{ optional($order->payment)->payment_status == 'cancelled' ? 'selected' : '' }}>
-                Cancelled
-            </option>
+                    <option
+                    value="cancelled"
+                    {{ optional($order->payment)->payment_status == 'cancelled' ? 'selected' : '' }}>
+                        Cancelled
+                    </option>
 
-        </select>
+                    <option
+                    value="refunded"
+                    {{ optional($order->payment)->payment_status == 'refunded' ? 'selected' : '' }}>
+                        Refunded
+                    </option>
 
-        <button
-        class="bg-green-500 text-white px-8 py-3 rounded-xl mt-5">
+                </select>
 
-            Update Payment
+                <button
+                class="bg-green-500 text-white px-8 py-3 rounded-xl mt-5">
 
-        </button>
+                    Update Payment
 
-    </form>
+                </button>
 
-</div>
+            </form>
+
+@if(
+            $order->status === 'cancelled' &&
+            optional($order->payment)->payment_status === 'paid'
+        )
+
+        <form method="POST"
+            action="{{ route('restaurant.orders.refund', $order->id) }}"
+            class="mt-4">
+
+            @csrf
+
+            <button
+                type="submit"
+                onclick="return confirm('Are you sure you want to refund this payment?')"
+                class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl">
+
+                Refund Payment
+
+            </button>
+
+        </form>
+
+        @endif
+        </div>
+
+        
+
+        
 
     </div>
 

@@ -187,6 +187,11 @@ class OrderController extends Controller
         }
 
 
+        $paymentEnabled =
+        !empty($restaurant->transactworld_member_id) &&
+        !empty($restaurant->transactworld_checksum_key);
+
+
 
         return view(
 
@@ -198,7 +203,8 @@ class OrderController extends Controller
                 'restaurant',
                 'originalTotal',
                 'discount',
-                'finalTotal'
+                'finalTotal',
+                'paymentEnabled'
             )
         );
     }

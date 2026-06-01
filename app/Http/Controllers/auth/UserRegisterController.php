@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserRegisterController extends Controller
 {
@@ -16,29 +18,47 @@ class UserRegisterController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
+        // $request->validate([
 
-            'name' => 'required',
+        //     'name' => 'required',
 
-            'email' => 'required|email|unique:users',
+        //     'email' => 'required|email|unique:users',
 
+        //     'password' => 'required|min:6'
+
+        // ]);
+
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6'
-
         ]);
 
-        User::create([
+        if ($validator->fails()) {
 
-            'name' => $request->name,
+            return redirect(
+                '/register?message=' .
+                urlencode($validator->errors()->first()) .
+                '&type=error'
+            );
+        }
 
-            'email' => $request->email,
-
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-
-            'role' => 'user'
+            'role'     => 'user'
         ]);
 
-        // return redirect('/login');
-        return redirect('/login')
-            ->with('success', 'Registration Successful!');
+        Auth::login($user);
+
+        $request->session()->flush();
+       
+
+        return redirect(
+            '/?message=' .
+            urlencode('Registration Successful!') .
+            '&type=success'
+        );
     }
 }

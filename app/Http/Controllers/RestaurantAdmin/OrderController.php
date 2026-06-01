@@ -217,7 +217,7 @@ class OrderController extends Controller
                 $order->id
             )->update([
 
-                        'payment_status' => 'cancelled'
+                        'payment_status' => 'paid'
 
                     ]);
 
@@ -260,6 +260,47 @@ class OrderController extends Controller
 
             'Payment Status Updated Successfully'
 
+        );
+    }
+
+    public function refundPayment($id)
+    {
+        $order = Order::where(
+            'restaurant_id',
+            auth()->user()->restaurant_id
+        )->with('payment')->findOrFail($id);
+
+        if ($order->status !== 'cancelled') {
+
+            return back()->with(
+                'error',
+                'Only cancelled orders can be refunded.'
+            );
+        }
+
+        if (!$order->payment) {
+
+            return back()->with(
+                'error',
+                'Payment record not found.'
+            );
+        }
+
+        if ($order->payment->payment_status !== 'paid') {
+
+            return back()->with(
+                'error',
+                'Only paid orders can be refunded.'
+            );
+        }
+
+        $order->payment->update([
+            'payment_status' => 'refunded'
+        ]);
+
+        return back()->with(
+            'success',
+            'Payment Refunded Successfully.'
         );
     }
 

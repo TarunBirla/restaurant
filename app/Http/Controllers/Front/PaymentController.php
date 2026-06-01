@@ -22,14 +22,21 @@ class PaymentController extends Controller
 
     public function pay(Request $request)
     {
+        $restaurant = Restaurant::findOrFail(
+            $request->restaurant_id
+        );
+
+        
         $merchantTransactionId = 'TXN' . time();
         $amount = "1.00";
         $currency = "GBP";
 
-        $memberId = env('TRANSACTWORLD_MEMBER_ID');
+        // $memberId = env('TRANSACTWORLD_MEMBER_ID');
+        $memberId = $restaurant->transactworld_member_id;
         $totype = env('TRANSACTWORLD_TOTYPE');
         $merchantRedirectUrl = env('TRANSACTWORLD_REDIRECT_URL');
-        $secureKey = env('TRANSACTWORLD_CHECKSUM_KEY');
+        // $secureKey = env('TRANSACTWORLD_CHECKSUM_KEY');
+        $secureKey = $restaurant->transactworld_checksum_key;
 
         $checksumString = "{$memberId}|{$totype}|{$amount}|{$merchantTransactionId}|{$merchantRedirectUrl}|{$secureKey}";
         $checksum = md5($checksumString);

@@ -1,5 +1,52 @@
 <?php
 
+// namespace App\Http\Controllers\Auth;
+
+// use App\Http\Controllers\Controller;
+// use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Auth;
+
+// class UsersController extends Controller
+// {
+//     public function showLogin(Request $request)
+//     {
+       
+       
+//         return view('auth.login',[
+//             'redirect' => $request->redirect
+//         ]);
+//     }
+
+//     public function login(Request $request)
+//     {
+//         if (Auth::attempt([
+//             'email' => $request->email,
+//             'password' => $request->password
+//         ])) {
+
+//             // return redirect('/');
+//             // return redirect()->intended('/');
+//             // $request->session()->regenerate();
+
+            
+//             $redirect = urldecode($request->redirect ?? '/');
+
+//             // Prevent external redirects
+//             if (
+//                 !str_starts_with($redirect, url('/'))
+//             ) {
+//                 $redirect = '/';
+//             }
+
+//             return redirect($redirect)
+//                 ->with('success', 'Login Successfully!');
+//         }
+
+//         return back()->with('error', 'Invalid Login');
+//     }
+// }
+
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -10,35 +57,53 @@ class UsersController extends Controller
 {
     public function showLogin(Request $request)
     {
-        // store previous url manually
-       session(['previous_url' => $request->redirect]);
-       
-        return view('auth.login');
+        return view('auth.login', [
+            'redirect' => $request->redirect
+        ]);
     }
 
     public function login(Request $request)
     {
-        if (Auth::attempt([
-            'email' => $request->email,
-            'password' => $request->password
-        ])) {
+        $credentials = [
+            'email'    => $request->email,
+            'password' => $request->password,
+        ];
 
-            // return redirect('/');
-            // return redirect()->intended('/');
-            // $request->session()->regenerate();
+        if (Auth::attempt($credentials)) {
 
-           
+            $redirect = urldecode($request->redirect ?? '/');
 
-            $previous = session('previous_url');
-
-            if (!$previous || str_contains($previous, '/login')) {
-                $previous = '/';
+            // Prevent external redirects
+            if (
+                empty($redirect) ||
+                !str_starts_with($redirect, url('/'))
+            ) {
+                $redirect = url('/');
             }
 
-            return redirect($previous)
-                ->with('success', 'Login Successfully!');
+            $separator = str_contains($redirect, '?') ? '&' : '?';
+
+            return redirect(
+                $redirect .
+                $separator .
+                'message=' . urlencode('Login Successfully!') .
+                '&type=success'
+            );
         }
 
-        return back()->with('error', 'Invalid Login');
+        return redirect(
+            route('login', [
+                'redirect' => $request->redirect,
+                'message'  => 'Invalid Login Credentials',
+                'type'     => 'error',
+            ])
+        );
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        return redirect('/?message=' . urlencode('Logged Out Successfully') . '&type=success');
     }
 }
