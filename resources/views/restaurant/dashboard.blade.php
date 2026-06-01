@@ -34,7 +34,7 @@
 
             </h2>
 
-            <p class="text-5xl font-bold mt-4 text-blue-600">
+            <p class="text-2xl font-bold mt-4 text-blue-600">
 
                 {{ $products }}
 
@@ -52,7 +52,7 @@
 
             </h2>
 
-            <p class="text-5xl font-bold mt-4 text-red-500">
+            <p class="text-2xl font-bold mt-4 text-red-500">
 
                 {{ $orders }}
 
@@ -70,7 +70,7 @@
 
             </h2>
 
-            <p class="text-5xl font-bold mt-4 text-green-600">
+            <p class="text-2xl font-bold mt-4 text-green-600">
 
                 {{ $categories }}
 
@@ -95,7 +95,7 @@
 
             </h2>
 
-            <p class="text-4xl font-bold mt-4 text-yellow-500">
+            <p class="text-2xl font-bold mt-4 text-yellow-500">
 
                 £{{ number_format($earnings, 2) }}
 
@@ -116,7 +116,7 @@
 
             </h2>
 
-            <p class="text-5xl font-bold mt-4 text-yellow-800">
+            <p class="text-2xl font-bold mt-4 text-yellow-800">
 
                 {{ $pendingOrders }}
 
@@ -134,7 +134,7 @@
 
             </h2>
 
-            <p class="text-5xl font-bold mt-4 text-green-800">
+            <p class="text-2xl font-bold mt-4 text-green-800">
 
                 {{ $completedOrders }}
 

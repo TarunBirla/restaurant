@@ -206,29 +206,29 @@
 
             </form>
 
-@if(
-            $order->status === 'cancelled' &&
-            optional($order->payment)->payment_status === 'paid'
-        )
+            @if(
+                $order->status === 'cancelled' &&
+                optional($order->payment)->payment_status === 'paid'
+            )
 
-        <form method="POST"
-            action="{{ route('restaurant.orders.refund', $order->id) }}"
-            class="mt-4">
+                <form method="POST"
+                    action="{{ route('restaurant.orders.refund', $order->id) }}"
+                    class="mt-4">
 
-            @csrf
+                    @csrf
 
-            <button
-                type="submit"
-                onclick="return confirm('Are you sure you want to refund this payment?')"
-                class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl">
+                    <button
+                        type="submit"
+                        onclick="return confirm('Are you sure you want to refund this payment?')"
+                        class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl">
 
-                Refund Payment
+                        Refund Payment
 
-            </button>
+                    </button>
 
-        </form>
+                </form>
 
-        @endif
+            @endif
         </div>
 
         

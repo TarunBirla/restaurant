@@ -11,8 +11,8 @@
     </h1>
 
     <form method="POST"
-    action="{{ route('admin.restaurants.update',$restaurant->id) }}"
-    enctype="multipart/form-data">
+        action="{{ route('admin.restaurants.update',$restaurant->id) }}"
+        enctype="multipart/form-data">
 
         @csrf
         @method('PUT')
@@ -63,6 +63,30 @@
 
             </div>
 
+            <div class="mt-5">
+
+                <label>Status</label>
+
+                <select
+                    name="status"
+                    class="w-full border p-3 rounded">
+
+                    <option
+                        value="1"
+                        {{ $restaurant->status == 1 ? 'selected' : '' }}>
+                        Active
+                    </option>
+
+                    <option
+                        value="0"
+                        {{ $restaurant->status == 0 ? 'selected' : '' }}>
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
         </div>
 
         <div class="mt-5">
@@ -75,6 +99,8 @@
             class="w-full border p-3 rounded">{{ $restaurant->description }}</textarea>
 
         </div>
+
+        
 
         <div class="mt-5">
 
@@ -89,6 +115,8 @@
             <input type="file" name="image">
 
         </div>
+
+        
 
         <button
         class="bg-green-500 text-white px-8 py-3 rounded mt-5">

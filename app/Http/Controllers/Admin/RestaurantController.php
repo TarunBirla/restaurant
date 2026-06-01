@@ -102,6 +102,7 @@ class RestaurantController extends Controller
                 ->store('restaurants','public');
         }
 
+
         $restaurant->update([
 
             'name' => $request->name,
@@ -114,13 +115,16 @@ class RestaurantController extends Controller
 
             'description' => $request->description,
 
-            'image' => $image
+            'image' => $image,
+            
+            'status' => $request->status
         ]);
 
         return redirect()
             ->route('admin.restaurants.index')
             ->with('success','Restaurant Updated');
     }
+
 
     public function destroy(string $id)
     {

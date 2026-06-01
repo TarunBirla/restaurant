@@ -173,6 +173,7 @@ Route::middleware(['auth'])->group(function () {
         '/profile',
         [FrontProfileController::class, 'index']
     );
+    
 
     Route::post(
         '/profile/update',
