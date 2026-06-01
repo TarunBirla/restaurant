@@ -7,10 +7,14 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>User Register</title>
+    <title>Create HYST Account</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
 
 </head>
@@ -23,16 +27,27 @@
 
             <div class="text-center mb-8">
 
+                <a href="/" style="display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none;">
+                    <div
+                        style="width:38px; height:38px; background:#C25A2A; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <i data-lucide="utensils" style="color:#fff; width:20px; height:20px;"></i>
+                    </div>
+                    <span
+                        style="font-family:'Poppins',sans-serif; font-weight:800; font-size:20px; color:#0D0D0D; letter-spacing:-.3px;">
+                        HYST
+                    </span>
+                </a>
 
-                <h1 class="text-4xl font-extrabold text-gray-800 mb-2">
 
-                    Create Account
+                <h1 class="text-4xl mt-2 font-bold text-gray-800 mb-2">
+
+                    Create HYST Account
 
                 </h1>
 
                 <p class="text-gray-500 text-sm">
 
-                    Register and start ordering delicious food
+                   Register with HYST and start ordering delicious food
 
                 </p>
 
@@ -102,7 +117,7 @@
                 <div class="text-center mt-4 flex justify-center">
                     <a href="/login"
                         class="text-[#c25a2a] font-semibold">
-                        Already have an account? Login
+                       Already have an HYST account? Login
                     </a>
                 </div>
 
@@ -121,6 +136,10 @@
 </script>
 @endif
 
+
+<script>
+    lucide.createIcons();
+</script>
 </body>
 
 </html>
