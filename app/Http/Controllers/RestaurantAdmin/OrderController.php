@@ -264,59 +264,12 @@ class OrderController extends Controller
         );
     }
 
-    // public function refundPayment($id)
-    // {
-    //     $order = Order::where(
-    //         'restaurant_id',
-    //         auth()->user()->restaurant_id
-    //     )->with('payment')->findOrFail($id);
-
-    //     if ($order->status !== 'cancelled') {
-
-    //         return back()->with(
-    //             'error',
-    //             'Only cancelled orders can be refunded.'
-    //         );
-    //     }
-
-    //     if (!$order->payment) {
-
-    //         return back()->with(
-    //             'error',
-    //             'Payment record not found.'
-    //         );
-    //     }
-
-    //     if ($order->payment->payment_status !== 'paid') {
-
-    //         return back()->with(
-    //             'error',
-    //             'Only paid orders can be refunded.'
-    //         );
-    //     }
-
-    //     $order->payment->update([
-    //         'payment_status' => 'refunded'
-    //     ]);
-
-    //     return back()->with(
-    //         'success',
-    //         'Payment Refunded Successfully.'
-    //     );
-    // }
-
-  
     public function refundPayment($id)
     {
         $order = Order::where(
             'restaurant_id',
             auth()->user()->restaurant_id
-        )
-        ->with([
-            'payment',
-            'restaurant'
-        ])
-        ->findOrFail($id);
+        )->with('payment')->findOrFail($id);
 
         if ($order->status !== 'cancelled') {
 
@@ -338,92 +291,139 @@ class OrderController extends Controller
 
             return back()->with(
                 'error',
-                'Only paid payments can be refunded.'
+                'Only paid orders can be refunded.'
             );
         }
 
-        $restaurant = $order->restaurant;
-
-        $memberId =
-            $restaurant->transactworld_member_id;
-
-        $secureKey =
-            $restaurant->transactworld_checksum_key;
-
-        $paymentId =
-            $order->payment->payment_id;
-
-        $amount = number_format(
-            $order->payment->amount,
-            2,
-            '.',
-            ''
-        );
-
-        $checksum = md5(
-            $memberId .
-            '|' .
-            $secureKey .
-            '|' .
-            $paymentId .
-            '|' .
-            $amount
-        );
-
-        $endpoint =
-            'https://preprod.transactworld.com/transactionServices/REST/v1/payments/' .
-            $paymentId;
-
-        $response = Http::withHeaders([
-
-            'Content-Type' => 'application/json',
-
-            // Add auth token here
-            'authentication' =>
-                'YOUR_AUTH_TOKEN'
-
-        ])->post($endpoint, [
-
-            'memberId' =>
-                $memberId,
-
-            'paymentType' =>
-                'RF',
-
-            'amount' =>
-                $amount,
-
-            'checksum' =>
-                $checksum
+        $order->payment->update([
+            'payment_status' => 'refunded'
         ]);
 
-        $result = $response->json();
-
-        \Log::info('Refund Response', $result);
-
-        if (
-            isset($result['responseCode']) &&
-            $result['responseCode'] == '000'
-        ) {
-
-            $order->payment->update([
-
-                'payment_status' =>
-                    'refunded'
-            ]);
-
-            return back()->with(
-                'success',
-                'Payment Refunded Successfully.'
-            );
-        }
-
         return back()->with(
-            'error',
-            $result['responseMessage']
-                ?? 'Refund Failed'
+            'success',
+            'Payment Refunded Successfully.'
         );
     }
+
+  
+    // public function refundPayment($id)
+    // {
+    //     $order = Order::where(
+    //         'restaurant_id',
+    //         auth()->user()->restaurant_id
+    //     )
+    //     ->with([
+    //         'payment',
+    //         'restaurant'
+    //     ])
+    //     ->findOrFail($id);
+
+    //     if ($order->status !== 'cancelled') {
+
+    //         return back()->with(
+    //             'error',
+    //             'Only cancelled orders can be refunded.'
+    //         );
+    //     }
+
+    //     if (!$order->payment) {
+
+    //         return back()->with(
+    //             'error',
+    //             'Payment record not found.'
+    //         );
+    //     }
+
+    //     if ($order->payment->payment_status !== 'paid') {
+
+    //         return back()->with(
+    //             'error',
+    //             'Only paid payments can be refunded.'
+    //         );
+    //     }
+
+    //     $restaurant = $order->restaurant;
+
+    //     $memberId =
+    //         $restaurant->transactworld_member_id;
+
+    //     $secureKey =
+    //         $restaurant->transactworld_checksum_key;
+
+    //     $paymentId =
+    //         $order->payment->payment_id;
+
+    //     $amount = number_format(
+    //         $order->payment->amount,
+    //         2,
+    //         '.',
+    //         ''
+    //     );
+
+    //     $checksum = md5(
+    //         $memberId .
+    //         '|' .
+    //         $secureKey .
+    //         '|' .
+    //         $paymentId .
+    //         '|' .
+    //         $amount
+    //     );
+
+    //     $endpoint =
+    //         'https://preprod.transactworld.com/transactionServices/REST/v1/payments/' .
+    //         $paymentId;
+
+    //     $response = Http::withHeaders([
+
+    //         'Content-Type' => 'application/json',
+
+    //         // Add auth token here
+    //         'authentication' =>
+    //             'YOUR_AUTH_TOKEN'
+
+    //     ])->post($endpoint, [
+
+    //         'memberId' =>
+    //             $memberId,
+
+    //         'paymentType' =>
+    //             'RF',
+
+    //         'amount' =>
+    //             $amount,
+
+    //         'checksum' =>
+    //             $checksum
+    //     ]);
+
+    //     $result = $response->json();
+
+    //     \Log::info('Refund Response', $result);
+
+    //     if (
+    //         isset($result['responseCode']) &&
+    //         $result['responseCode'] == '000'
+    //     ) {
+
+    //         $order->payment->update([
+
+    //             'payment_status' =>
+    //                 'refunded'
+    //         ]);
+
+    //         return back()->with(
+    //             'success',
+    //             'Payment Refunded Successfully.'
+    //         );
+    //     }
+
+    //     return back()->with(
+    //         'error',
+    //         $result['responseMessage']
+    //             ?? 'Refund Failed'
+    //     );
+    // }
 
     public function reviews()
     {
