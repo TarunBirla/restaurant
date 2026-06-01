@@ -25,8 +25,6 @@ class PaymentController extends Controller
         $restaurant = Restaurant::findOrFail(
             $request->restaurant_id
         );
-
-        
         $merchantTransactionId = 'TXN' . time();
         $amount = "1.00";
         $currency = "GBP";
