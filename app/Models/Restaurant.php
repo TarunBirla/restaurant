@@ -27,7 +27,8 @@ class Restaurant extends Model
         'transactworld_account_id',
         'transactworld_terminal_id',
         'transactworld_checksum_key',
-        'transactworld_mode'
+        'transactworld_mode',
+        'favorite_count'
     ];
 
 

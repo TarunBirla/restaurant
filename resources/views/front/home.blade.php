@@ -16,8 +16,7 @@
                         style="display:inline-flex; align-items:center; gap:8px; background:rgba(232,55,14,0.18); border:1px solid rgba(232,55,14,0.4); padding:7px 16px; border-radius:999px; margin-bottom:22px;">
                         <i data-lucide="zap" style="width:14px; height:14px; color:#C25A2A; flex-shrink:0;"></i>
                         <span
-                            style="font-size:12px; font-weight:600; color:#C25A2A; font-family:'Poppins',sans-serif; letter-spacing:.04em;">Fast
-                            Delivery In 30 Min</span>
+                            style="font-size:12px; font-weight:600; color:#C25A2A; font-family:'Poppins',sans-serif; letter-spacing:.04em;">Zero Commission Platform</span>
                     </div>
 
                     <h1 class="hero-title"
@@ -31,16 +30,16 @@
                     </p>
 
                     <div class="hero-cta" style="display:flex; gap:12px; flex-wrap:wrap;">
-                        <a href="#products" class="btn-primary"
+                        <a href="/restaurants" class="btn-primary"
                             style="padding:14px 28px; font-size:15px; display:flex; align-items:center; gap:8px; text-decoration:none; letter-spacing:.02em;">
                             <i data-lucide="shopping-bag" style="width:17px; height:17px;"></i> Order Now
                         </a>
-                        <a href="#categories"
+                        {{-- <a href="#categories"
                             style="padding:14px 28px; font-size:15px; font-family:'Poppins',sans-serif; font-weight:600; border:2px solid rgba(255,255,255,0.25); border-radius:12px; color:#fff; text-decoration:none; display:flex; align-items:center; gap:8px; transition:border-color .18s; letter-spacing:.02em;"
                             onmouseover="this.style.borderColor='rgba(255,255,255,0.6)'"
                             onmouseout="this.style.borderColor='rgba(255,255,255,0.25)'">
                             <i data-lucide="grid-2x2" style="width:17px; height:17px;"></i> Explore Menu
-                        </a>
+                        </a> --}}
                     </div>
 
                     <!-- STATS -->
@@ -66,11 +65,10 @@
         </div>
     </section>
 
-
     <!-- ══════════════════════════════════════
          QR CODE SECTION
     ══════════════════════════════════════ -->
-    <section style="padding:80px 0; background:rgba(245, 240, 232, 0.95);">
+    {{-- <section style="padding:80px 0; background:rgba(245, 240, 232, 0.95);">
         <div style="max-width:1280px; margin:auto; padding:0 24px;">
             <div class="qr-wrapper" style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:56px; align-items:center;">
 
@@ -132,8 +130,9 @@
 
             </div>
         </div>
-    </section>
+    </section> --}}
 
+    @include('front.restaurants')
 
     <!-- ══════════════════════════════════════
          CATEGORIES
@@ -166,7 +165,6 @@
             @endforeach
         </div>
     </section> -->
-
 
     <!-- ══════════════════════════════════════
          FEATURED PRODUCTS
@@ -240,7 +238,6 @@
         </div>
     </section> -->
 
-
     <!-- ══════════════════════════════════════
          OFFER SECTION
     ══════════════════════════════════════ -->
@@ -253,17 +250,16 @@
                         style="display:inline-flex; align-items:center; gap:8px; background:rgba(232,55,14,0.15); border:1px solid rgba(232,55,14,0.3); padding:7px 16px; border-radius:999px; margin-bottom:22px;">
                         <i data-lucide="tag" style="width:14px; height:14px; color:#C25A2A;"></i>
                         <span
-                            style="font-size:12px; font-weight:700; color:#C25A2A; font-family:'Poppins',sans-serif; letter-spacing:.05em;">Limited
-                            Time Offer</span>
+                            style="font-size:12px; font-weight:700; color:#C25A2A; font-family:'Poppins',sans-serif; letter-spacing:.05em;">Unlimited Offer</span>
                     </div>
                     <h2 class="offer-title"
                         style="font-family:'Poppins',sans-serif; font-size:48px; font-weight:800; line-height:1.2; margin:0 0 18px; letter-spacing:-.5px;">
-                        Get <span style="color:#C25A2A;">30% Off</span><br>On Your First Order
+                        Get <span style="color:#C25A2A;">Discount</span><br>On Your First Order
                     </h2>
                     <p style="color:#D1D5DB; font-size:16px; line-height:1.8; margin:0 0 32px; max-width:420px;">
                         Enjoy premium dishes from top restaurants. Fresh food, fast delivery, best experience guaranteed.
                     </p>
-                    <a href="#products" class="btn-primary"
+                    <a href="/restaurants" class="btn-primary"
                         style="padding:14px 30px; font-size:15px; display:inline-flex; align-items:center; gap:9px; text-decoration:none;">
                         <i data-lucide="shopping-bag" style="width:17px; height:17px;"></i> Order Food Now
                     </a>
@@ -281,7 +277,6 @@
             </div>
         </div>
     </section>
-
 
     <!-- ══════════════════════════════════════
          WHY CHOOSE US

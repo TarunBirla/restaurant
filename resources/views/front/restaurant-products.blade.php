@@ -317,6 +317,8 @@
         </section>
     @endif
 
+    
+
     {{-- ======== MENU SECTION ======== --}}
     <section style="background:rgba(245, 240, 232, 0.95); padding:40px 0 80px;">
         <div style="max-width:1280px; margin:0 auto; padding:0 24px;">
@@ -362,6 +364,140 @@
                 </span>
             </div>
 
+            @if($eligibleOffer)
+
+            <div style="
+                background:#fff;
+                border:1px solid #F0F0EC;
+                border-left:5px solid #C25A2A;
+                border-radius:20px;
+                padding:22px;
+                margin-bottom:28px;
+                box-shadow:0 4px 16px rgba(0,0,0,.05);
+            ">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    gap:20px;
+                    flex-wrap:wrap;
+                ">
+
+                    <div>
+
+                        <p style="
+                            color:#C25A2A;
+                            font-size:11px;
+                            font-weight:700;
+                            letter-spacing:.12em;
+                            text-transform:uppercase;
+                            margin:0 0 6px;
+                        ">
+                            Exclusive Offer
+                        </p>
+
+                        <h3 style="
+                            font-size:22px;
+                            font-weight:800;
+                            color:#0D0D0D;
+                            margin:0;
+                            font-family:'Poppins',sans-serif;
+                        ">
+                            🎉 {{ $eligibleOffer->title }}
+                        </h3>
+
+                        @if($eligibleOffer->description)
+                            <p style="
+                                color:#6B7280;
+                                margin:8px 0 0;
+                                font-size:14px;
+                                line-height:1.6;
+                            ">
+                                {{ $eligibleOffer->description }}
+                            </p>
+                        @endif
+
+                        <div style="
+                            margin-top:10px;
+                            display:flex;
+                            gap:10px;
+                            flex-wrap:wrap;
+                        ">
+
+                            <span style="
+                                background:#FFF0EC;
+                                color:#C25A2A;
+                                padding:6px 12px;
+                                border-radius:999px;
+                                font-size:12px;
+                                font-weight:700;
+                            ">
+                                Min Order £{{ number_format($eligibleOffer->min_order_value, 2) }}
+                            </span>
+
+                            <span style="
+                                background:#F3F4F6;
+                                color:#374151;
+                                padding:6px 12px;
+                                border-radius:999px;
+                                font-size:12px;
+                                font-weight:600;
+                            ">
+                                Valid Until
+                                {{ \Carbon\Carbon::parse($eligibleOffer->end_date)->format('d M Y') }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div style="
+                        background:#C25A2A;
+                        color:#fff;
+                        border-radius:18px;
+                        padding:18px 24px;
+                        text-align:center;
+                        min-width:150px;
+                    ">
+
+                        <div style="
+                            font-size:12px;
+                            font-weight:600;
+                            opacity:.9;
+                            margin-bottom:4px;
+                        ">
+                            YOU SAVE
+                        </div>
+
+                        <div style="
+                            font-size:30px;
+                            font-weight:800;
+                            line-height:1;
+                        ">
+                            @if($eligibleOffer->value_type == 'percentage')
+                                {{ rtrim(rtrim($eligibleOffer->value,'0'),'.') }}%
+                            @else
+                                £{{ rtrim(rtrim($eligibleOffer->value,'0'),'.') }}
+                            @endif
+                        </div>
+
+                        <div style="
+                            font-size:13px;
+                            margin-top:5px;
+                            opacity:.9;
+                        ">
+                            OFF
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            @endif
+
             {{-- Products Grid --}}
             <div class="res-products-grid">
 
@@ -385,7 +521,7 @@
                             </div>
 
                             {{-- If product has an active offer/discount --}}
-                            @if(isset($product->activeOffer) && $product->activeOffer)
+                            {{-- @if(isset($product->activeOffer) && $product->activeOffer)
                                 <div
                                     style="position:absolute; bottom:12px; left:12px; background:{{ $product->activeOffer->type === 'discount' ? '#16A34A' : '#E63946' }}; color:#fff; padding:4px 10px; border-radius:12px; font-size:11px; font-weight:700;">
                                     {{ $product->activeOffer->type === 'discount' ? '🏷️' : '🎁' }}
@@ -395,7 +531,7 @@
                                         £{{ $product->activeOffer->value }} OFF
                                     @endif
                                 </div>
-                            @endif
+                            @endif --}}
                         </div>
 
 
@@ -582,6 +718,39 @@
                 Drag to rotate</p>
         </div>
     </div>
+
+    <div id="favoriteModal"
+     class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full">
+
+        <h2 class="text-2xl font-bold mb-3">
+            ⭐ Add Restaurant To Favorites
+        </h2>
+
+        <p class="mb-6">
+            Do you want to add this restaurant to your favorites?
+        </p>
+
+        <div class="flex gap-3">
+
+            <button
+                onclick="saveFavorite()"
+                class="flex-1 bg-black text-white py-3 rounded-xl">
+                Yes
+            </button>
+
+            <button
+                onclick="closeFavoritePopup()"
+                class="flex-1 border py-3 rounded-xl">
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
     <script>
         /* ---- AR ---- */
@@ -857,64 +1026,22 @@
 
     </script>
    <script>
+        document.querySelectorAll('.addCartForm').forEach(form => {
 
-document.querySelectorAll('.addCartForm').forEach(form => {
+            const addBtn   = form.querySelector('.addBtn');
+            const qtyBox   = form.querySelector('.qtyBox');
+            const qtyValue = form.querySelector('.qtyValue');
 
-    const addBtn   = form.querySelector('.addBtn');
-    const qtyBox   = form.querySelector('.qtyBox');
-    const qtyValue = form.querySelector('.qtyValue');
+            const productId =
+                form.querySelector('[name="product_id"]').value;
 
-    const productId =
-        form.querySelector('[name="product_id"]').value;
+            // REAL SESSION QTY
+            let qty = parseInt(
+                form.dataset.qty || 0
+            );
 
-    // REAL SESSION QTY
-    let qty = parseInt(
-        form.dataset.qty || 0
-    );
-
-    // SHOW EXISTING QTY
-    if(qty > 0){
-
-        addBtn.style.display = 'none';
-
-        qtyBox.style.display = 'flex';
-
-        qtyValue.innerText = qty;
-
-    }
-
-    // ADD
-    form.addEventListener('submit', async function(e){
-
-        e.preventDefault();
-
-        const fd = new FormData(form);
-
-        try{
-
-            const res = await fetch('/cart/add', {
-
-                method:'POST',
-
-                headers:{
-                    'X-CSRF-TOKEN':
-                    document.querySelector('meta[name="csrf-token"]').content,
-
-                    'Accept':'application/json'
-                    
-                },
-
-                body:fd
-
-            });
-
-            const data = await res.json();
-
-            if(data.success){
-
-                qty = 1;
-
-                form.dataset.qty = qty;
+            // SHOW EXISTING QTY
+            if(qty > 0){
 
                 addBtn.style.display = 'none';
 
@@ -922,130 +1049,252 @@ document.querySelectorAll('.addCartForm').forEach(form => {
 
                 qtyValue.innerText = qty;
 
+            }
+
+            // ADD
+            form.addEventListener('submit', async function(e){
+
+                e.preventDefault();
+
+                const fd = new FormData(form);
+
+                try{
+
+                    const res = await fetch('/cart/add', {
+
+                        method:'POST',
+
+                        headers:{
+                            'X-CSRF-TOKEN':
+                            document.querySelector('meta[name="csrf-token"]').content,
+
+                            'Accept':'application/json'
+                            
+                        },
+
+                        body:fd
+
+                    });
+
+                    const data = await res.json();
+
+                    if(data.success){
+
+                        qty = 1;
+
+                        form.dataset.qty = qty;
+
+                        addBtn.style.display = 'none';
+
+                        qtyBox.style.display = 'flex';
+
+                        qtyValue.innerText = qty;
+
+                        updateCounts(data.count);
+                        setTimeout(() => {
+
+                            maybeShowFavoritePopup();
+
+                        }, 500);
+
+                    }
+
+                }catch(err){
+
+                    console.log(err);
+
+                }
+
+            });
+
+
+            // PLUS
+            form.querySelector('.qtyPlus')
+            .addEventListener('click', async () => {
+
+                try{
+
+                    await fetch(
+                        `/cart/increase/${productId}`
+                    );
+
+                    qty++;
+
+                    form.dataset.qty = qty;
+
+                    qtyValue.innerText = qty;
+
+                    updateCountFromPage();
+
+                }catch(err){
+
+                    console.log(err);
+
+                }
+
+            });
+
+
+            // MINUS
+            form.querySelector('.qtyMinus')
+            .addEventListener('click', async () => {
+
+                try{
+
+                    if(qty > 1){
+
+                        await fetch(
+                            `/cart/decrease/${productId}`
+                        );
+
+                        qty--;
+
+                        form.dataset.qty = qty;
+
+                        qtyValue.innerText = qty;
+
+                    }else{
+
+                        await fetch(
+                            `/cart/remove/${productId}`
+                        );
+
+                        qty = 0;
+
+                        form.dataset.qty = qty;
+
+                        qtyBox.style.display = 'none';
+
+                        addBtn.style.display = 'flex';
+
+                    }
+
+                    updateCountFromPage();
+
+                }catch(err){
+
+                    console.log(err);
+
+                }
+
+            });
+
+        });
+
+
+        // UPDATE COUNT
+        function updateCountFromPage(){
+
+            fetch('/cart-count')
+
+            .then(res => res.json())
+
+            .then(data => {
+
                 updateCounts(data.count);
 
-            }
-
-        }catch(err){
-
-            console.log(err);
+            });
 
         }
 
-    });
 
+        function updateCounts(count){
 
-    // PLUS
-    form.querySelector('.qtyPlus')
-    .addEventListener('click', async () => {
+            const cartCount =
+                document.getElementById('cartCount');
 
-        try{
+            if(cartCount){
 
-            await fetch(
-                `/cart/increase/${productId}`
-            );
-
-            qty++;
-
-            form.dataset.qty = qty;
-
-            qtyValue.innerText = qty;
-
-            updateCountFromPage();
-
-        }catch(err){
-
-            console.log(err);
-
-        }
-
-    });
-
-
-    // MINUS
-    form.querySelector('.qtyMinus')
-    .addEventListener('click', async () => {
-
-        try{
-
-            if(qty > 1){
-
-                await fetch(
-                    `/cart/decrease/${productId}`
-                );
-
-                qty--;
-
-                form.dataset.qty = qty;
-
-                qtyValue.innerText = qty;
-
-            }else{
-
-                await fetch(
-                    `/cart/remove/${productId}`
-                );
-
-                qty = 0;
-
-                form.dataset.qty = qty;
-
-                qtyBox.style.display = 'none';
-
-                addBtn.style.display = 'flex';
+                cartCount.innerHTML = count;
 
             }
 
-            updateCountFromPage();
+            const mobile =
+                document.getElementById('mobileCartCount');
 
-        }catch(err){
+            if(mobile){
 
-            console.log(err);
+                mobile.innerHTML = count;
+
+            }
 
         }
 
-    });
+        function maybeShowFavoritePopup()
+        {
+            if(window.isFavorite){
+                return;
+            }
 
-});
+            const key =
+                'favorite_popup_' + window.restaurantId;
 
+            if(localStorage.getItem(key)){
+                return;
+            }
 
-// UPDATE COUNT
-function updateCountFromPage(){
+            document
+                .getElementById('favoriteModal')
+                .classList.remove('hidden');
 
-    fetch('/cart-count')
+            document
+                .getElementById('favoriteModal')
+                .classList.add('flex');
 
-    .then(res => res.json())
+            localStorage.setItem(key, 'shown');
+        }
 
-    .then(data => {
+        function closeFavoritePopup()
+        {
+            document
+                .getElementById('favoriteModal')
+                .classList.remove('flex');
 
-        updateCounts(data.count);
+            document
+                .getElementById('favoriteModal')
+                .classList.add('hidden');
+        }
 
-    });
+        function saveFavorite()
+        {
+            fetch(
+                `/restaurant/${window.restaurantId}/favorite`,
+                {
+                    method:'POST',
+                    headers:{
+                        'X-CSRF-TOKEN':
+                        document.querySelector(
+                            'meta[name="csrf-token"]'
+                        ).content,
 
-}
+                        'Accept':'application/json'
+                    }
+                }
+            )
+            .then(res => res.json())
+            .then(data => {
 
+                window.isFavorite = true;
 
-function updateCounts(count){
+                closeFavoritePopup();
 
-    const cartCount =
-        document.getElementById('cartCount');
+            });
+        }
 
-    if(cartCount){
+    </script>
+    <script>
+        window.restaurantId = @json($restaurant->id);
 
-        cartCount.innerHTML = count;
-
-    }
-
-    const mobile =
-        document.getElementById('mobileCartCount');
-
-    if(mobile){
-
-        mobile.innerHTML = count;
-
-    }
-
-}
-
-</script>
+        window.isFavorite = @json(
+            auth()->check()
+                ? \App\Models\RestaurantFavorite::where(
+                    'restaurant_id',
+                    $restaurant->id
+                )->where(
+                    'user_id',
+                    auth()->id()
+                )->exists()
+                : false
+        );
+    </script>
 @endsection

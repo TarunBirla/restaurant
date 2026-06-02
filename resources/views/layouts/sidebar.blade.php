@@ -112,7 +112,15 @@
             <a href="/restaurant/items" class="nav-link {{ str_contains($current, 'restaurant/items') ? 'active' : '' }}">
                 <i data-lucide="utensils-crossed" class="nav-icon"></i> Items
             </a>
-            <a href="/restaurant/offers" class="nav-link {{ str_contains($current, 'restaurant/offers') ? 'active' : '' }}">
+            
+            {{-- <a href="/restaurant/offers" class="nav-link {{ str_contains($current, 'restaurant/offers') ? 'active' : '' }}">
+
+                <i data-lucide="badge-percent" class="nav-icon"></i>
+
+                Offers & Discounts
+
+            </a> --}}
+            <a href="/restaurant/order-offers" class="nav-link {{ str_contains($current, 'restaurant/order-offers') ? 'active' : '' }}">
 
                 <i data-lucide="badge-percent" class="nav-icon"></i>
 

@@ -268,9 +268,9 @@
 
 
 
-@extends('front.layouts.app')
+{{-- @extends('front.layouts.app')
 
-@section('content')
+@section('content') --}}
 
 <style>
     .restaurant-grid{
@@ -387,11 +387,37 @@
 
         </div>
 
+       
+            <div style="
+                max-width:600px;
+                margin:auto;
+                display:flex;
+                gap:10px;
+            ">
+                <input
+                    type="text"
+                    id="restaurantSearch"
+                    placeholder="Search restaurant..."
+                    style="
+                        width:100%;
+                        max-width:600px;
+                        margin:0 auto 30px;
+                        display:block;
+                        padding:14px 18px;
+                        border:1px solid #ddd;
+                        border-radius:12px;
+                    "
+                >
+
+            </div>
+        
+
         <div class="restaurant-grid">
 
             @forelse($restaurants as $restaurant)
 
-                <div class="restaurant-card">
+                <div class="restaurant-card"
+                    data-name="{{ strtolower($restaurant->name) }}">
 
                     <div style="position:relative; overflow:hidden;">
 
@@ -610,6 +636,26 @@
 
     </div>
 
+    <script>
+    document.getElementById('restaurantSearch').addEventListener('keyup', function() {
+
+        let value = this.value.toLowerCase();
+
+        document.querySelectorAll('.restaurant-card').forEach(card => {
+
+            let name = card.dataset.name;
+
+            if(name.includes(value)){
+                card.style.display = '';
+            }else{
+                card.style.display = 'none';
+            }
+
+        });
+
+    });
+    </script>
+
 </section>
 
-@endsection
+{{-- @endsection --}}

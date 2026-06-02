@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\RestaurantAdmin\ProductController as RestaurantProductController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\RestaurantAdmin\OrderOfferController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::post(
@@ -183,6 +184,21 @@ Route::middleware(['auth'])->group(function () {
         '/transactions',
         [OrderController::class, 'transactions']
     );
+
+    
+
+    Route::prefix('restaurant/order-offers')->group(function () {
+
+        Route::get('/', [OrderOfferController::class, 'index']);
+        Route::get('/create', [OrderOfferController::class, 'create']);
+        Route::post('/', [OrderOfferController::class, 'store']);
+
+        Route::get('/{id}/edit', [OrderOfferController::class, 'edit']);
+        Route::put('/{id}', [OrderOfferController::class, 'update']);
+
+        Route::delete('/{id}', [OrderOfferController::class, 'destroy']);
+
+    });
 
 });
 
@@ -352,6 +368,34 @@ Route::post(
     [UserRegisterController::class, 'register']
 );
 
+Route::get('/terms-and-conditions', function () {
+    return view('front.terms-and-conditions');
+})->name('terms.conditions');
+Route::get('/refund-and-cancellation-policy', function () {
+    return view('front.refund-and-cancellation-policy');
+})->name('refund.policy');
+
+
+Route::post(
+    '/restaurant/{restaurant}/favorite',
+    [RestaurantController::class, 'favorite']
+)->name('restaurant.favorite');
+
+
+Route::middleware('auth')
+    ->get(
+        '/favorite-restaurants',
+        [RestaurantController::class, 'favorites']
+    )
+    ->name('favorite.restaurants');
+
+Route::delete(
+    '/favorite-restaurant/{restaurant}',
+    [RestaurantController::class,
+     'removeFavorite']
+)->name(
+    'favorite.remove'
+);
 
 // Route::get('/login', [UsersController::class, 'showLogin']);    
 

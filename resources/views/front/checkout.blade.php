@@ -833,6 +833,45 @@
 
             <!-- ══════════ RIGHT: SUMMARY (desktop only) ══════════ -->
             <div class="co-right">
+                @if(isset($orderOffer) && $orderOffer)
+
+                <div style="
+                    background:#FFF0EC;
+                    border:1px solid #FAD7C8;
+                    border-radius:14px;
+                    padding:14px;
+                    margin-bottom:16px;
+                ">
+
+                    <div style="
+                        font-size:12px;
+                        font-weight:700;
+                        color:#C25A2A;
+                        text-transform:uppercase;
+                        margin-bottom:6px;
+                    ">
+                        Returning Customer Offer
+                    </div>
+
+                    <div style="
+                        font-size:15px;
+                        font-weight:700;
+                        color:#111;
+                    ">
+                        {{ $orderOffer->title }}
+                    </div>
+
+                    <div style="
+                        margin-top:6px;
+                        color:#6B7280;
+                        font-size:13px;
+                    ">
+                        {{ $orderOffer->description }}
+                    </div>
+
+                </div>
+
+                @endif
                 <div class="co-summary">
                     <div class="summary-title">Order Summary</div>
 
@@ -852,12 +891,32 @@
                         <span class="sr-value">£{{ number_format($originalTotal, 2) }}</span>
                     </div>
 
-                    @if($discount > 0)
+                    @if(isset($orderOffer) && $orderOffer)
+
+                    <div class="summary-row">
+                        <span class="sr-label" style="color:#C25A2A;">
+                            🎉 {{ $orderOffer->title }}
+                        </span>
+
+                        <span class="sr-value green">
+
+                            @if($orderOffer->value_type == 'percentage')
+                                -{{ $orderOffer->value }}%
+                            @else
+                                -£{{ number_format($orderOffer->value,2) }}
+                            @endif
+
+                        </span>
+                    </div>
+
+                    @endif
+
+                    {{-- @if($discount > 0)
                     <div class="summary-row">
                         <span class="sr-label" style="color:#16A34A;">🏷️ Discount Saved</span>
                         <span class="sr-value green">− £{{ number_format($discount, 2) }}</span>
                     </div>
-                    @endif
+                    @endif --}}
 
                     <div class="summary-row">
                         <span class="sr-label">Delivery</span>
@@ -871,11 +930,17 @@
                         <span class="summary-total-value">£{{ number_format($finalTotal, 2) }}</span>
                     </div>
 
-                    @if($discount > 0)
+                    {{-- @if($discount > 0)
                     <div class="saving-banner">
                         🎉 You're saving £{{ number_format($discount, 2) }} on this order!
                     </div>
+                    @endif --}}
+                    @if(isset($orderOffer) && $orderOffer)
+                    <div class="saving-banner">
+                        🎉 You're saving £{{ number_format($orderOfferDiscount ?? 0, 2) }} on this order!
+                    </div>
                     @endif
+                    
 
                     <button type="submit" class="co-place-btn" form="checkoutForm">
                         Place Order

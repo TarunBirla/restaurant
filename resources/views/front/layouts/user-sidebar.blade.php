@@ -112,6 +112,17 @@
 }
 </style>
 
+@php
+
+$favoriteCount = auth()->check()
+    ? \App\Models\RestaurantFavorite::where(
+        'user_id',
+        auth()->id()
+    )->count()
+    : 0;
+
+@endphp
+
 {{-- ===== DESKTOP SIDEBAR ===== --}}
 <div class="desk-sidebar">
     <div style="text-align:center;">
@@ -142,6 +153,30 @@
             <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.95-1.56L23 6H6"/></svg>
             Cart
         </a>
+        <a href="{{ route('favorite.restaurants') }}"
+        class="ds-link {{ request()->routeIs('favorite.restaurants') ? 'active' : '' }}">
+
+            <svg viewBox="0 0 24 24">
+                <path d="M12 21s-7-4.35-10-9a6 6 0 0110-7 6 6 0 0110 7c-3 4.65-10 9-10 9z"/>
+            </svg>
+
+            Favorite Restaurants
+
+            @if($favoriteCount > 0)
+                <span style="
+                    margin-left:auto;
+                    background:#E63946;
+                    color:#fff;
+                    font-size:11px;
+                    font-weight:700;
+                    padding:2px 8px;
+                    border-radius:999px;
+                ">
+                    {{ $favoriteCount }}
+                </span>
+            @endif
+
+        </a>
         <hr class="ds-divider" style="margin:10px 0;">
         <form method="POST" action="/logout">
             @csrf
@@ -161,6 +196,7 @@
             Dashboard
             <span class="mob-dot"></span>
         </a>
+        
         <a href="/my-orders" class="mob-nav-item {{ request()->is('my-orders*') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24"><path d="M3 6h2l3.5 9h9L21 6H8"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
             Orders
@@ -171,6 +207,32 @@
             Cart
             <span class="mob-dot"></span>
         </a>
+
+        <a href="{{ route('favorite.restaurants') }}"
+        class="mob-nav-item {{ request()->routeIs('favorite.restaurants') ? 'active' : '' }}">
+
+            <svg viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2">
+
+                <path d="M12 21s-7-4.35-10-9a6 6 0 0110-7 6 6 0 0110 7c-3 4.65-10 9-10 9z"/>
+
+            </svg>
+
+            Favorites
+
+            @if($favoriteCount > 0)
+                <span class="mob-count">
+                    {{ $favoriteCount }}
+                </span>
+            @endif
+
+            <span class="mob-dot"></span>
+
+        </a>
+        
+        
         <a href="/transactions" class="mob-nav-item {{ request()->is('transactions') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
             Wallet

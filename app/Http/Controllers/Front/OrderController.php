@@ -7,6 +7,7 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderOffer;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Review;
@@ -171,6 +172,43 @@ class OrderController extends Controller
                 0
             );
 
+        $orderOfferDiscount = 0;
+        $orderOffer = null;
+
+        if(auth()->check()) {
+
+            $completedOrder = Order::where('user_id', auth()->id())
+                ->where('restaurant_id', $restaurantId)
+                ->whereIn('status', ['completed', 'delivered'])
+                ->exists();
+
+            if($completedOrder) {
+
+                $orderOffer = OrderOffer::where('restaurant_id', $restaurantId)
+                    ->where('status', 'active')
+                    ->where('min_order_value', '<=', $finalTotal)
+                    ->first();
+
+                if($orderOffer) {
+
+                    if($orderOffer->value_type == 'percentage') {
+
+                        $orderOfferDiscount =
+                            ($finalTotal * $orderOffer->value) / 100;
+
+                    } else {
+
+                        $orderOfferDiscount =
+                            $orderOffer->value;
+                    }
+
+                    $finalTotal -= $orderOfferDiscount;
+
+                    $discount += $orderOfferDiscount;
+                }
+            }
+        }   
+
 
         foreach ($cart as $key => $item) {
 
@@ -204,7 +242,9 @@ class OrderController extends Controller
                 'originalTotal',
                 'discount',
                 'finalTotal',
-                'paymentEnabled'
+                'paymentEnabled',
+                'orderOffer',
+                'orderOfferDiscount'
             )
         );
     }
@@ -405,6 +445,41 @@ class OrderController extends Controller
 
             0
         );
+
+        $orderOffer = null;
+
+        $completedOrder = Order::where('user_id', auth()->id())
+            ->where('restaurant_id', $restaurantId)
+            ->whereIn('status', ['completed', 'delivered'])
+            ->exists();
+
+        if($completedOrder) {
+
+            $orderOffer = OrderOffer::where('restaurant_id', $restaurantId)
+                ->where('status', 'active')
+                ->where('min_order_value', '<=', $finalTotal)
+                ->first();
+
+            if($orderOffer) {
+
+                if($orderOffer->value_type == 'percentage') {
+
+                    $discount +=
+                        ($finalTotal * $orderOffer->value) / 100;
+
+                } else {
+
+                    $discount +=
+                        $orderOffer->value;
+                }
+            }
+        }
+
+        $finalTotal = max(
+            $originalTotal - $discount,
+            0
+        );
+        
 
         /*
         |--------------------------------------------------------------------------

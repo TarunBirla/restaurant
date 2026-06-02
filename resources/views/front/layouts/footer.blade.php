@@ -55,6 +55,12 @@
                            onmouseover="this.style.color='#C25A2A'" onmouseout="this.style.color='#9CA3AF'">
                         <i data-lucide="chevron-right" style="width:13px; height:13px;"></i> My Orders
                     </a></li>
+                    <li><a href="{{ route('terms.conditions') }}" style="color:#9CA3AF; text-decoration:none; font-size:14px; transition:color .15s; display:flex; align-items:center; gap:6px;"
+                           onmouseover="this.style.color='#C25A2A'" onmouseout="this.style.color='#9CA3AF'">
+                        <i data-lucide="chevron-right" style="width:13px; height:13px;"></i> Terms & Conditions
+                    </a></li>
+
+                    
                 </ul>
             </div>
 
@@ -77,6 +83,10 @@
                     <li><a href="/profile" style="color:#9CA3AF; text-decoration:none; font-size:14px; transition:color .15s; display:flex; align-items:center; gap:6px;"
                            onmouseover="this.style.color='#C25A2A'" onmouseout="this.style.color='#9CA3AF'">
                         <i data-lucide="chevron-right" style="width:13px; height:13px;"></i> Profile
+                    </a></li>
+                    <li><a href="/refund-and-cancellation-policy" style="color:#9CA3AF; text-decoration:none; font-size:14px; transition:color .15s; display:flex; align-items:center; gap:6px;"
+                           onmouseover="this.style.color='#C25A2A'" onmouseout="this.style.color='#9CA3AF'">
+                        <i data-lucide="chevron-right" style="width:13px; height:13px;"></i> Refund Policy
                     </a></li>
                 </ul>
             </div>

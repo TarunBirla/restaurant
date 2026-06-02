@@ -8,7 +8,7 @@ use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\RestaurantFavorite;
 class RestaurantController extends Controller
 {
     public function index()
@@ -25,62 +25,62 @@ class RestaurantController extends Controller
     }
 
     public function store(Request $request)
-{
-    $image = null;
+    {
+        $image = null;
 
-    if($request->hasFile('image')){
+        if($request->hasFile('image')){
 
-        $image = $request->file('image')
-            ->store('restaurants','public');
+            $image = $request->file('image')
+                ->store('restaurants','public');
+        }
+
+        $restaurant = Restaurant::create([
+
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+
+            'email' => $request->email,
+
+            'phone' => $request->phone,
+
+            'location' => $request->location,
+
+            'description' => $request->description,
+
+            'image' => $image,
+
+            'status' => 1
+        ]);
+
+
+
+
+
+        // CREATE RESTAURANT ADMIN USER
+
+        User::create([
+
+            'name' => $request->name,
+
+            'email' => $request->email,
+
+            'password' => Hash::make($request->password),
+
+            'role' => 'restaurant_admin',
+
+            'restaurant_id' => $restaurant->id,
+
+            'phone' => $request->phone
+        ]);
+
+
+
+
+
+        return redirect()
+            ->route('admin.restaurants.index')
+            ->with('success','Restaurant Added Successfully');
     }
-
-    $restaurant = Restaurant::create([
-
-        'name' => $request->name,
-         'slug' => Str::slug($request->name),
-
-        'email' => $request->email,
-
-        'phone' => $request->phone,
-
-        'location' => $request->location,
-
-        'description' => $request->description,
-
-        'image' => $image,
-
-        'status' => 1
-    ]);
-
-
-
-
-
-    // CREATE RESTAURANT ADMIN USER
-
-    User::create([
-
-        'name' => $request->name,
-
-        'email' => $request->email,
-
-        'password' => Hash::make($request->password),
-
-        'role' => 'restaurant_admin',
-
-        'restaurant_id' => $restaurant->id,
-
-        'phone' => $request->phone
-    ]);
-
-
-
-
-
-    return redirect()
-        ->route('admin.restaurants.index')
-        ->with('success','Restaurant Added Successfully');
-}
 
     public function edit(string $id)
     {
@@ -176,4 +176,104 @@ class RestaurantController extends Controller
             'Payment Settings Updated Successfully'
         );
     }
+
+   
+
+    public function favorite(Restaurant $restaurant)
+    {
+        if (!auth()->check()) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Please login first'
+            ], 401);
+        }
+
+        $userId = auth()->id();
+
+        $favorite = RestaurantFavorite::where(
+            'restaurant_id',
+            $restaurant->id
+        )
+        ->where(
+            'user_id',
+            $userId
+        )
+        ->first();
+
+        if (!$favorite) {
+
+            RestaurantFavorite::create([
+                'restaurant_id' => $restaurant->id,
+                'user_id'       => $userId,
+            ]);
+
+            $restaurant->update([
+                'favorite_count' => RestaurantFavorite::where(
+                    'restaurant_id',
+                    $restaurant->id
+                )->count()
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'favorite_count' => $restaurant->fresh()->favorite_count
+        ]);
+    }
+
+
+    
+
+    public function favorites()
+    {
+        $restaurants = Restaurant::with([
+            'featuredOffer',
+            'reviews'
+        ])
+        ->whereIn(
+            'id',
+            RestaurantFavorite::where(
+                'user_id',
+                auth()->id()
+            )->pluck('restaurant_id')
+        )
+        ->latest()
+        ->get();
+
+        return view(
+            'front.favorite-restaurants',
+            compact('restaurants')
+        );
+    }
+
+   public function removeFavorite(
+        Restaurant $restaurant
+    )
+    {
+        RestaurantFavorite::where(
+            'restaurant_id',
+            $restaurant->id
+        )
+        ->where(
+            'user_id',
+            auth()->id()
+        )
+        ->delete();
+
+        $favoriteCount = RestaurantFavorite::where(
+            'restaurant_id',
+            $restaurant->id
+        )->count();
+
+        $restaurant->update([
+            'favorite_count' => $favoriteCount
+        ]);
+
+        return back()->with(
+            'success',
+            'Restaurant removed from favorites.'
+        );
+    }
+
 }

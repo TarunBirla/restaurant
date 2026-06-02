@@ -21,11 +21,11 @@
                     onmouseover="this.style.background='#F5F5F0'"
                     onmouseout="this.style.background='transparent'">Home</a>
 
-                <a href="/restaurants"
+                {{-- <a href="/restaurants"
                     style="padding:8px 15px; border-radius:10px; font-weight:500; font-size:14px; color:#0D0D0D; text-decoration:none; display:flex; align-items:center; gap:6px; transition:background .18s;"
                     onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='transparent'">
                     <i data-lucide="package" style="width:16px; height:16px;"></i> Restaurants
-                </a>
+                </a> --}}
 
 
 
@@ -121,6 +121,12 @@
                                 style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
                                 onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
                                 <i data-lucide="package" style="width:15px; height:15px; color:#C25A2A;"></i> My Orders
+                            </a>
+                            <a href="{{ route('favorite.restaurants') }}"
+                                 style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
+                                onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
+                                <i data-lucide="heart" style="width:15px; height:15px; color:#C25A2A;"></i>
+                                Favorite Restaurants
                             </a>
                             {{-- <a href="/cart">
 

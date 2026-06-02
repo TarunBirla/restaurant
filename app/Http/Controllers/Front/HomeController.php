@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\Offer;
+use App\Models\Order;
+use App\Models\OrderOffer;
 
 class HomeController extends Controller
 {
-    public function home()
+    public function home(Request $request)
     {
         $products = Product::latest()->get();
 
@@ -24,10 +26,97 @@ class HomeController extends Controller
         $qrCode = QrCode::size(220)
             ->generate(url('/restaurants'));
 
+
+        $ip = $request->ip();
+
+        Log::info('User IP: ' . $ip);
+
+        $response = Http::get("http://ip-api.com/json/" . $ip);
+
+        $data = $response->json();
+
+        Log::info('IP API Response', $data);
+
+        $latitude = $data['lat'] ?? null;
+        $longitude = $data['lon'] ?? null;
+
+        Log::info('User Latitude: ' . $latitude);
+        Log::info('User Longitude: ' . $longitude);
+
+        /*
+        |--------------------------------------------------------------------------
+        | IF LOCATION NOT FOUND
+        |--------------------------------------------------------------------------
+        */
+
+        if (!$latitude || !$longitude) {
+
+            $restaurants = Restaurant::latest()->get();
+
+            return view(
+                'front.home',
+                compact('restaurants', 'products', 'categories', 'qrCode')
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ALL RESTAURANTS WITH DISTANCE
+        |--------------------------------------------------------------------------
+        */
+
+        // $restaurants = Restaurant::select(
+        // $restaurants = Restaurant::with('featuredOffer')
+        $restaurants = Restaurant::with([
+
+            'featuredOffer',
+            'reviews'
+
+        ])
+            ->select(
+                        '*',
+                        DB::raw("
+                    (
+                        6371 * acos(
+                            cos(radians($latitude))
+                            * cos(radians(latitude))
+                            * cos(radians(longitude) - radians($longitude))
+                            + sin(radians($latitude))
+                            * sin(radians(latitude))
+                        )
+                    ) AS distance
+                ")
+                    )
+                    ->orderByRaw("
+                CASE
+                    WHEN distance <= 5 THEN 0
+                    ELSE 1
+                END
+            ")
+            ->orderBy('distance')
+            ->get();
+
+        Log::info('Restaurants Count: ' . $restaurants->count());
+
+        foreach ($restaurants as $restaurant) {
+
+            Log::info('Restaurant Found', [
+                'name' => $restaurant->name,
+                'distance' => $restaurant->distance
+            ]);
+        }    
+
+        
+
+
+
         return view('front.home', compact(
             'products',
             'categories',
-            'qrCode'
+            'qrCode',
+            'restaurants',
+                'latitude',
+                'longitude'
         ));
     }
 
@@ -216,13 +305,38 @@ class HomeController extends Controller
             ->latest()
             ->get();
 
+
+            $eligibleOffer = null;
+
+            if(auth()->check()) {
+
+                $completedOrder = Order::where('user_id', auth()->id())
+                    ->where('restaurant_id', $restaurant->id)
+                    ->whereIn('status', ['completed', 'delivered'])
+                    ->latest()
+                    ->first();
+                    
+
+                if($completedOrder) {
+
+                    $eligibleOffer = OrderOffer::active()
+                        ->where('restaurant_id', $restaurant->id)
+                        ->where('min_order_value', '<=', $completedOrder->total_amount)
+                        ->orderByDesc('value')
+                        ->first();
+                }
+            } 
+            
+            
+
         return view(
             'front.restaurant-products',
             compact(
                 'restaurant',
                 'products',
                 'categories',
-                'offers'
+                'offers',
+                'eligibleOffer'
             )
         );
     }

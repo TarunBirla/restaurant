@@ -164,7 +164,7 @@
             <div class="mob-page-title">Dashboard</div>
 
             {{-- STAT CARDS --}}
-            <div class="stat-grid">
+            {{-- <div class="stat-grid">
                 <div class="stat-card">
                     <div class="stat-label">My Orders</div>
                     <div class="stat-value">
@@ -181,7 +181,7 @@
                     <div class="stat-label">Cart Items</div>
                     <div class="stat-value">{{ count(session('cart', [])) }}</div>
                 </div>
-            </div>
+            </div> --}}
 
             {{-- RECENT ORDERS --}}
             <div class="table-card">

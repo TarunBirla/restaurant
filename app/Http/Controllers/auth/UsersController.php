@@ -50,8 +50,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -106,4 +108,39 @@ class UsersController extends Controller
 
         return redirect('/?message=' . urlencode('Logged Out Successfully') . '&type=success');
     }
+
+    public function showForgotPassword()
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $user = User::where(
+            'email',
+            $request->email
+        )->first();
+
+        if (!$user) {
+
+            return redirect(
+                '/forgot-password?message=' .
+                urlencode('Email not found') .
+                '&type=error'
+            );
+        }
+
+        $user->update([
+            'password' => Hash::make(
+                $request->password
+            )
+        ]);
+
+        return redirect(
+            '/login?message=' .
+            urlencode('Password Updated Successfully') .
+            '&type=success'
+        );
+    }
 }
+
