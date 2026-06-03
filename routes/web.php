@@ -348,7 +348,7 @@ Route::middleware(['auth', 'restaurant_admin'])
     });
 
 Route::get(
-    '/admin/login',
+    '/sign-in',
     [AdminLoginController::class, 'showLogin']
 );
 

@@ -1,3 +1,10 @@
+
+@php
+    $isAdmin = auth()->check() &&
+        in_array(auth()->user()->role, ['super_admin', 'restaurant_admin']);
+    $isRestaurant = auth()->check() && auth()->user()->role == 'restaurant_admin'; 
+    $isSuperAdmin = auth()->check() && auth()->user()->role == 'super_admin';   
+@endphp
 <header style="background:rgba(245, 240, 232, 0.95); box-shadow:0 1px 0 #F0F0EC; position:sticky; top:0; z-index:100;">
     <div style=" margin:0 auto; padding:0 24px;" class="mx-auto max-w-7xl">
         <div style="display:flex; align-items:center; justify-content:space-between; height:68px;">
@@ -31,6 +38,7 @@
 
 
                 @auth
+                @if(!$isAdmin)
                     <a href="/cart"
                         style="padding:8px 15px; border-radius:10px; font-weight:500; font-size:14px; color:#0D0D0D; text-decoration:none; display:flex; align-items:center; gap:6px; transition:background .18s;"
                         onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='transparent'">
@@ -53,6 +61,8 @@
                         onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='transparent'">
                         <i data-lucide="package" style="width:16px; height:16px;"></i> Orders
                     </a>
+
+                @endif
 
 
                     <!-- USER DROPDOWN -->
@@ -101,17 +111,38 @@
                             <i data-lucide="chevron-down" style="width:14px; height:14px; color:#6B7280;"></i>
                         </button>
 
+                
+
                         {{-- <div id="userDropdown"
                             style="display:none; position:absolute; right:0; top:100%; margin-top:8px; width:210px; background:#fff; border-radius:16px; box-shadow:0 16px 48px rgba(0,0,0,.14); overflow:hidden; z-index:200; border:1px solid #F0F0EC;">
                              --}}
                             <div id="userDropdown"
                                 style="display:none; position:absolute; right:0; top:100%; margin-top:8px; width:210px; background:#fff; border-radius:16px; box-shadow:0 16px 48px rgba(0,0,0,.14); overflow:hidden; z-index:200; border:1px solid #F0F0EC;">
+                            
+                            @if($isSuperAdmin)    
+                            <a href="/admin/dashboard"
+                                style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
+                                onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
+                                <i data-lucide="layout-dashboard" style="width:15px; height:15px; color:#C25A2A;"></i>
+                                Dashboard
+                            </a>
+                            @endif
+                            @if($isRestaurant)    
+                            <a href="/restaurant/dashboard"
+                                style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
+                                onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
+                                <i data-lucide="layout-dashboard" style="width:15px; height:15px; color:#C25A2A;"></i>
+                                Dashboard
+                            </a>
+                            @endif
+                            @if(!$isAdmin)    
                             <a href="/dashboard"
                                 style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
                                 onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
                                 <i data-lucide="layout-dashboard" style="width:15px; height:15px; color:#C25A2A;"></i>
                                 Dashboard
                             </a>
+                            
                             <a href="/profile"
                                 style="display:flex; align-items:center; gap:10px; padding:13px 17px; text-decoration:none; color:#0D0D0D; font-size:13px; font-weight:500; transition:background .15s;"
                                 onmouseover="this.style.background='#F5F5F0'" onmouseout="this.style.background='#fff'">
@@ -135,13 +166,13 @@
                                 Cart
 
                                 <span id="cartCount" style="
-                        background:#C25A2A;
-                        color:white;
-                        padding:2px 8px;
-                        border-radius:20px;
-                        font-size:12px;
-                        margin-left:5px;
-                        ">
+                                    background:#C25A2A;
+                                    color:white;
+                                    padding:2px 8px;
+                                    border-radius:20px;
+                                    font-size:12px;
+                                    margin-left:5px;
+                                    ">
 
                                     {{ collect(session('cart', []))->sum('quantity') }}
 
@@ -191,6 +222,7 @@
                                 </span>
 
                             </a>
+                            @endif
                             <div style="border-top:1px solid #F0F0EC; margin:4px 0;"></div>
                             <form method="POST" action="/logout">
                                 @csrf

@@ -181,6 +181,12 @@
         }
     </style>
 
+
+@php
+    $isAdmin = auth()->check() &&
+        in_array(auth()->user()->role, ['super_admin', 'restaurant_admin']);
+    
+@endphp
     {{-- ======== RESTAURANT HEADER ======== --}}
     <section
         style="background:linear-gradient(135deg,#0D0D0D 0%,#1a1a1a 100%); padding:44px 0; border-bottom:3px solid #C25A2A;">
@@ -575,6 +581,7 @@
                                 {{-- <form class="addCartForm"
                                     style="flex:1;"
                                     data-product="{{ $product->id }}"> --}}
+                                @if(!$isAdmin)    
                                 @auth
                                     <form class="addCartForm"
                                         style="flex:1;"
@@ -671,6 +678,7 @@
                                     </a>
 
                                 @endauth
+                                @endif
 
                             </div>
                         </div>

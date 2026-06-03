@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Models\RestaurantFavorite;
+use Illuminate\Support\Facades\DB;
+
 class RestaurantController extends Controller
 {
     public function index()
@@ -24,62 +26,126 @@ class RestaurantController extends Controller
         return view('admin.restaurants.create');
     }
 
+    // public function store(Request $request)
+    // {
+    //     $image = null;
+
+    //     if($request->hasFile('image')){
+
+    //         $image = $request->file('image')
+    //             ->store('restaurants','public');
+    //     }
+
+    //     $restaurant = Restaurant::create([
+
+    //         'name' => $request->name,
+    //         'slug' => Str::slug($request->name),
+
+    //         'email' => $request->email,
+
+    //         'phone' => $request->phone,
+
+    //         'location' => $request->location,
+
+    //         'description' => $request->description,
+
+    //         'image' => $image,
+
+    //         'status' => 1
+    //     ]);
+
+
+
+
+
+    //     // CREATE RESTAURANT ADMIN USER
+
+    //     User::create([
+
+    //         'name' => $request->name,
+
+    //         'email' => $request->email,
+
+    //         'password' => Hash::make($request->password),
+
+    //         'role' => 'restaurant_admin',
+
+    //         'restaurant_id' => $restaurant->id,
+
+    //         'phone' => $request->phone
+    //     ]);
+
+
+
+
+
+    //     return redirect()
+    //         ->route('admin.restaurants.index')
+    //         ->with('success','Restaurant Added Successfully');
+    // }
+
     public function store(Request $request)
     {
-        $image = null;
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'password' => 'required|min:6',
+        ]);
 
-        if($request->hasFile('image')){
 
-            $image = $request->file('image')
-                ->store('restaurants','public');
+        $emailExist = User::where('email', $request->email)->first();
+
+        if ($emailExist) {
+            return back()->with('error', 'Email already exist');
         }
 
-        $restaurant = Restaurant::create([
+        DB::beginTransaction();
 
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-
-            'email' => $request->email,
-
-            'phone' => $request->phone,
-
-            'location' => $request->location,
-
-            'description' => $request->description,
-
-            'image' => $image,
-
-            'status' => 1
-        ]);
+        try {
 
 
+            $image = null;
 
+            if ($request->hasFile('image')) {
+                $image = $request->file('image')
+                    ->store('restaurants', 'public');
+            }
 
+            $restaurant = Restaurant::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name . '-' . time()),
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'location' => $request->location,
+                'description' => $request->description,
+                'image' => $image,
+                'status' => 1,
+            ]);
 
-        // CREATE RESTAURANT ADMIN USER
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'restaurant_admin',
+                'restaurant_id' => $restaurant->id,
+                'phone' => $request->phone,
+            ]);
 
-        User::create([
+            DB::commit();
 
-            'name' => $request->name,
+            return redirect()
+                ->route('admin.restaurants.index')
+                ->with('success', 'Restaurant Added Successfully');
 
-            'email' => $request->email,
+        } catch (\Exception $e) {
 
-            'password' => Hash::make($request->password),
+            DB::rollBack();
 
-            'role' => 'restaurant_admin',
-
-            'restaurant_id' => $restaurant->id,
-
-            'phone' => $request->phone
-        ]);
-
-
-
-
-
-        return redirect()
-            ->route('admin.restaurants.index')
-            ->with('success','Restaurant Added Successfully');
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     public function edit(string $id)
