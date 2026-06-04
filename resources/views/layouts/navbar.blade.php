@@ -4,9 +4,26 @@
     <div style="display:flex; align-items:center; gap:14px;">
 
         <!-- Mobile menu toggle -->
-        <button class="mobile-menu-btn" onclick="openSidebar()"
+        {{-- <button class="mobile-menu-btn" onclick="openSidebar()"
                 style="display:none; align-items:center; justify-content:center; width:40px; height:40px; background:#F5F5F0; border:none; border-radius:10px; cursor:pointer;">
             <i data-lucide="menu" style="width:20px; height:20px;"></i>
+        </button> --}}
+
+        <button
+            onclick="toggleSidebar()"
+            style="
+                width:52px;
+                height:52px;
+                border:none;
+                border-radius:50%;
+                background:#C25A2A;
+                color:white;
+                cursor:pointer;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            ">
+            <i data-lucide="menu"></i>
         </button>
 
         <!-- Dynamic page title -->

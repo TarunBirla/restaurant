@@ -562,13 +562,13 @@
                                 📍 {{ $restaurant->location }}
                             </div>
 
-                            <div style="
+                            {{-- <div style="
                                 color:#10B981;
                                 font-weight:700;
                                 font-size:14px;
                             ">
                                 Free Delivery
-                            </div>
+                            </div> --}}
 
                         </div>
 

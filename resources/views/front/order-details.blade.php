@@ -413,6 +413,142 @@
     .review-modal-bg { align-items: flex-end; padding: 0; }
     .star-rating .star { font-size: 36px; }
 }
+
+
+
+.order-flow-card{
+    background:#fff;
+    border-radius:24px;
+    padding:30px;
+    margin-bottom:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+
+.order-flow-title{
+    font-size:22px;
+    font-weight:700;
+    color:#111827;
+    margin-bottom:35px;
+}
+
+.order-flow-wrapper{
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+.order-flow-bar{
+    position:absolute;
+    top:18px;
+    left:0;
+    right:0;
+    height:4px;
+    background:#E5E7EB;
+    z-index:1;
+}
+
+.order-flow-bar-active{
+    height:100%;
+    width:0;
+    background:#22C55E;
+    transition:.5s ease;
+}
+
+.order-flow-step{
+    position:relative;
+    z-index:2;
+    width:33.33%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.order-flow-circle{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#D1D5DB;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    font-weight:700;
+    transition:.3s;
+}
+
+.order-flow-circle.active{
+    background:#22C55E;
+}
+
+.order-flow-circle.cancelled{
+    background:#EF4444;
+}
+
+.order-flow-step span{
+    margin-top:12px;
+    font-size:13px;
+    font-weight:600;
+    color:#6B7280;
+}
+
+.order-flow-status{
+    text-align:center;
+    margin-top:35px;
+}
+
+.order-flow-status span{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 18px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.flow-pending{
+    background:#FEF3C7;
+    color:#B45309;
+}
+
+.flow-accepted{
+    background:#DBEAFE;
+    color:#1D4ED8;
+}
+
+.flow-completed{
+    background:#DCFCE7;
+    color:#15803D;
+}
+
+.flow-cancelled{
+    background:#FEE2E2;
+    color:#DC2626;
+}
+
+.flow-refunded{
+    background:#F3E8FF;
+    color:#7E22CE;
+}
+
+@media(max-width:768px){
+
+    .order-flow-card{
+        padding:20px;
+    }
+
+    .order-flow-step span{
+        font-size:11px;
+    }
+
+    .order-flow-circle{
+        width:32px;
+        height:32px;
+        font-size:12px;
+    }
+}
 </style>
 
 <div class="od-page">
@@ -459,66 +595,204 @@
                 $step4 = in_array($deliveryStatus, ['in_transit','delivered']);
                 $step5 = $deliveryStatus === 'delivered';
             @endphp
+            
+ 
+            @if ($order->order_type == 'delivery')
+                <div class="od-card">
+                    <div class="od-tracking">
+                        <h2>Delivery Tracking</h2>
 
-            <div class="od-card">
-                <div class="od-tracking">
-                    <h2>Delivery Tracking</h2>
+                        <div class="track-bar-wrap">
+                            <div class="track-line-bg"></div>
+                            <div class="track-line-active {{ $isCancelled ? 'track-line-cancelled' : '' }}" style="width:{{ $progress }};"></div>
 
-                    <div class="track-bar-wrap">
-                        <div class="track-line-bg"></div>
-                        <div class="track-line-active {{ $isCancelled ? 'track-line-cancelled' : '' }}" style="width:{{ $progress }};"></div>
+                            {{-- Step 1 --}}
+                            <div class="track-step">
+                                <div class="step-dot {{ $step1 ? 'active' : '' }}">✓</div>
+                                <div class="step-lbl {{ $step1 ? 'active' : '' }}">Search</div>
+                            </div>
+                            {{-- Step 2 --}}
+                            <div class="track-step">
+                                <div class="step-dot {{ $step2 ? 'active' : '' }}">✓</div>
+                                <div class="step-lbl {{ $step2 ? 'active' : '' }}">Assigned</div>
+                            </div>
+                            {{-- Step 3 --}}
+                            <div class="track-step">
+                                <div class="step-dot {{ $step3 ? 'active' : '' }}">✓</div>
+                                <div class="step-lbl {{ $step3 ? 'active' : '' }}">Pickup</div>
+                            </div>
+                            {{-- Step 4 --}}
+                            <div class="track-step">
+                                <div class="step-dot {{ $step4 ? 'active' : '' }}">✓</div>
+                                <div class="step-lbl {{ $step4 ? 'active' : '' }}">On Way</div>
+                            </div>
+                            {{-- Step 5 --}}
+                            <div class="track-step">
+                                @if($isCancelled)
+                                    <div class="step-dot cancelled">✕</div>
+                                    <div class="step-lbl cancelled">Cancelled</div>
+                                @else
+                                    <div class="step-dot {{ $step5 ? 'active' : '' }}">✓</div>
+                                    <div class="step-lbl {{ $step5 ? 'active' : '' }}">Delivered</div>
+                                @endif
+                            </div>
+                        </div>
 
-                        {{-- Step 1 --}}
-                        <div class="track-step">
-                            <div class="step-dot {{ $step1 ? 'active' : '' }}">✓</div>
-                            <div class="step-lbl {{ $step1 ? 'active' : '' }}">Search</div>
-                        </div>
-                        {{-- Step 2 --}}
-                        <div class="track-step">
-                            <div class="step-dot {{ $step2 ? 'active' : '' }}">✓</div>
-                            <div class="step-lbl {{ $step2 ? 'active' : '' }}">Assigned</div>
-                        </div>
-                        {{-- Step 3 --}}
-                        <div class="track-step">
-                            <div class="step-dot {{ $step3 ? 'active' : '' }}">✓</div>
-                            <div class="step-lbl {{ $step3 ? 'active' : '' }}">Pickup</div>
-                        </div>
-                        {{-- Step 4 --}}
-                        <div class="track-step">
-                            <div class="step-dot {{ $step4 ? 'active' : '' }}">✓</div>
-                            <div class="step-lbl {{ $step4 ? 'active' : '' }}">On Way</div>
-                        </div>
-                        {{-- Step 5 --}}
-                        <div class="track-step">
-                            @if($isCancelled)
-                                <div class="step-dot cancelled">✕</div>
-                                <div class="step-lbl cancelled">Cancelled</div>
-                            @else
-                                <div class="step-dot {{ $step5 ? 'active' : '' }}">✓</div>
-                                <div class="step-lbl {{ $step5 ? 'active' : '' }}">Delivered</div>
+                        <div class="status-badge-wrap">
+                            @if($deliveryStatus == 'searching')
+                                <span class="status-badge sb-searching"> Searching Driver</span>
+                            @elseif($deliveryStatus == 'almost_picking')
+                                <span class="status-badge sb-almost_picking"> Driver On The Way</span>
+                            @elseif($deliveryStatus == 'waiting_at_pickup')
+                                <span class="status-badge sb-almost_picking"> Driver at Restaurant</span>
+                            @elseif($deliveryStatus == 'picking')
+                                <span class="status-badge sb-almost_picking"> Pickup Started</span>
+                            @elseif($deliveryStatus == 'in_transit')
+                                <span class="status-badge sb-in_transit"> On The Way</span>
+                            @elseif($deliveryStatus == 'delivered')
+                                <span class="status-badge sb-delivered"> Delivered</span>
+                            @elseif($deliveryStatus == 'canceled')
+                                <span class="status-badge sb-canceled">❌ Cancelled</span>
                             @endif
                         </div>
                     </div>
-
-                    <div class="status-badge-wrap">
-                        @if($deliveryStatus == 'searching')
-                            <span class="status-badge sb-searching"> Searching Driver</span>
-                        @elseif($deliveryStatus == 'almost_picking')
-                            <span class="status-badge sb-almost_picking"> Driver On The Way</span>
-                        @elseif($deliveryStatus == 'waiting_at_pickup')
-                            <span class="status-badge sb-almost_picking"> Driver at Restaurant</span>
-                        @elseif($deliveryStatus == 'picking')
-                            <span class="status-badge sb-almost_picking"> Pickup Started</span>
-                        @elseif($deliveryStatus == 'in_transit')
-                            <span class="status-badge sb-in_transit"> On The Way</span>
-                        @elseif($deliveryStatus == 'delivered')
-                            <span class="status-badge sb-delivered"> Delivered</span>
-                        @elseif($deliveryStatus == 'canceled')
-                            <span class="status-badge sb-canceled">❌ Cancelled</span>
-                        @endif
-                    </div>
                 </div>
-            </div>
+            @else
+                <div class="order-flow-card">
+
+                    <h3 class="order-flow-title">
+                        Order Progress
+                    </h3>
+
+                    <div class="order-flow-wrapper">
+
+                        <div class="order-flow-bar">
+                            <div
+                                id="orderFlowProgress"
+                                class="order-flow-bar-active">
+                            </div>
+                        </div>
+
+                        <div class="order-flow-step">
+                            <div id="flowPending" class="order-flow-circle">
+                                ✓
+                            </div>
+                            <span>Pending</span>
+                        </div>
+
+                        <div class="order-flow-step">
+                            <div id="flowAccepted" class="order-flow-circle">
+                                ✓
+                            </div>
+                            <span>Accepted</span>
+                        </div>
+
+                        <div class="order-flow-step">
+                            <div id="flowCompleted" class="order-flow-circle">
+                                ✓
+                            </div>
+                            <span>Completed</span>
+                        </div>
+
+                    </div>
+
+                    <div class="order-flow-status">
+                        <span id="flowStatusBadge">
+                            {{ ucfirst($order->status) }}
+                        </span>
+                    </div>
+
+                </div>
+            @endif
+            
+
+
+            
+
+
+
+            <script>
+
+                const orderStatus = @json($order->status);
+
+                const progressBar =
+                    document.getElementById(
+                        'orderFlowProgress'
+                    );
+
+                const statusBadge =
+                    document.getElementById(
+                        'flowStatusBadge'
+                    );
+
+                if(orderStatus === 'pending')
+                {
+                    flowPending.classList.add('active');
+
+                    statusBadge.classList.add(
+                        'flow-pending'
+                    );
+
+                    progressBar.style.width='0%';
+                }
+
+                if(orderStatus === 'accepted')
+                {
+                    flowPending.classList.add('active');
+                    flowAccepted.classList.add('active');
+
+                    statusBadge.classList.add(
+                        'flow-accepted'
+                    );
+
+                    progressBar.style.width='50%';
+                }
+
+                if(orderStatus === 'completed')
+                {
+                    flowPending.classList.add('active');
+                    flowAccepted.classList.add('active');
+                    flowCompleted.classList.add('active');
+
+                    statusBadge.classList.add(
+                        'flow-completed'
+                    );
+
+                    progressBar.style.width='100%';
+                }
+
+                if(orderStatus === 'cancelled')
+                {
+                    flowPending.classList.add(
+                        'cancelled'
+                    );
+
+                    statusBadge.classList.add(
+                        'flow-cancelled'
+                    );
+
+                    statusBadge.innerHTML =
+                        '❌ Cancelled';
+                }
+
+                if(orderStatus === 'refunded')
+                {
+                    flowPending.classList.add('active');
+                    flowAccepted.classList.add('active');
+
+                    progressBar.style.width='50%';
+
+                    statusBadge.classList.add(
+                        'flow-refunded'
+                    );
+
+                    statusBadge.innerHTML =
+                        '↩ Refunded';
+                }
+
+            </script>
+
+            
 
             {{-- LIVE TRACK BUTTON --}}
             @if($order->tracking_url)

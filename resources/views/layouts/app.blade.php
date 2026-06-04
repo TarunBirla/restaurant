@@ -46,7 +46,7 @@
         }
 
 
-        #sidebar {
+        /* #sidebar {
             width: 260px;
             height: 100vh;
             background: #0D0D0D;
@@ -61,14 +61,19 @@
             /* IMPORTANT */
 
             overflow: hidden;
-        }
+        } */
 
-        #main-content {
+        /* #main-content {
             margin-left: 260px;
             min-height: 100vh;
             background: rgba(245, 240, 232, 0.95);
-        }
+        } */
 
+        #main-content {
+            margin-left: 0;
+            min-height: 100vh;
+            background: rgba(245,240,232,.95);
+        }
         .nav-link {
             display: flex;
             align-items: center;
@@ -117,12 +122,24 @@
         }
 
         /* Mobile */
-        #sidebar-overlay {
+        /* #sidebar-overlay {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, .5);
             z-index: 40;
+        } */
+
+        #sidebar-overlay{
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.4);
+            z-index:998;
+            display:none;
+        }
+
+        #sidebar-overlay.active{
+            display:block;
         }
 
         .mobile-menu-btn {
@@ -130,13 +147,13 @@
         }
 
         @media(max-width: 1024px) {
-            #sidebar {
+            /* #sidebar {
                 transform: translateX(-100%);
             }
 
             #sidebar.open {
                 transform: translateX(0);
-            }
+            } */
 
             #main-content {
                 margin-left: 0 !important;
@@ -146,21 +163,22 @@
                 display: flex !important;
             }
 
-            #sidebar-overlay.active {
+            /* #sidebar-overlay.active {
                 display: block;
-            }
+            } */
         }
     </style>
 </head>
 
 <body>
 
-    <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+    {{-- <div id="sidebar-overlay" onclick="closeSidebar()"></div> --}}
+    
     @include('layouts.sidebar')
     <div id="main-content">
         @include('layouts.navbar')
 
-        <div style="padding: 28px 28px;">
+        <div style="padding: 28px 28px; background: rgba(245, 240, 232, 0.95); min-height: calc(100vh - 68px);">
             @if(session('success'))
                 <div class="alert-success">
                     <i data-lucide="circle-check" style="width:18px; height:18px; flex-shrink:0;"></i>
@@ -183,14 +201,14 @@
     <script>
         lucide.createIcons();
 
-        function openSidebar() {
-            document.getElementById('sidebar').classList.add('open');
-            document.getElementById('sidebar-overlay').classList.add('active');
-        }
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.remove('open');
-            document.getElementById('sidebar-overlay').classList.remove('active');
-        }
+        // function openSidebar() {
+        //     document.getElementById('sidebar').classList.add('open');
+        //     document.getElementById('sidebar-overlay').classList.add('active');
+        // }
+        // function closeSidebar() {
+        //     document.getElementById('sidebar').classList.remove('open');
+        //     document.getElementById('sidebar-overlay').classList.remove('active');
+        // }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
@@ -309,6 +327,36 @@
 
         });
     </script>
+
+    <script>
+
+function toggleSidebar() {
+
+    document
+        .getElementById('sidebar')
+        .classList.toggle('open');
+
+}
+
+document.addEventListener('click', function(e){
+
+    const sidebar =
+        document.getElementById('sidebar');
+
+    const button =
+        document.getElementById('menuToggle');
+
+    if(
+        !sidebar.contains(e.target)
+        &&
+        !button.contains(e.target)
+    ){
+        sidebar.classList.remove('open');
+    }
+
+});
+
+</script>
 
     <!-- INSTALL POPUP -->
 

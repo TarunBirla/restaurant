@@ -59,18 +59,39 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     */
 
+    // public function show($id)
+    // {
+    //     $order = Order::where(
+    //         'restaurant_id',
+    //         auth()->user()->restaurant_id
+    //     )
+    //         ->with([
+    //             'user',
+    //             'items.product',
+    //             'payment'
+    //         ])
+    //         ->findOrFail($id);
+
+    //     return view(
+    //         'restaurant.orders.show',
+    //         compact('order')
+    //     );
+    // }
+
     public function show($id)
     {
         $order = Order::where(
             'restaurant_id',
             auth()->user()->restaurant_id
         )
-            ->with([
-                'user',
-                'items.product',
-                'payment'
-            ])
-            ->findOrFail($id);
+        ->with([
+            'user',
+            'restaurant',
+            'items.product',
+            'payment',
+            'review'
+        ])
+        ->findOrFail($id);
 
         return view(
             'restaurant.orders.show',
