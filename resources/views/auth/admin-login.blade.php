@@ -25,7 +25,7 @@
 
                 <h1 class="text-4xl font-extrabold text-white mb-2">
 
-                    Admin Login
+                    Login
 
                 </h1>
 
