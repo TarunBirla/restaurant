@@ -887,7 +887,7 @@
   @endif
 
   {{-- ── Row 1: Customer · Order Info · Delivery ── --}}
-  <div class="od-grid-3">
+  <div class="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-4 gap-8 mb-8">
 
     {{-- Customer --}}
     <div class="od-card">
@@ -974,12 +974,7 @@
     </div>
     @endif
 
-  </div>
 
-  {{-- ── Row 2: Status Workflow · Payment ── --}}
-  <div class="od-grid-2">
-
-    {{-- ── STATUS WORKFLOW ── --}}
     <div class="od-card">
       <div class="card-eyebrow">Order Status</div>
 
@@ -1106,6 +1101,137 @@
     </div>
 
   </div>
+
+  {{-- ── Row 2: Status Workflow · Payment ── --}}
+  {{-- <div class="od-grid-2">
+
+    
+    <div class="od-card">
+      <div class="card-eyebrow">Order Status</div>
+
+      @if($order->status === 'pending')
+
+        <p class="status-hint">New order received. Accept it to start preparing, or cancel if unable to fulfil.</p>
+        <div class="btn-row">
+          <form method="POST" action="{{ route('restaurant.orders.status', $order->id) }}">
+            @csrf
+            <input type="hidden" name="status" value="accepted">
+            <button type="submit" class="od-btn btn-accept">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Accept Order
+            </button>
+          </form>
+          <form method="POST" action="{{ route('restaurant.orders.status', $order->id) }}">
+            @csrf
+            <input type="hidden" name="status" value="cancelled">
+            <button type="submit" class="od-btn btn-cancel" onclick="return confirm('Cancel this order?')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Cancel Order
+            </button>
+          </form>
+        </div>
+
+      @elseif($order->status === 'accepted')
+
+        <p class="status-hint">Order accepted — being prepared. Mark as picked up once the driver collects it.</p>
+        <div class="btn-row">
+          <form method="POST" action="{{ route('restaurant.orders.status', $order->id) }}">
+            @csrf
+            <input type="hidden" name="status" value="pickup">
+            <button type="submit" class="od-btn btn-pickup">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Mark as Picked Up
+            </button>
+          </form>
+        </div>
+
+      @elseif($order->status === 'pickup')
+
+        <p class="status-hint">Order is on the way to the customer. Confirm once it has been delivered.</p>
+        <div class="btn-row">
+          <form method="POST" action="{{ route('restaurant.orders.status', $order->id) }}">
+            @csrf
+            <input type="hidden" name="status" value="completed">
+            <button type="submit" class="od-btn btn-complete">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Complete Order
+            </button>
+          </form>
+        </div>
+
+      @elseif($order->status === 'completed')
+
+        <div class="terminal-state ts-completed">
+          <div class="terminal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div>
+            <p class="terminal-title">Order completed</p>
+            <p class="terminal-sub">This order has been fulfilled successfully.</p>
+          </div>
+        </div>
+
+      @elseif($order->status === 'cancelled')
+
+        <div class="terminal-state ts-cancelled">
+          <div class="terminal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+          <div>
+            <p class="terminal-title">Order cancelled</p>
+            <p class="terminal-sub">This order has been cancelled and is closed.</p>
+          </div>
+        </div>
+
+      @endif
+    </div>
+
+    
+    <div class="od-card">
+      <div class="card-eyebrow">Payment</div>
+      <div class="info-row" style="margin-bottom:16px">
+        <div class="info-item">
+          <span class="info-label">Method</span>
+          <span class="info-val">{{ $order->payment->payment_method ?? 'N/A' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Status</span>
+          <span class="badge badge-{{ optional($order->payment)->payment_status ?? 'pending' }}">
+            {{ ucfirst(optional($order->payment)->payment_status ?? 'Pending') }}
+          </span>
+        </div>
+      </div>
+
+      <hr class="pay-divider">
+      <p class="pay-section-label">Update payment status</p>
+
+      <form method="POST" action="{{ route('restaurant.orders.payment.status', $order->id) }}">
+        @csrf
+        <select name="payment_status" class="pay-select">
+          @foreach(['pending','paid','failed','cancelled','refunded'] as $ps)
+            <option value="{{ $ps }}" {{ optional($order->payment)->payment_status == $ps ? 'selected' : '' }}>
+              {{ ucfirst($ps) }}
+            </option>
+          @endforeach
+        </select>
+        <button type="submit" class="od-btn btn-pay-update">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Update Payment
+        </button>
+      </form>
+
+      @if($order->status === 'cancelled' && optional($order->payment)->payment_status === 'paid')
+        <form method="POST" action="{{ route('restaurant.orders.refund', $order->id) }}" style="margin-top:8px">
+          @csrf
+          <button type="submit" class="od-btn btn-refund" onclick="return confirm('Issue a refund for this payment?')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+            Refund Payment
+          </button>
+        </form>
+      @endif
+    </div>
+
+  </div> --}}
 
   {{-- ── Review (conditional) ── --}}
   @if($order->review)
