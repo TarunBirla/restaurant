@@ -397,6 +397,29 @@ class HomeController extends Controller
             ->latest()
             ->get();
 
+        
+         $eligibleOffer = null;
+
+            if(auth()->check()) {
+
+                $completedOrder = Order::where('user_id', auth()->id())
+                    ->where('restaurant_id', $restaurant->id)
+                    ->whereIn('status', ['completed', 'delivered'])
+                    ->latest()
+                    ->first();
+                    
+
+                if($completedOrder) {
+
+                    $eligibleOffer = OrderOffer::active()
+                        ->where('restaurant_id', $restaurant->id)
+                        ->where('min_order_value', '<=', $completedOrder->total_amount)
+                        ->orderByDesc('value')
+                        ->first();
+                }
+            } 
+                
+
 
 
         return view(
@@ -406,6 +429,7 @@ class HomeController extends Controller
                 'products',
                 'categories',
                 'category',
+                'eligibleOffer'
 
             )
         );
