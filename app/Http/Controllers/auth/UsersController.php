@@ -104,7 +104,12 @@ class UsersController extends Controller
 
     public function logout(Request $request)
     {
+        session()->forget('cart');
+        
         Auth::logout();
+        $request->session()->flush();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/?message=' . urlencode('Logged Out Successfully') . '&type=success');
     }

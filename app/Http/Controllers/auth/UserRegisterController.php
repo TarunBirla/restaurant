@@ -30,9 +30,22 @@ class UserRegisterController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name'     => 'required',
-            'email'    => 'required|email|unique:users,email',
+            'email'    => 'required|email',
             'password' => 'required|min:6'
         ]);
+
+        $emailExist = User::where('email', $request->email)->first();
+
+        if ($emailExist) {
+
+            return redirect(
+                '/register?message=' .
+                urlencode('Email already exist') .
+                '&type=error'
+            );
+        }
+
+
 
         if ($validator->fails()) {
 

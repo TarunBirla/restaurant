@@ -18,7 +18,8 @@ class User extends Authenticatable
         'restaurant_id',
         'phone',
         'image',
-        'fcm_token'
+        'fcm_token',
+        'api_token'
     ];
 
     protected $hidden = [

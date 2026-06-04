@@ -805,7 +805,7 @@
 
                         @endif
 
-                        {{-- <label class="pm-label" id="pm-cod">
+                        <label class="pm-label" id="pm-cod">
                             <input type="radio" name="payment_method" value="Cash On Delivery" required>
                             <div class="pm-icon">💵</div>
                             <div>
@@ -813,7 +813,7 @@
                                 <div class="pm-sub">Pay after delivery</div>
                             </div>
                             <div class="pm-radio-dot"></div>
-                        </label> --}}
+                        </label>
                     </div>
 
                     <!-- PHONE (COD only) -->
