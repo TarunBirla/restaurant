@@ -999,6 +999,19 @@ class OrderController extends Controller
         );
     }
 
+    public function orderStatus($id)
+    {
+        $order = Order::where(
+            'user_id',
+            auth()->id()
+        )->findOrFail($id);
+
+        return response()->json([
+            'status'          => $order->status,
+            'delivery_status' => $order->delivery_status,
+        ]);
+    }
+
     public function transactions()
     {
         $payments = Payment::with([

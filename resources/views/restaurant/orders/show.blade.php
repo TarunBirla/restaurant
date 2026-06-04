@@ -1006,7 +1006,7 @@
         <div class="btn-row">
           <form method="POST" action="{{ route('restaurant.orders.status', $order->id) }}">
             @csrf
-            <input type="hidden" name="status" value="pickup">
+            <input type="hidden" name="status" value="completed">
             <button type="submit" class="od-btn btn-pickup">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
               Mark as Picked Up
@@ -1014,7 +1014,7 @@
           </form>
         </div>
 
-      @elseif($order->status === 'pickup')
+      {{-- @elseif($order->status === 'accepted')
 
         <p class="status-hint">Order is on the way to the customer. Confirm once it has been delivered.</p>
         <div class="btn-row">
@@ -1026,7 +1026,7 @@
               Complete Order
             </button>
           </form>
-        </div>
+        </div> --}}
 
       @elseif($order->status === 'completed')
 

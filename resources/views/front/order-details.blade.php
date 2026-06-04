@@ -704,91 +704,226 @@
 
                 </div>
             @endif
-            
-
-
-            
-
-
 
             <script>
 
-                const orderStatus = @json($order->status);
+                const orderId = {{ $order->id }};
 
-                const progressBar =
-                    document.getElementById(
-                        'orderFlowProgress'
-                    );
-
-                const statusBadge =
-                    document.getElementById(
-                        'flowStatusBadge'
-                    );
-
-                if(orderStatus === 'pending')
+                function fetchOrderStatus()
                 {
-                    flowPending.classList.add('active');
+                    fetch(`/my-orders/${orderId}/status`)
+                    .then(response => response.json())
+                    .then(data => {
 
-                    statusBadge.classList.add(
-                        'flow-pending'
-                    );
+                        console.log(data);
 
-                    progressBar.style.width='0%';
+                        if(document.getElementById('flowStatusBadge'))
+                        {
+                            updateOrderFlow(data.status);
+                        }
+
+                        if(document.querySelector('.od-tracking'))
+                        {
+                            updateDeliveryTracking(data.delivery_status);
+                        }
+
+                    })
+                    .catch(error => {
+
+                        console.log(error);
+
+                    });
                 }
 
-                if(orderStatus === 'accepted')
+                /*
+                |--------------------------------------------------------------------------
+                | ORDER FLOW
+                |--------------------------------------------------------------------------
+                */
+
+                function updateOrderFlow(status)
                 {
-                    flowPending.classList.add('active');
-                    flowAccepted.classList.add('active');
+                    const pending =
+                        document.getElementById('flowPending');
 
-                    statusBadge.classList.add(
-                        'flow-accepted'
-                    );
+                    const accepted =
+                        document.getElementById('flowAccepted');
 
-                    progressBar.style.width='50%';
+                    const completed =
+                        document.getElementById('flowCompleted');
+
+                    const progress =
+                        document.getElementById('orderFlowProgress');
+
+                    const badge =
+                        document.getElementById('flowStatusBadge');
+
+                    if(!badge) return;
+
+                    [pending, accepted, completed].forEach(el => {
+
+                        if(el){
+                            el.classList.remove('active');
+                            el.classList.remove('cancelled');
+                        }
+
+                    });
+
+                    badge.className = '';
+
+                    switch(status)
+                    {
+                        case 'pending':
+
+                            pending?.classList.add('active');
+
+                            badge.classList.add('flow-pending');
+
+                            badge.innerHTML = 'Pending';
+
+                            progress && (progress.style.width='0%');
+
+                        break;
+
+                        case 'accepted':
+
+                            pending?.classList.add('active');
+                            accepted?.classList.add('active');
+
+                            badge.classList.add('flow-accepted');
+
+                            badge.innerHTML = 'Accepted';
+
+                            progress && (progress.style.width='50%');
+
+                        break;
+
+                        case 'completed':
+
+                            pending?.classList.add('active');
+                            accepted?.classList.add('active');
+                            completed?.classList.add('active');
+
+                            badge.classList.add('flow-completed');
+
+                            badge.innerHTML = 'Completed';
+
+                            progress && (progress.style.width='100%');
+
+                        break;
+
+                        case 'cancelled':
+
+                            pending?.classList.add('cancelled');
+
+                            badge.classList.add('flow-cancelled');
+
+                            badge.innerHTML = '❌ Cancelled';
+
+                        break;
+
+                        case 'refunded':
+
+                            pending?.classList.add('active');
+                            accepted?.classList.add('active');
+
+                            badge.classList.add('flow-refunded');
+
+                            badge.innerHTML = '↩ Refunded';
+
+                            progress && (progress.style.width='50%');
+
+                        break;
+                    }
                 }
 
-                if(orderStatus === 'completed')
+                /*
+                |--------------------------------------------------------------------------
+                | DELIVERY FLOW
+                |--------------------------------------------------------------------------
+                */
+
+                function updateDeliveryTracking(status)
                 {
-                    flowPending.classList.add('active');
-                    flowAccepted.classList.add('active');
-                    flowCompleted.classList.add('active');
+                    const badgeWrap =
+                        document.querySelector(
+                            '.status-badge-wrap'
+                        );
 
-                    statusBadge.classList.add(
-                        'flow-completed'
-                    );
+                    if(!badgeWrap) return;
 
-                    progressBar.style.width='100%';
+                    let badge = '';
+
+                    switch(status)
+                    {
+                        case 'searching':
+
+                            badge =
+                            '<span class="status-badge sb-searching">Searching Driver</span>';
+
+                        break;
+
+                        case 'almost_picking':
+
+                            badge =
+                            '<span class="status-badge sb-almost_picking">Driver On The Way</span>';
+
+                        break;
+
+                        case 'waiting_at_pickup':
+
+                            badge =
+                            '<span class="status-badge sb-almost_picking">Driver At Restaurant</span>';
+
+                        break;
+
+                        case 'picking':
+
+                            badge =
+                            '<span class="status-badge sb-almost_picking">Pickup Started</span>';
+
+                        break;
+
+                        case 'in_transit':
+
+                            badge =
+                            '<span class="status-badge sb-in_transit">On The Way</span>';
+
+                        break;
+
+                        case 'delivered':
+
+                            badge =
+                            '<span class="status-badge sb-delivered">Delivered</span>';
+
+                        break;
+
+                        case 'canceled':
+
+                            badge =
+                            '<span class="status-badge sb-canceled">Cancelled</span>';
+
+                        break;
+                    }
+
+                    badgeWrap.innerHTML = badge;
                 }
 
-                if(orderStatus === 'cancelled')
-                {
-                    flowPending.classList.add(
-                        'cancelled'
-                    );
+                /*
+                |--------------------------------------------------------------------------
+                | INITIAL LOAD
+                |--------------------------------------------------------------------------
+                */
 
-                    statusBadge.classList.add(
-                        'flow-cancelled'
-                    );
+                fetchOrderStatus();
 
-                    statusBadge.innerHTML =
-                        '❌ Cancelled';
-                }
+                /*
+                |--------------------------------------------------------------------------
+                | AUTO REFRESH EVERY 5 SECONDS
+                |--------------------------------------------------------------------------
+                */
 
-                if(orderStatus === 'refunded')
-                {
-                    flowPending.classList.add('active');
-                    flowAccepted.classList.add('active');
-
-                    progressBar.style.width='50%';
-
-                    statusBadge.classList.add(
-                        'flow-refunded'
-                    );
-
-                    statusBadge.innerHTML =
-                        '↩ Refunded';
-                }
+                setInterval(fetchOrderStatus, 5000);
 
             </script>
 

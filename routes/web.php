@@ -57,9 +57,6 @@ Route::post(
     [PaymentController::class, 'pay']
 )->name('payment.pay');
 
-
-
-
 Route::match(
     ['get', 'post'],
     '/payment/notify',
@@ -160,6 +157,11 @@ Route::middleware(['auth'])->group(function () {
         '/my-orders/{id}',
         [OrderController::class, 'orderDetails']
     );
+
+    Route::get(
+        '/my-orders/{id}/status',
+        [OrderController::class, 'orderStatus']
+    )->middleware('auth');
 
 
     Route::post(
