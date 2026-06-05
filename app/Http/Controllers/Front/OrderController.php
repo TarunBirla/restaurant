@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Complaint;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Models\Order;
@@ -991,11 +992,18 @@ class OrderController extends Controller
 
         })
         ->latest()
-        ->get();    
+        ->get();   
+        
+        $complaints = Complaint::where(
+            'order_id',
+            $order->id
+        )
+        ->latest()
+        ->get();
 
         return view(
             'front.order-details',
-            compact('order', 'messages')
+            compact('order', 'messages', 'complaints')
         );
     }
 

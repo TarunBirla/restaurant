@@ -179,6 +179,69 @@
                 min-width: 100%;
             }
         }
+
+
+        .info-tooltip {
+            position: relative;
+            display: inline-flex;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .info-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #C25A2A;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tooltip-content {
+            position: absolute;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            background: #fff;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,.15);
+            z-index: 9999;
+            display: none;
+        }
+        .tooltip-content{
+            position:absolute;
+            bottom:30px;
+            top:auto;
+            right:0;
+            left:auto;
+            transform:none;
+            width:260px;
+            z-index:99999;
+        }
+
+        .info-tooltip:hover .tooltip-content {
+            display: block;
+        }
+
+        .tooltip-content h6 {
+            margin: 0 0 4px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .tooltip-content p {
+            margin: 0 0 8px;
+            font-size: 12px;
+            color: #6B7280;
+        }
     </style>
 
 
@@ -508,7 +571,7 @@
             <div class="res-products-grid">
 
                 @forelse($products as $product)
-                    <div style="background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,.07); border:1px solid #F0F0EC; transition:all .22s;"
+                    <div style="background:#fff; border-radius:20px; overflow:visible; box-shadow:0 2px 16px rgba(0,0,0,.07); border:1px solid #F0F0EC; transition:all .22s;"
                         onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(0,0,0,.12)'"
                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 16px rgba(0,0,0,.07)'">
 
@@ -542,10 +605,44 @@
 
 
                         <div style="padding:16px;">
-                            <h3
+                            {{-- <h3
                                 style="font-weight:700; font-size:15px; margin:0 0 6px; line-height:1.3; color:#0D0D0D; font-family:'Poppins',sans-serif;">
                                 {{ $product->name }}
-                            </h3>
+                            </h3> --}}
+                            <div style="display:flex; align-items:center; margin-bottom:6px;">
+
+                                <h3 style="
+                                    font-weight:700;
+                                    font-size:15px;
+                                    margin:0;
+                                    line-height:1.3;
+                                    color:#0D0D0D;
+                                    font-family:'Poppins',sans-serif;
+                                ">
+                                    {{ $product->name }}
+                                </h3>
+
+                                <div class="info-tooltip">
+
+                                    <span class="info-icon">i</span>
+
+                                    <div class="tooltip-content">
+
+                                        <h6>Allergy Information</h6>
+                                        <p>
+                                            {{ $product->allergy ?: 'May contain common allergens.' }}
+                                        </p>
+
+                                        <h6>Dietary Information</h6>
+                                        <p>
+                                            {{ $product->dietary ?: 'Veg / Non-Veg' }}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
                             <p style="color:#6B7280; font-size:13px; line-height:1.55; margin:0 0 14px;">
                                 <!-- {{ Str::limit($product->description, 70) }} -->
                                 {{ Str::limit(strip_tags($product->description), 80) }}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\RestaurantAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Complaint;
 use App\Models\Message;
 use App\Models\Order;
 use App\Models\Payment;
@@ -93,9 +94,13 @@ class OrderController extends Controller
         ])
         ->findOrFail($id);
 
+        $complaints = Complaint::where('order_id', $order->id)
+        ->latest()
+        ->get();
+
         return view(
             'restaurant.orders.show',
-            compact('order')
+            compact('order','complaints')
         );
     }
 

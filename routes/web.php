@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\RestaurantAdmin\ProductController as RestaurantProductController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\RestaurantAdmin\OrderOfferController;
 use Illuminate\Support\Facades\Artisan;
 
@@ -41,12 +42,32 @@ Route::post(
     [OrderController::class, 'submitReview']
 
 )->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+
+    // Customer
+    Route::post('/complaints', [ComplaintController::class, 'store'])
+        ->name('complaints.store');
+
+    Route::get('/my-complaints', [ComplaintController::class, 'myComplaints'])
+        ->name('complaints.my');
+
+    // Restaurant
+    Route::get('/restaurant/complaints', [ComplaintController::class, 'restaurantComplaints'])
+        ->name('restaurant.complaints');
+
+    Route::post('/restaurant/complaints/{id}/reply', [ComplaintController::class, 'reply'])
+        ->name('restaurant.complaints.reply');
+
+});
+
 // Route::get('/payment', [PaymentController::class, 'index'])->name('payment.form');
 // Route::post('/payment/pay', [PaymentController::class, 'pay'])->name('payment.pay');
 // Route::post('/payment/notify', [PaymentController::class, 'notify'])->name('payment.notify');
 // Route::post('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 // Route::post('/payment/failure', [PaymentController::class, 'failure'])->name('payment.failure');
 // Route::get('/payment/successpage', [PaymentController::class, 'successPage'])->name('payment.successpage');
+
 Route::get(
     '/payment',
     [PaymentController::class, 'index']
@@ -79,9 +100,6 @@ Route::get(
     '/payment/successpage',
     [PaymentController::class, 'successPage']
 )->name('payment.successpage');
-
-
-
 
 Route::get(
     '/',

@@ -974,6 +974,26 @@
     </div>
     @endif
 
+    @if($complaints->count())
+
+    <div class="od-card" style="margin-bottom:16px;">
+
+        <div class="card-eyebrow">
+            Customer Complaints
+        </div>
+
+        <button
+            onclick="openComplaintsModal()"
+            class="od-btn btn-pickup">
+
+            View Complaints ({{ $complaints->count() }})
+
+        </button>
+
+    </div>
+
+    @endif
+
 
     <div class="od-card">
       <div class="card-eyebrow">Order Status</div>
@@ -1101,6 +1121,125 @@
     </div>
 
   </div>
+
+<div id="complaintsModal"
+     class="od-modal-bg">
+
+    <div class="od-modal"
+         style="max-width:800px;">
+
+        <button
+            class="od-modal-close"
+            onclick="closeComplaintsModal()">
+
+            ×
+
+        </button>
+
+        <div class="od-modal-eyebrow">
+            Customer Complaints
+        </div>
+
+        <h3>
+            Complaint History
+        </h3>
+
+        <div style="
+            max-height:65vh;
+            overflow-y:auto;
+        ">
+
+            @foreach($complaints as $complaint)
+
+                <div style="
+                    border:1px solid #E5E7EB;
+                    border-radius:14px;
+                    padding:16px;
+                    margin-bottom:15px;
+                ">
+
+                    <div style="
+                        font-weight:700;
+                        margin-bottom:10px;
+                    ">
+                        {{ $complaint->subject }}
+                    </div>
+
+                    <div style="
+                        background:#FEF2F2;
+                        border:1px solid #FECACA;
+                        color:#991B1B;
+                        padding:14px;
+                        border-radius:12px;
+                        margin-bottom:12px;
+                    ">
+                        {{ $complaint->complaint }}
+                    </div>
+
+                    @if($complaint->restaurant_reply)
+
+                        <div style="
+                            background:#ECFDF5;
+                            border:1px solid #BBF7D0;
+                            color:#166534;
+                            padding:14px;
+                            border-radius:12px;
+                        ">
+
+                            <strong>
+                                Your Reply
+                            </strong>
+
+                            <br><br>
+
+                            {{ $complaint->restaurant_reply }}
+
+                        </div>
+
+                    @else
+
+                        <form method="POST"
+                              action="{{ route('restaurant.complaints.reply',$complaint->id) }}">
+
+                            @csrf
+
+                            <textarea
+                                name="restaurant_reply"
+                                rows="4"
+                                required
+                                placeholder="Write your reply..."
+                                style="
+                                    width:100%;
+                                    border:1px solid #ddd;
+                                    border-radius:12px;
+                                    padding:12px;
+                                "></textarea>
+
+                            <button
+                                type="submit"
+                                class="od-btn btn-pickup"
+                                style="
+                                    margin-top:10px;
+                                ">
+
+                                Send Reply
+
+                            </button>
+
+                        </form>
+
+                    @endif
+
+                </div>
+
+            @endforeach
+
+        </div>
+
+    </div>
+
+</div>
+  
 
   {{-- ── Row 2: Status Workflow · Payment ── --}}
   {{-- <div class="od-grid-2">
@@ -1290,5 +1429,22 @@
     </form>
   </div>
 </div>
+
+
+<script>
+function openComplaintsModal()
+{
+    document
+        .getElementById('complaintsModal')
+        .classList.add('open');
+}
+
+function closeComplaintsModal()
+{
+    document
+        .getElementById('complaintsModal')
+        .classList.remove('open');
+}
+</script>
 
 @endsection

@@ -20,7 +20,9 @@ class Product extends Model
         'price',
         'currency',
         'status',
-        'image_3d'
+        'image_3d',
+        'allergy',
+        'dietary'
     ];
 
     public function category()

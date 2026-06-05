@@ -978,6 +978,335 @@
             </div>
             @endif
 
+            {{-- Complaint Support --}}
+
+            <div class="od-card" style="margin-bottom:20px;">
+
+                <div class="od-info-body">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        flex-wrap:wrap;
+                        gap:20px;
+                    ">
+
+                        <div>
+
+                            <h3 style="
+                                font-size:18px;
+                                font-weight:700;
+                                color:#111827;
+                                margin-bottom:8px;
+                            ">
+                                Complaint Support
+                            </h3>
+
+                            <p style="
+                                color:#6B7280;
+                                font-size:13px;
+                                line-height:1.7;
+                                margin:0;
+                            ">
+                                View complaint history or raise a new complaint.
+                            </p>
+
+                        </div>
+
+                        <div style="display:flex;gap:10px;">
+
+                            <button
+                                onclick="openComplaintsModal()"
+                                style="
+                                    background:#111827;
+                                    color:#fff;
+                                    border:none;
+                                    padding:12px 20px;
+                                    border-radius:14px;
+                                    cursor:pointer;
+                                    font-weight:700;
+                                ">
+                                Complaints ({{ $complaints->count() }})
+                            </button>
+
+                            <button
+                                onclick="document.getElementById('complaintModal').style.display='flex'"
+                                style="
+                                    background:#DC2626;
+                                    color:#fff;
+                                    border:none;
+                                    padding:12px 20px;
+                                    border-radius:14px;
+                                    cursor:pointer;
+                                    font-weight:700;
+                                ">
+                                New Complaint
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- Complaint History --}}
+
+            <div id="complaintsHistoryModal"
+                style="
+                    display:none;
+                    position:fixed;
+                    inset:0;
+                    background:rgba(0,0,0,.6);
+                    z-index:99999;
+                    align-items:center;
+                    justify-content:center;
+                "
+            >
+
+            <div style="
+                width:95%;
+                max-width:800px;
+                max-height:80vh;
+                overflow-y:auto;
+                background:#fff;
+                border-radius:20px;
+                padding:25px;
+            ">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:20px;
+                ">
+
+                    <h3 style="margin:0;">
+                        Complaint History
+                    </h3>
+
+                    <button
+                        onclick="closeComplaintsModal()"
+                        style="
+                            border:none;
+                            background:none;
+                            font-size:22px;
+                            cursor:pointer;
+                        ">
+                        ✕
+                    </button>
+
+                </div>
+
+                @forelse($complaints as $complaint)
+
+                    <div style="
+                        border:1px solid #E5E7EB;
+                        border-radius:14px;
+                        padding:16px;
+                        margin-bottom:16px;
+                    ">
+
+                        <div style="
+                            display:flex;
+                            justify-content:space-between;
+                            margin-bottom:10px;
+                        ">
+
+                            <strong>
+                                {{ $complaint->subject }}
+                            </strong>
+
+                            <small>
+                                {{ $complaint->created_at->format('d M Y') }}
+                            </small>
+
+                        </div>
+
+                        <div style="
+                            background:#FEF2F2;
+                            padding:12px;
+                            border-radius:10px;
+                            margin-bottom:12px;
+                        ">
+                            {{ $complaint->complaint }}
+                        </div>
+
+                        @if($complaint->restaurant_reply)
+
+                            <div style="
+                                background:#ECFDF5;
+                                padding:12px;
+                                border-radius:10px;
+                            ">
+                                <strong>
+                                    Restaurant Reply:
+                                </strong>
+                                <br>
+
+                                {{ $complaint->restaurant_reply }}
+                            </div>
+
+                        @else
+
+                            <div style="
+                                background:#FEF3C7;
+                                padding:12px;
+                                border-radius:10px;
+                            ">
+                                Waiting for restaurant response...
+                            </div>
+
+                        @endif
+
+                    </div>
+
+                @empty
+
+                    <div style="
+                        text-align:center;
+                        color:#6B7280;
+                        padding:30px;
+                    ">
+                        No complaints found.
+                    </div>
+
+                @endforelse
+
+            </div>
+
+</div>
+
+            {{-- @if(
+                in_array(
+                    $order->status,
+                    ['delivered','canceled']
+                )
+            ) --}}
+
+            
+
+            {{-- @endif --}}
+
+            <div id="complaintModal"
+                style="
+                    display:none;
+                    position:fixed;
+                    inset:0;
+                    background:rgba(0,0,0,.6);
+                    z-index:99999;
+                    align-items:center;
+                    justify-content:center;
+                ">
+
+                <div style="
+                    background:#fff;
+                    width:100%;
+                    max-width:550px;
+                    border-radius:24px;
+                    padding:25px;
+                ">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        margin-bottom:20px;
+                    ">
+
+                        <h3 style="margin:0;">
+                            Raise Complaint
+                        </h3>
+
+                        <button
+                            onclick="document.getElementById('complaintModal').style.display='none'"
+                            style="
+                                border:none;
+                                background:none;
+                                font-size:20px;
+                                cursor:pointer;
+                            ">
+                            ✕
+                        </button>
+
+                    </div>
+
+                    <form action="{{ route('complaints.store') }}"
+                        method="POST">
+
+                        @csrf
+
+                        <input type="hidden"
+                            name="restaurant_id"
+                            value="{{ $order->restaurant_id }}">
+
+                        <input type="hidden"
+                            name="order_id"
+                            value="{{ $order->id }}">
+
+                        <div style="margin-bottom:15px;">
+
+                            <label style="font-weight:600;">
+                                Subject
+                            </label>
+
+                            <input type="text"
+                                name="subject"
+                                required
+                                style="
+                                        width:100%;
+                                        padding:12px;
+                                        border:1px solid #ddd;
+                                        border-radius:12px;
+                                        margin-top:6px;
+                                ">
+
+                        </div>
+
+                        <div style="margin-bottom:20px;">
+
+                            <label style="font-weight:600;">
+                                Complaint
+                            </label>
+
+                            <textarea
+                                name="complaint"
+                                rows="5"
+                                required
+                                style="
+                                    width:100%;
+                                    padding:12px;
+                                    border:1px solid #ddd;
+                                    border-radius:12px;
+                                    margin-top:6px;
+                                "
+                            ></textarea>
+
+                        </div>
+
+                        <button type="submit"
+                                style="
+                                    width:100%;
+                                    background:#DC2626;
+                                    color:#fff;
+                                    border:none;
+                                    padding:14px;
+                                    border-radius:12px;
+                                    font-weight:700;
+                                ">
+
+                            Submit Complaint
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
             {{-- CANCEL ORDER --}}
             @if(
                 !in_array(
@@ -1366,6 +1695,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+</script>
+
+<script>
+function openComplaintsModal()
+{
+    document.getElementById(
+        'complaintsHistoryModal'
+    ).style.display = 'flex';
+}
+
+function closeComplaintsModal()
+{
+    document.getElementById(
+        'complaintsHistoryModal'
+    ).style.display = 'none';
+}
 </script>
 
 @endsection
