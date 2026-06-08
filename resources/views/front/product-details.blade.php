@@ -2,7 +2,11 @@
 
 @section('content')
 
-
+@php
+    $isAdmin = auth()->check() &&
+        in_array(auth()->user()->role, ['super_admin', 'restaurant_admin']);
+    
+@endphp
 
     <section style="background:#F5F5F0; padding:60px 0 80px;">
         <div style="max-width:1280px; margin:0 auto; padding:0 24px;">
@@ -14,8 +18,8 @@
                     <div
                         style="border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.12); position:relative; background:#fff;">
                         <img src="{{ $product->image
-        ? asset('storage/' . $product->image)
-        : asset('default.png') }}"
+                            ? asset('storage/' . $product->image)
+                            : asset('default.png') }}"
                             style="width:100%; aspect-ratio:4/3; object-fit:cover; display:block; transition:transform .6s;"
                             onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
                         <div style="position:absolute; top:16px; left:16px;" class="badge-primary">
@@ -26,7 +30,7 @@
                     </div>
 
                     <!-- QUICK INFO CHIPS -->
-                    <div style="display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;">
+                    {{-- <div style="display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;">
                         <div
                             style="display:flex; align-items:center; gap:8px; background:#fff; padding:10px 16px; border-radius:12px; border:1px solid #F0F0EC; flex:1; min-width:120px;">
                             <i data-lucide="clock" style="width:16px; height:16px; color:#C25A2A; flex-shrink:0;"></i>
@@ -61,7 +65,7 @@
                                     Fresh</p>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div>
@@ -106,36 +110,53 @@
 
                     <!-- WHY CHOOSE BADGES -->
                     <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:36px;">
+
+                        {{-- Allergy Information --}}
                         <div
                             style="display:flex; align-items:center; gap:12px; background:#F9FAFB; padding:12px 16px; border-radius:12px; border:1px solid #F0F0EC;">
+
+                            <div
+                                style="width:34px; height:34px; background:#FEF3C7; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <i data-lucide="alert-triangle"
+                                    style="width:16px; height:16px; color:#D97706;"></i>
+                            </div>
+
+                            <div>
+                                <p style="font-size:13px; font-weight:700; margin:0; font-family:'Poppins',sans-serif;">
+                                    Allergy Information
+                                </p>
+
+                                <p style="font-size:12px; color:#6B7280; margin:2px 0 0;">
+                                    {{ $product->allergy ?: 'No allergy information available.' }}
+                                </p>
+                            </div>
+                        </div>
+
+                        {{-- Dietary Information --}}
+                        <div
+                            style="display:flex; align-items:center; gap:12px; background:#F9FAFB; padding:12px 16px; border-radius:12px; border:1px solid #F0F0EC;">
+
                             <div
                                 style="width:34px; height:34px; background:#DCFCE7; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                <i data-lucide="shield-check" style="width:16px; height:16px; color:#16A34A;"></i>
+                                <i data-lucide="leaf"
+                                    style="width:16px; height:16px; color:#16A34A;"></i>
                             </div>
+
                             <div>
-                                <p style="font-size:13px; font-weight:700; margin:0; font-family:'Poppins',sans-serif;">100%
-                                    Fresh Ingredients</p>
-                                <p style="font-size:12px; color:#6B7280; margin:2px 0 0;">Sourced daily from local suppliers
+                                <p style="font-size:13px; font-weight:700; margin:0; font-family:'Poppins',sans-serif;">
+                                    Dietary Information
+                                </p>
+
+                                <p style="font-size:12px; color:#6B7280; margin:2px 0 0;">
+                                    {{ $product->dietary ?: 'No dietary information available.' }}
                                 </p>
                             </div>
                         </div>
-                        <div
-                            style="display:flex; align-items:center; gap:12px; background:#F9FAFB; padding:12px 16px; border-radius:12px; border:1px solid #F0F0EC;">
-                            <div
-                                style="width:34px; height:34px; background:#EFF6FF; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                <i data-lucide="truck" style="width:16px; height:16px; color:#2563EB;"></i>
-                            </div>
-                            <div>
-                                <p style="font-size:13px; font-weight:700; margin:0; font-family:'Poppins',sans-serif;">Fast
-                                    Delivery Guaranteed</p>
-                                <p style="font-size:12px; color:#6B7280; margin:2px 0 0;">Arrives hot and fresh at your door
-                                </p>
-                            </div>
-                        </div>
+
                     </div>
 
                     <!-- ADD TO CART FORM -->
-                    <form method="POST" action="/cart/add">
+                    {{-- <form method="POST" action="/cart/add">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <input type="hidden" name="current_url" value="{{ url()->current() }}">
@@ -153,7 +174,104 @@
                                 <i data-lucide="arrow-left" style="width:16px; height:16px;"></i> Back
                             </a>
                         </div>
-                    </form>
+                    </form> --}}
+                    @if(!$isAdmin)
+                        @auth
+
+                        <form class="addCartForm"
+                            data-product="{{ $product->id }}"
+                            data-qty="{{ session('cart')[$product->id]['quantity'] ?? 0 }}">
+
+                            @csrf
+
+                            <input type="hidden"
+                                name="product_id"
+                                value="{{ $product->id }}">
+
+                            <input type="hidden"
+                                name="quantity"
+                                value="1"
+                                class="qtyInput">
+
+                            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+
+                                {{-- ADD BUTTON --}}
+                                <button class="btn-primary addBtn"
+                                    type="submit"
+                                    style="flex:2;  min-width:180px;">
+                                    <i data-lucide="shopping-cart"></i>
+                                    Add To Cart
+                                </button>
+
+                                {{-- QUANTITY BOX --}}
+                                <div class="qtyBox"
+                                    style="
+                                        display:none;
+                                        align-items:center;
+                                        overflow:hidden;
+                                        border-radius:14px;
+                                        border:1px solid #E5E7EB;
+                                        height:54px;
+                                    ">
+
+                                    <button type="button"
+                                        class="qtyMinus"
+                                        style="
+                                            width:54px;
+                                            height:54px;
+                                            border:none;
+                                            background:#F5F5F0;
+                                            font-size:24px;
+                                            cursor:pointer;
+                                        ">
+                                        −
+                                    </button>
+
+                                    <div class="qtyValue"
+                                        style="
+                                            width:60px;
+                                            text-align:center;
+                                            font-weight:700;
+                                            font-size:16px;
+                                        ">
+                                        1
+                                    </div>
+
+                                    <button type="button"
+                                        class="qtyPlus"
+                                        style="
+                                            width:54px;
+                                            height:54px;
+                                            border:none;
+                                            background:#E63946;
+                                            color:#fff;
+                                            font-size:24px;
+                                            cursor:pointer;
+                                        ">
+                                        +
+                                    </button>
+
+                                </div>
+
+                                <a href="javascript:history.back()"
+                                    style="flex:1;"
+                                    class="btn-black ">
+                                    Back
+                                </a>
+
+                            </div>
+
+                        </form>
+
+                        @else
+
+                        <a href="{{ route('login', ['redirect' => urlencode(url()->current())]) }}"
+                            class="btn-primary">
+                            Add To Cart
+                        </a>
+
+                        @endauth
+                    @endif
 
                     {{-- REVIEWS --}}
 
@@ -161,9 +279,9 @@
 
                 </div>
             </div>
-             @if($reviews->count())
+            @if($reviews->count())
 
-                                        <section style="
+                        <section style="
                             margin-top:70px;
                             background:#fff;
                             border-radius:28px;
@@ -171,7 +289,7 @@
                             box-shadow:0 10px 40px rgba(0,0,0,.05);
                         ">
 
-                                            <h2 style="
+                            <h2 style="
                                 font-size:30px;
                                 font-weight:800;
                                 margin-bottom:35px;
@@ -182,98 +300,131 @@
 
                                             </h2>
 
-                                            <div style="
+                            <div style="
                                 display:grid;
                                 gap:24px;
                             ">
 
                                                <div style="
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:24px;
-" class="review-grid">
+                                                    display:grid;
+                                                    grid-template-columns:repeat(3,1fr);
+                                                    gap:24px;
+                                                " class="review-grid">
 
-    @foreach($reviews as $review)
+                                                    @foreach($reviews as $review)
 
-        <div style="
-            border:1px solid #F3F4F6;
-            border-radius:20px;
-            padding:24px;
-            background:#fff;
-            box-shadow:0 4px 20px rgba(0,0,0,.04);
-        ">
+                                                        <div style="
+                                                            border:1px solid #F3F4F6;
+                                                            border-radius:20px;
+                                                            padding:24px;
+                                                            background:#fff;
+                                                            box-shadow:0 4px 20px rgba(0,0,0,.04);
+                                                        ">
 
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                gap:20px;
-                flex-wrap:wrap;
-                margin-bottom:14px;
-            ">
+                                                            <div style="
+                                                                display:flex;
+                                                                justify-content:space-between;
+                                                                gap:20px;
+                                                                flex-wrap:wrap;
+                                                                margin-bottom:14px;
+                                                            ">
 
-                <div>
+                                                                <div>
 
-                    <h3 style="
-                        margin:0 0 8px;
-                        font-size:18px;
-                        font-weight:700;
-                    ">
+                                                                    <h3 style="
+                                                                        margin:0 0 8px;
+                                                                        font-size:18px;
+                                                                        font-weight:700;
+                                                                    ">
 
-                        {{ $review->user->name }}
+                                                                        {{ $review->user->name }}
 
-                    </h3>
+                                                                    </h3>
 
-                    <div style="
-                        color:#F59E0B;
-                        font-size:22px;
-                    ">
+                                                                    <div style="
+                                                                        color:#F59E0B;
+                                                                        font-size:22px;
+                                                                    ">
 
-                        @for($i = 1; $i <= $review->rating; $i++)
+                                                                        @for($i = 1; $i <= $review->rating; $i++)
 
-                            ★
+                                                                            ★
 
-                        @endfor
+                                                                        @endfor
 
-                    </div>
+                                                                    </div>
 
-                </div>
+                                                                </div>
 
-                <div style="
-                    color:#9CA3AF;
-                    font-size:13px;
-                ">
+                                                                <div style="
+                                                                    color:#9CA3AF;
+                                                                    font-size:13px;
+                                                                ">
 
-                    {{ $review->created_at->format('d M Y') }}
+                                                                    {{ $review->created_at->format('d M Y') }}
 
-                </div>
+                                                                </div>
 
-            </div>
+                                                            </div>
 
-            <p style="
-                color:#4B5563;
-                line-height:1.8;
-                margin:0;
-                font-size:15px;
-            ">
+                                                            <p style="
+                                                                color:#4B5563;
+                                                                line-height:1.8;
+                                                                margin:0;
+                                                                font-size:15px;
+                                                            ">
 
-                {{ $review->review }}
+                                                                {{ $review->review }}
 
-            </p>
+                                                            </p>
 
-        </div>
+                                                        </div>
 
-    @endforeach
+                                                    @endforeach
 
-</div>
+                                                </div>
 
                                             </div>
 
                                         </section>
 
-                    @endif
+            @endif
         </div>
         
     </section>
+
+    <div id="favoriteModal"
+        class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full">
+
+            <h2 class="text-2xl font-bold mb-3">
+                ⭐ Add Restaurant To Favorites
+            </h2>
+
+            <p class="mb-6">
+                Do you want to add this restaurant to your favorites?
+            </p>
+
+            <div class="flex gap-3">
+
+                <button
+                    onclick="saveFavorite()"
+                    class="flex-1 bg-black text-white py-3 rounded-xl">
+                    Yes
+                </button>
+
+                <button
+                    onclick="closeFavoritePopup()"
+                    class="flex-1 border py-3 rounded-xl">
+                    No
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
     <style>
         @media(max-width:900px) {
@@ -282,6 +433,319 @@
                 gap: 32px !important;
             }
         }
+
+        .btn-black {
+            display: block;
+            background: #111827;
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            transition: background 0.2s;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-black:hover {
+            background: #374151;
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: #C25A2A;
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #c42d0b;
+        }
+        
     </style>
+
+    <script>
+        document.querySelectorAll('.addCartForm').forEach(form => {
+
+            const addBtn   = form.querySelector('.addBtn');
+            const qtyBox   = form.querySelector('.qtyBox');
+            const qtyValue = form.querySelector('.qtyValue');
+
+            const productId =
+                form.querySelector('[name="product_id"]').value;
+
+            // REAL SESSION QTY
+            let qty = parseInt(
+                form.dataset.qty || 0
+            );
+
+            // SHOW EXISTING QTY
+            if(qty > 0){
+
+                addBtn.style.display = 'none';
+
+                qtyBox.style.display = 'flex';
+
+                qtyValue.innerText = qty;
+
+            }
+
+            // ADD
+            form.addEventListener('submit', async function(e){
+
+                e.preventDefault();
+
+                const fd = new FormData(form);
+
+                try{
+
+                    const res = await fetch('/cart/add', {
+
+                        method:'POST',
+
+                        headers:{
+                            'X-CSRF-TOKEN':
+                            document.querySelector('meta[name="csrf-token"]').content,
+
+                            'Accept':'application/json'
+                            
+                        },
+
+                        body:fd
+
+                    });
+
+                    const data = await res.json();
+
+                    if(data.success){
+
+                        qty = 1;
+
+                        form.dataset.qty = qty;
+
+                        addBtn.style.display = 'none';
+
+                        qtyBox.style.display = 'flex';
+
+                        qtyValue.innerText = qty;
+
+                        updateCounts(data.count);
+                        setTimeout(() => {
+
+                            maybeShowFavoritePopup();
+
+                        }, 500);
+
+                    }
+
+                }catch(err){
+
+                    console.log(err);
+
+                }
+
+            });
+
+
+            // PLUS
+            form.querySelector('.qtyPlus')
+            .addEventListener('click', async () => {
+
+                try{
+
+                    await fetch(
+                        `/cart/increase/${productId}`
+                    );
+
+                    qty++;
+
+                    form.dataset.qty = qty;
+
+                    qtyValue.innerText = qty;
+
+                    updateCountFromPage();
+
+                }catch(err){
+
+                    console.log(err);
+
+                }
+
+            });
+
+
+            // MINUS
+            form.querySelector('.qtyMinus')
+            .addEventListener('click', async () => {
+
+                try{
+
+                    if(qty > 1){
+
+                        await fetch(
+                            `/cart/decrease/${productId}`
+                        );
+
+                        qty--;
+
+                        form.dataset.qty = qty;
+
+                        qtyValue.innerText = qty;
+
+                    }else{
+
+                        await fetch(
+                            `/cart/remove/${productId}`
+                        );
+
+                        qty = 0;
+
+                        form.dataset.qty = qty;
+
+                        qtyBox.style.display = 'none';
+
+                        addBtn.style.display = 'flex';
+
+                    }
+
+                    updateCountFromPage();
+
+                }catch(err){
+
+                    console.log(err);
+
+                }
+
+            });
+
+        });
+
+
+        // UPDATE COUNT
+        function updateCountFromPage(){
+
+            fetch('/cart-count')
+
+            .then(res => res.json())
+
+            .then(data => {
+
+                updateCounts(data.count);
+
+            });
+
+        }
+
+
+        function updateCounts(count){
+
+            const cartCount =
+                document.getElementById('cartCount');
+
+            if(cartCount){
+
+                cartCount.innerHTML = count;
+
+            }
+
+            const mobile =
+                document.getElementById('mobileCartCount');
+
+            if(mobile){
+
+                mobile.innerHTML = count;
+
+            }
+
+        }
+
+        function maybeShowFavoritePopup()
+        {
+            if(window.isFavorite){
+                return;
+            }
+
+            const key =
+                'favorite_popup_' + window.restaurantId;
+
+            if(localStorage.getItem(key)){
+                return;
+            }
+
+            document
+                .getElementById('favoriteModal')
+                .classList.remove('hidden');
+
+            document
+                .getElementById('favoriteModal')
+                .classList.add('flex');
+
+            localStorage.setItem(key, 'shown');
+        }
+
+        function closeFavoritePopup()
+        {
+            document
+                .getElementById('favoriteModal')
+                .classList.remove('flex');
+
+            document
+                .getElementById('favoriteModal')
+                .classList.add('hidden');
+        }
+
+        function saveFavorite()
+        {
+            fetch(
+                `/restaurant/${window.restaurantId}/favorite`,
+                {
+                    method:'POST',
+                    headers:{
+                        'X-CSRF-TOKEN':
+                        document.querySelector(
+                            'meta[name="csrf-token"]'
+                        ).content,
+
+                        'Accept':'application/json'
+                    }
+                }
+            )
+            .then(res => res.json())
+            .then(data => {
+
+                window.isFavorite = true;
+
+                closeFavoritePopup();
+
+            });
+        }
+
+    </script>
+    <script>
+        window.restaurantId = @json($product->restaurant_id);
+
+        window.isFavorite = @json(
+            auth()->check()
+                ? \App\Models\RestaurantFavorite::where(
+                    'restaurant_id',
+                    $product->restaurant_id
+                )->where(
+                    'user_id',
+                    auth()->id()
+                )->exists()
+                : false
+        );
+    </script>
 
 @endsection

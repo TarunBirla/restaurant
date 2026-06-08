@@ -185,7 +185,8 @@
             position: relative;
             display: inline-block;
             cursor: pointer;
-            margin-left: auto; /* pushes to right side */
+            /* margin-left: auto; */
+             /* pushes to right side */
         }
 
         .details-link {
@@ -616,9 +617,9 @@
                                 {{ Str::limit(strip_tags($product->description), 80) }}
 
                             </p>
-                            <div style="text-align:right; margin-top:2px; margin-bottom:8px;">
-                                    <div class="info-tooltip">
-                                        <span class="details-link">Details</span>
+                            <div style="display:flex; gap:8px; justify-content:space-between; text-align:center; margin-top:2px; margin-bottom:8px;">
+                                <div class="info-tooltip">
+                                    <span class="details-link">Allergy & Dietary</span>
 
                                         <div class="tooltip-content">
                                             <h6>Allergy Information</h6>
@@ -627,8 +628,13 @@
                                             <h6>Dietary Information</h6>
                                             <p>{{ $product->dietary ?: 'Veg / Non-Veg' }}</p>
                                         </div>
-                                    </div>
                                 </div>
+                                <a href="{{ url('/product/' . $product->id) }}">
+                                    <div class="info-tooltip">
+                                        <span class="details-link">Details</span>
+                                    </div>
+                                </a>
+                            </div>
                             {{-- <div style="display:flex; gap:8px;">
                                 <a href="javascript:void(0)" class="btn-black"
                                     onclick="openAR('{{ asset('storage/' . $product->image) }}')" style="flex:1;">
@@ -806,37 +812,37 @@
     </div>
 
     <div id="favoriteModal"
-     class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+        class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
 
-    <div class="bg-white rounded-3xl p-8 max-w-md w-full">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full">
 
-        <h2 class="text-2xl font-bold mb-3">
-            ⭐ Add Restaurant To Favorites
-        </h2>
+            <h2 class="text-2xl font-bold mb-3">
+                ⭐ Add Restaurant To Favorites
+            </h2>
 
-        <p class="mb-6">
-            Do you want to add this restaurant to your favorites?
-        </p>
+            <p class="mb-6">
+                Do you want to add this restaurant to your favorites?
+            </p>
 
-        <div class="flex gap-3">
+            <div class="flex gap-3">
 
-            <button
-                onclick="saveFavorite()"
-                class="flex-1 bg-black text-white py-3 rounded-xl">
-                Yes
-            </button>
+                <button
+                    onclick="saveFavorite()"
+                    class="flex-1 bg-black text-white py-3 rounded-xl">
+                    Yes
+                </button>
 
-            <button
-                onclick="closeFavoritePopup()"
-                class="flex-1 border py-3 rounded-xl">
-                No
-            </button>
+                <button
+                    onclick="closeFavoritePopup()"
+                    class="flex-1 border py-3 rounded-xl">
+                    No
+                </button>
+
+            </div>
 
         </div>
 
     </div>
-
-</div>
 
     <script>
         /* ---- AR ---- */
@@ -1111,7 +1117,7 @@
         }
 
     </script>
-   <script>
+    <script>
         document.querySelectorAll('.addCartForm').forEach(form => {
 
             const addBtn   = form.querySelector('.addBtn');
