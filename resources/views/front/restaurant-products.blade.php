@@ -183,22 +183,23 @@
 
         .info-tooltip {
             position: relative;
-            display: inline-flex;
-            margin-left: 8px;
+            display: inline-block;
             cursor: pointer;
+            margin-left: auto; /* pushes to right side */
         }
 
-        .info-icon {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #C25A2A;
-            color: #fff;
-            font-size: 11px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .details-link {
+            font-size: 12px;
+            color: #C25A2A;
+            font-weight: 600;
+            border-bottom: 1px dotted #C25A2A;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .details-link:hover {
+            color: #a6481f;
+            border-bottom-color: #a6481f;
         }
 
         .tooltip-content {
@@ -605,49 +606,29 @@
 
 
                         <div style="padding:16px;">
-                            {{-- <h3
+                            <h3
                                 style="font-weight:700; font-size:15px; margin:0 0 6px; line-height:1.3; color:#0D0D0D; font-family:'Poppins',sans-serif;">
                                 {{ $product->name }}
-                            </h3> --}}
-                            <div style="display:flex; align-items:center; margin-bottom:6px;">
-
-                                <h3 style="
-                                    font-weight:700;
-                                    font-size:15px;
-                                    margin:0;
-                                    line-height:1.3;
-                                    color:#0D0D0D;
-                                    font-family:'Poppins',sans-serif;
-                                ">
-                                    {{ $product->name }}
-                                </h3>
-
-                                <div class="info-tooltip">
-
-                                    <span class="info-icon">i</span>
-
-                                    <div class="tooltip-content">
-
-                                        <h6>Allergy Information</h6>
-                                        <p>
-                                            {{ $product->allergy ?: 'May contain common allergens.' }}
-                                        </p>
-
-                                        <h6>Dietary Information</h6>
-                                        <p>
-                                            {{ $product->dietary ?: 'Veg / Non-Veg' }}
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
+                            </h3>
+                            
                             <p style="color:#6B7280; font-size:13px; line-height:1.55; margin:0 0 14px;">
                                 <!-- {{ Str::limit($product->description, 70) }} -->
                                 {{ Str::limit(strip_tags($product->description), 80) }}
 
                             </p>
+                            <div style="text-align:right; margin-top:2px; margin-bottom:8px;">
+                                    <div class="info-tooltip">
+                                        <span class="details-link">Details</span>
+
+                                        <div class="tooltip-content">
+                                            <h6>Allergy Information</h6>
+                                            <p>{{ $product->allergy ?: 'May contain common allergens.' }}</p>
+
+                                            <h6>Dietary Information</h6>
+                                            <p>{{ $product->dietary ?: 'Veg / Non-Veg' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             {{-- <div style="display:flex; gap:8px;">
                                 <a href="javascript:void(0)" class="btn-black"
                                     onclick="openAR('{{ asset('storage/' . $product->image) }}')" style="flex:1;">
